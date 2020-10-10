@@ -1,0 +1,413 @@
+###  导读      
+     管理网络流量是系统管理员必需处理的最棘手工作之一，我们必需规定连接系统的用户满足防火墙的传入和传出要求，以最大限度保证系统免受攻击。很多用户把 Linux 中的 IPTables 当成一个防火墙，从严格意见上来说 IPTables 只是能够帮助管理员定义各种规则并与 Linux Kernel 进行沟通的一个命令行工具。它只是帮助管理员配置网络流量的传入、传出规则列表，具体的实现其实是在 Linux 内核当中。
+
+	 
+###  iptables 防火墙服务
+###  iptables防火墙服务名词概念
+     iptables(容器)---表(filter nat) ---- 链(在不同方向上控制数据包) ---规则(允许 禁止)
+	 
+###  防火墙工作原理
+     工作流程小结：
+     1.	防火墙是层层过滤的，实际是按照配置规则的顺序从上到下，从前到后进行过滤的。
+     2.	如果匹配上规则，即明确表示是阻止还是通过，数据包就不再向下匹配新的规则。
+     3.	如果规则中没有明确表明是阻止还是通过的，也就是没有匹配规则，向下进行匹配，直到匹配默认规则得到明确的阻止还是通过。
+     4.	防火墙的默认规则是所有规则执行完才执行的。
+	 
+###  四个表五个链
+####  filter表:  是数据包的过滤功能
+	  input链:   是否允许数据包进入到防火墙服务中
+	  output链:  是否允许防火墙服务器产生的数据包可以出去
+	  forward链: 是否允许数据经过防火墙到到达相应主机
+	  
+####  nat表: 对数据包中的源地址或目标地址,以及源端口或目标端口进行修改
+	  prerouting:  将路由之前接收到的数据包, 进行修改调整
+	  postrouting: 将路由之后发出去的数据包, 进行修改调整
+	  output:	   将防火墙自身产生数据包,在发出去的时候进行修改调整
+
+###  熟悉掌握iptables防火墙配置方法
+####  预备知识:
+	 01. 防火墙服务必须开启
+	 02. 了解运维基础网络(数据包结构信息)
+	 03. 掌握防火墙服务配置命令
+	
+####  iptables防火墙操作管理方法:
+#####  查看方法
+	   /etc/init.d/iptables status
+	   iptables -L -n
+	   iptables -nL -v  --- 显示更详细的规则策略
+
+	   iptables -L -n
+       Chain INPUT (policy ACCEPT)   --- 访问防火墙做策略管理
+       target     prot opt source               destination         
+       ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0           state RELATED,ESTABLISHED 
+	   指定允许任意IP地址主机和我的防火墙建立连接, 允许防火墙进行访问
+	   
+       ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0   
+       指定任意主机访问其他主机,icmp协议放行(可以进行ping的操作)
+	   
+       ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0  
+       指定任意主机可以访问防火墙服务任意端口信息
+	   
+       ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           state NEW tcp dpt:22 
+	   指定任意主机可以访问ssh服务信息
+	   
+       REJECT     all  --  0.0.0.0/0            0.0.0.0/0           reject-with icmp-host-prohibited
+       指定任意主机防火墙进行拒绝, 并给出拒绝的原因 
+       
+       Chain FORWARD (policy ACCEPT)
+       target     prot opt source               destination         
+       REJECT     all  --  0.0.0.0/0            0.0.0.0/0           reject-with icmp-host-prohibited 
+	   
+       
+       Chain OUTPUT (policy ACCEPT)
+       target     prot opt source               destination 
+	   
+#####  防火墙初始化操作
+	   iptables -F  --- 将防火墙默认规则信息进行删除清空
+	   iptables -Z  --- 将防火墙默认计数器信息进行清楚
+	   iptables -X  --- 将防火墙默认自定义链信息删除
+	
+	
+
+####  实现防火请策略添加配置
+	   iptables命令             --- 临时生效（即时生效）
+	   语法结构:
+	   iptables 指定在什么表上进行配置  指定在什么链上进行配置  如何进行配置规则
+	   案例: 禁止来自 10.0.0.1 ip 地址访问 80 端口的请求 
+	   # iptables filter  input 组织访问本地服务器上80端口
+       iptables -t filter -A INPUT -p tcp --dport 80 -j REJECT
+	   -t   --- 指定防火墙表的信息, 默认不添加-t参数, 表示直接配置filter表
+	   -A   --- 指定在相应链上进行添加规则信息
+	   -p   --- 指定规则中协议信息
+	   --dport  --- 指定规则中目标端口信息
+	   -j   --- 指定对匹配的数据包做什么处理 (ACCEPT REJECT DROP)
+	   
+	   
+	   /etc/sysconfig/iptables  --- 永久生效
+     
+	 
+###  企业案例
+####  根据网段信息进行策略控制--阻止访问服务器10.0.0.0/24网段
+     [root@web01 ~]# iptables -A INPUT -i eth0 -d 10.0.0.0/24 -j DROP
+####  除了10.0.0.1主机可以访问，其他都不允许
+     root@web01 ~]# iptables -A INPUT -i eth0 -d 10.0.0.0/24 ! -s 10.0.0.1 -j DROP
+	 ！ --取反
+	 
+####  指定连续端口&不连续端口
+     [root@web01 ~]# iptables -A INPUT -i eth0 -s 10.0.0.1 -p tcp --dport 10:30 -j ACCEPT
+
+	 不连续端口号配置方法
+     iptables -I INPUT -i eth0 -s 10.0.0.1 -p tcp -m multiport --dport 80,443 -j ACCEPT
+	 -m  --- 可以用于指定iptables防火墙扩展模块信息
+	    multiport    --- 指定此模块可以支持配置多端口策略信息
+	 
+####  如何实现禁止ping功能
+     ping如何依赖于哪个协议icmp协议
+	 icmp 8 : Echo request——回显请求（Ping请求）
+####  在input链上实现禁止ping
+	 iptables -A INPUT -m icmp -p icmp --icmp-type 8 -j DROP
+	 
+	 icmp 0 : Echo Reply——回显应答（Ping应答）
+
+####  防火墙状态机制配置
+#####  NEW状态
+     发送第一个数据包，就称为new状态数据包，syn=1，ack=0
+#####  ESTABLISHED状态
+     响应（回复）数据包，就称为ESTABLISHED
+#####  RELATED
+     借用已有链路，建立新的通讯请求
+	 FTP：两个链路   控制链路  数据链路
+	 
+#####  INVAID
+     无效的数据包
+	 
+###  利用状态机制实现策略控制
+####  在iptables服务器上：实现阻止new状态机制数据包接收（INPUT）
+     [root@web01 ~]# iptables -A INPUT -i eth0 -s 10.0.0.8 -m state --state NEW -j DROP
+####  在iptables服务器上：实现阻止new状态机制数据包发送（OUTPUT）
+     iptables -A OUTPUT -o eth0 -d 10.0.0.8 -m state --state NEW -j DROP
+####  在iptables服务器上: 实现阻止ESTABLISHED状态机制数据包接收(INPUT)
+     iptables -A INPUT -i eth0 -s 10.0.0.8 -m state --state ESTABLISHED -j DROP
+####  在iptables服务器上: 实现阻止ESTABLISHED状态机制数据包发出(OUTPUT)
+	 iptables -A OUTPUT -o eth0 -d 10.0.0.8 -m state --state ESTABLISHED -j DROP
+
+###  企业环境防火墙配置方法
+####  第一个里程: 备份配置文件
+	 cp -a /etc/sysconfig/iptables{,.bak}
+	
+####  第二个里程: 清除防火墙配置
+	 iptables -F
+	 iptables -Z
+	 iptables -X
+	 
+####  第三个里程: 进行配置操作
+	 a. 让管理主机可以直接访问iptables服务器
+	 iptables -A INPUT -i eth0 -s 10.0.0.1 -p tcp --dport 22 -j ACCEPT
+	 
+	 b. 配置默认策略
+	 iptables -P INPUT DROP
+	 iptables -P FORWARD DROP
+	 
+	 c. 允许自己可访问自己
+	 loopback接口---环回接口(测试
+	 iptables -A INPUT  -i lo -m icmp -p icmp --icmp-type any -j ACCEPT
+	 
+	 eth0  10.0.0.7 
+	       -------->    
+	 lo    10.0.0.7  --- 10.0.0.7 
+	       -------->|
+	 	   <-------|
+     
+     d. 允许指定端口可以被外网访问
+	 iptables -A INPUT -i eth0 -m multiport -p tcp --dport 80,443 -j ACCEPT
+	 
+	 e. 允许合作企业进行访问(允许内网服务器进行访问)
+	 iptables -A INPUT -i eth0 -s 10.0.0.0/24 -j ACCEPT
+	 iptables -A INPUT -i eth1 -s 172.16.1.0/24 -j ACCEPT
+	 
+	 f. 允许特殊状态数据包
+	 # 允许关联的状态包
+     iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+     iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+     
+####  保存配置
+	 /etc/sysconfig/iptables  --- 永久生效
+	 1. 利用iptables命令进行保存
+	    iptables-save >/etc/sysconfig/iptables
+	 2. 利用启动脚本进行保存
+	    /etc/init.d/iptables save
+
+
+####  	应用场景01: 如何实现架构中没有外网地址的主机,访问互联网
+	 第一个里程: 创建出模拟环境
+	 关闭服务器内网网卡
+     
+     异常问题: 虚拟主机内网无法ping通(防火墙服务没有开启)
+	 问题说明: 在虚拟主机中setup界面识别了多个备份网卡信息
+	 解决方法: 在setup中需要将多个备份网卡信息进行删除
+     
+     第二个里程: 修改内网主机网关信息
+     route add default gw 172.16.1.7
+     
+     第三个里程: 将web01防火墙服务器作为路由器使用
+	 vim /etc/sysctl.conf 
+     net.ipv4.ip_forward = 1
+     sysctl -p
+	 
+	 第四个里程: 完成nat映射配置
+	 1) 指定出将什么地址(端口)做转换  
+	 2) 在什么位置上做转换
+	 3) 转换成什么地址信息
+	 iptables -t nat -A POSTROUTING -s 172.16.1.0/24 -o eth0 -j SNAT --to-source 10.0.0.7
+	 
+	 [root@web01 ~]# iptables -A FORWARD -i eth1 -s 172.16.1.0/24 -j ACCEPT
+     [root@web01 ~]# iptables -A FORWARD -o eth0 -s 10.0.0.7 -j ACCEPT
+     [root@web01 ~]# iptables -A FORWARD -i eth0 -d 10.0.0.7 -j ACCEPT
+     [root@web01 ~]# iptables -A FORWARD -o eth1 -d 172.16.1.0/24 -j ACCEPT
+     
+     prerouting   --- 在路由之前做好映射操作
+     postrouting  --- 在路由之后做好映射操作
+     output       --- 防火墙服务自身产生数据在出去之前做映射	
+
+####  总结:
+     prerouting   --- 路由前做映射
+	 postrouting  --- 路由后做映射
+	 SNAT   --- 做源地址映射
+	 DNAT   --- 做目标地址映射
+	 --to-source       --- 指定将源地址映射成什么地址
+	 --to-destination  --- 指定将目标地址映射成什么地址
+	 
+	 
+####  请描述下面 iptables 命令的作用 (防止网络中泛洪攻击)
+####  定义自定链信息 syn-flood链的名称==变量名
+     iptables -N syn-flood 
+
+####  设置自定义链的规则信息
+     iptables -A syn-flood -m limit -limit 5000/s -limit-burst 200 -j RETURN 
+     iptables -A syn-flood -j DROP 
+
+####  调用自定义链的配置
+     iptables -A INPUT -i eth0 -syn -j syn-flood 
+
+     iptables -A INPUT -i eth0 -syn -m limit -limit 5000/s -limit-burst 200 -j RETURN 
+     iptables -A INPUT -i eth0 -syn -j DROP
+
+###  自定义链概念 
+     1) 指定自定义链名称信息== shell设置变量信息    oldboy=
+     iptables -N oldboy
+     
+     2) 指定自定义链的规则==   shell设置变量值内容  oldboy=xxx
+     iptables -A oldboy -p tcp --dport 22 -j ACCEPT 
+     
+     iptables -R oldboy 1 -p tcp --dport 22:80 -j ACCEPT
+     
+     3) 调用自定义链信息==     shell  echo $oldboy 
+     iptable -A INPUT -i eth0 -s 10.0.0.0/24 -j oldboy
+     iptable -A INPUT -i eth0 -s 10.0.1.0/24 -j oldboy
+     iptable -A INPUT -i eth0 -s 192.168.1.0/24 -j oldboy
+
+	 
+	 
+###  接下来我们将由简入难介绍 20 条 Linux 管理员最常会用到的 IPTables 规则。
+####  1、启动、停止和重启IPTables
+     
+     虽然 IPTables 并不是一项服务，但在 Linux 中还是可以像服务一样对其状态进行管理。
+     基于SystemD的系统（centos7）
+     
+     systemctl start iptables
+     systemctl stop iptables
+     systemctl restart iptables
+     
+     基于SysVinit的系统（centos6）
+     
+      /etc/init.d/iptables start
+     /etc/init.d/iptables stop
+     /etc/init.d/iptables restart
+     
+####  2、查看IPtables防火墙策略
+     
+     你可以使用如下命令来查看 IPtables 防火墙策略：
+     
+      iptables -L -n -v
+
+     
+     以上命令是查看默认的 FILTER 表，如果你只希望查看特定的表，可以在 -t 参数后跟上要单独查看的表名。例如只查看 NAT 表中的规则，可以使用如下命令：
+     
+      iptables -t nat -L -v –n
+     
+####  3、屏蔽某个IP地址
+     
+     如果你发布有某个 IP 向服务器导入攻击或非正常流量，可以使用如下规则屏蔽其 IP 地址：
+     
+      iptables -A INPUT -s xxx.xxx.xxx.xxx -j DROP
+     
+     注意需要将上述的 XXX 改成要屏蔽的实际 IP 地址，其中的 -A 参数表示在 INPUT 链的最后追加本条规则。（IPTables 中的规则是从上到下匹配的，一旦匹配成功就不再继续往下匹配）
+     
+     如果你只想屏蔽 TCP 流量，可以使用 -p 参数的指定协议，例如：
+     
+     iptables -A INPUT -p tcp -s xxx.xxx.xxx.xxx -j DROP
+     
+####  4、解封某个IP地址
+     
+     要解封对 IP 地址的屏蔽，可以使用如下命令进行删除：
+     
+      iptables -D INPUT -s xxx.xxx.xxx.xxx -j DROP
+     
+     其中 -D 参数表示从链中删除一条或多条规则。
+####  5、使用IPtables关闭特定端口
+     
+     很多时候，我们需要阻止某个特定端口的网络连接，可以使用 IPtables 关闭特定端口。
+     
+     阻止特定的传出连接：
+     
+      iptables -A OUTPUT -p tcp --dport xxx -j DROP
+     
+     阻止特定的传入连接：
+     
+     iptables -A INPUT -p tcp --dport xxx -j ACCEPT
+     
+####  6、使用Multiport控制多端口
+     
+     使用 multiport 我们可以一次性在单条规则中写入多个端口，例如：
+     
+     iptables -A INPUT  -p tcp -m multiport --dports 22,80,443 -j ACCEPT
+     iptables -A OUTPUT -p tcp -m multiport --sports 22,80,443 -j ACCEPT
+     
+####  7、在规则中使用 IP 地址范围
+     
+     在 IPtables 中 IP 地址范围是可以直接使用 CIDR 进行表示的，例如：
+     
+     iptables -A OUTPUT -p tcp -d 192.168.100.0/24 --dport 22 -j ACCEPT
+     
+####  8、配置端口转发
+     
+     有时我们需要将 Linux 服务器的某个服务流量转发到另一端口，此时可以使用如下命令：
+     
+     iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
+     
+     上述命令会将所有到达 eth0 网卡 25 端口的流量重定向转发到 2525 端口。
+####  9、屏蔽HTTP服务Flood攻击
+     
+     有时会有用户在某个服务，例如 HTTP 80 上发起大量连接请求，此时我们可以启用如下规则：
+     
+     iptables -A INPUT -p tcp --dport 80 -m limit --limit 100/minute --limit-burst 200 -j ACCEPT
+     
+     上述命令会将连接限制到每分钟 100 个，上限设定为 200。
+####  10、禁止PING
+     
+     对 Linux 禁 PING 可以使用如下规则屏蔽 ICMP 传入连接：
+     
+     iptables -A INPUT -p icmp -i eth0 -j DROP
+     
+####  11、允许访问回环网卡
+     
+     环回访问（127.0.0.1）是比较重要的，建议大家都开放：
+     
+     iptables -A INPUT -i lo -j ACCEPT
+     iptables -A OUTPUT -o lo -j ACCEPT
+     
+####  12、屏蔽指定MAC地址
+     
+     使用如下规则可以屏蔽指定的 MAC 地址：
+     
+     iptables -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j DROP
+     
+####  13、限制并发连接数
+     
+     如果你不希望来自特定端口的过多并发连接，可以使用如下规则：
+     
+     iptables -A INPUT -p tcp --syn --dport 22 -m connlimit --connlimit-above 3 -j REJECT
+     
+     以上规则限制每客户端不超过 3 个连接。
+####  14、清空IPtables规则
+     
+     要清空 IPtables 链可以使用如下命令：
+     
+     iptables -F
+     
+     要清空特定的表可以使用 -t 参数进行指定，例如：
+     
+     iptables -t nat –F
+     
+####  15、保存IPtables规则
+     
+     默认情况下，管理员对 IPtables 规则的操作会立即生效。但由于规则都是保存在内存当中的，所以重启系统会造成配置丢失，要永久保存 IPtables 规则可以使用 iptables-save 命令：
+     
+     iptables-save > ~/iptables.rules
+     
+     保存的名称大家可以自己改。
+####  16、还原IPtables规则
+     
+     有保存自然就对应有还原，大家可以使用 iptables-restore 命令还原已保存的规则：
+     
+     iptables-restore < ~/iptables.rules
+     
+####  17、允许建立相关连接
+     
+     随着网络流量的进出分离，要允许建立传入相关连接，可以使用如下规则：
+     
+     iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+     
+     允许建立传出相关连接的规则：
+     
+     iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+     
+####  18、丢弃无效数据包
+     
+     很多网络攻击都会尝试用黑客自定义的非法数据包进行尝试，我们可以使用如下命令来丢弃无效数据包：
+     
+     iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
+     
+####  19、IPtables屏蔽邮件发送规则
+     
+     如果你的系统不会用于邮件发送，我们可以在规则中屏蔽 SMTP 传出端口：
+     
+     iptables -A OUTPUT -p tcp --dports 25,465,587 -j REJECT
+     
+####  20、阻止连接到某块网卡
+     
+     如果你的系统有多块网卡，我们可以限制 IP 范围访问某块网卡：
+     
+     iptables -A INPUT -i eth0 -s xxx.xxx.xxx.xxx -j DROP
+     
+     源地址可以是 IP 或 CIDR。

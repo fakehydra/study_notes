@@ -1,0 +1,31 @@
+需要安装软件
+
+1.金蝶中间件 
+2.TensorFlow
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<license
+    product="Apusic Application Server"
+    edition="Standard Edition"
+    version="9.0.1"
+    licensee="金蝶天燕临时测试license"
+    connections="3"
+    datefrom="2018-12-04"
+    expiration="2019-12-10"
+    license_ver="8"
+    signature="VNxKQwnIP8umXi3CGdQ7aezoN8AvPiMzx/6cw8lTVBuUrROPnGd3andD+F7mJEcSqlir6oGwgl5hi+Zqbsax+RcyXor/hw+0t8XWc2XTrmHn/Al8ICIVwE7IvVVN/xG1QwQPwmatfbRMcMTX0+n0LUd5qMgX2fIf4JC9rkWd9UGIwaKw0gtESp2tZyB0eQzlazP6dl/eOybNHyLO/rF5DtmIq9BL8WgqElKTrVlHeZx8L9ViYF93UnCHsu4Fk4GMYGe78vE8q/PrLtMOssbME9ksm37sWU20zd6eq4Ub6LxbrjxpUVRooEnsHPfSl41y2TB0cXnlk0nDIXee+hFedgtU9t5u1ypRCcBWnnM/2xED/RwHZpLn1mBTbX/UTZKpekaKywYUh2MLtWbEFV6PzM2jyitTEMcVdAMw5ONapUQHMmgtUa39zEQN1yqncx/2tGH1eo2L0HPOj3uRdI6UsPwU0kCdnHLGxW5OglQ1BWWzsmyb7H6dOa5sjqhxvmZV"
+/>
+
+
+安装TensorFlow
+
+sudo apt-get install python3-pip python3-dev 
+
+git clone https://github.com/JohnnyChan8/TensorFlow4FireflyRK3399.git
+
+cd 
+
+pip3 install tenxx

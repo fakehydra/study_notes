@@ -1,0 +1,20 @@
+# pxe相关
+地址：10.15.5.202
+账号密码：root/123
+重启服务：
+systemctl restart cobblerd
+systemctl restart dhcpd
+systemctl restart tftp
+cobbler sync
+
+
+# 虚拟机相关
+地址：10.15.5.205
+账号密码：root/Hisw2019!@#
+
+
+# 禅道相关
+地址：10.15.7.55
+账号密码：admin/intel@123
+
+ 

@@ -1,0 +1,44 @@
+搭建本地yum仓库
+###  创建目录
+	 mkdir -p /application/yum/centos6.6/x86_64/
+####  进入目录
+     cd /application/yum/centos6.6/x86_64/
+####  下载createrepo软件
+     yum install -y createrepo
+####  初始化
+     createrepo -pdo /application/yum/centos6.6/x86_64/ /application/yum/centos6.6/x86_64/
+####  提供yum服务
+     python -m SimpleHTTPServer 80 &>/dev/null &
+	 ps:可以用nginx或者Apache ，但python更适合内网环境
+	 
+####  添加新的rpm包
+     yumdownloader pcre-devel openssl-devel
+	 
+####  更新
+     createrepo --update /application/yum/centos6.6/x86_64/
+     ps：每新加一个rpm包都更新一下
+###  修改yum配置文件，不删除安装包
+     vim /etc/yum.conf
+	 keepcache=1
+	 cachedir=/var/cache/yum/x86_64/6/base/packages
+	 
+###  客户端
+####  添加
+     [root@lb01 yum.repos.d]# vim hydra.repo
+     [hydra]
+     name=Server
+     baseurl=http://10.0.0.71
+     enable=1
+     gpgcheck=0
+####  临时使用
+     [root@lb01 yum.repos.d]# yum --enablerepo=hydra --disablerepo=base,extras,updates,epel list
+     --指定使用hydra库
+	 
+####  永久使用
+     [root@lb01 yum.repos.d]# vim CentOS-Base.repo
+     在每一个启动的源后面加上：enabled=0
+	 --当数值为1或者没有的时候，都是启动，为0 关闭
+	 [base]
+     ...
+	 enabled=0
+	 

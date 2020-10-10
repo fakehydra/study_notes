@@ -1,0 +1,231 @@
+###  下载dhcp
+     yum install -y dhcp
+	 
+###  修改配置文件
+     [root@yum ~]# vim /etc/dhcp/dhcpd.conf 
+     #
+     # DHCP Server Configuration file.
+     #   see /usr/share/doc/dhcp*/dhcpd.conf.sample
+     #   see 'man 5 dhcpd.conf'
+     #
+     
+     subnet 10.0.0.0 netmask 255.255.255.0 {
+             range 10.0.0.206 10.0.0.240;      --分配的区段
+             option subnet-mask 255.255.255.0;   --子网掩码
+             default-lease-time 21600;    --租用期限
+             max-lease-time 43200;    --最大值
+             next-server 10.0.0.71;   --tftp地址
+             filename "/pxelinux.0";  --宣告文件地址
+     }
+
+###  启动dhcp
+     [root@yum ~]# /etc/init.d/dhcpd start
+     正在启动 dhcpd：                                           [确定]
+	 
+###  安装tftp
+     yum install -y tftp-server
+	 已安装:
+     tftp-server.x86_64 0:0.49-8.el6 
+	 
+####  配置tftp
+     [root@yum ~]# vim /etc/xinetd.d/tftp 
+     # default: off
+     # description: The tftp server serves files using the trivial file transfer \
+     #       protocol.  The tftp protocol is often used to boot diskless \
+     #       workstations, download configuration files to network-aware printers, \
+     #       and to start the installation process for some operating systems.
+     service tftp
+     {
+             socket_type             = dgram
+             protocol                = udp
+             wait                    = yes
+             user                    = root
+             server                  = /usr/sbin/in.tftpd
+             server_args             = -s /var/lib/tftpboot
+             disable                 = no
+             per_source              = 11
+             cps                     = 100 2
+             flags                   = IPv4
+###  启动xinetd.d     
+     [root@yum ~]# /etc/init.d/xinetd start
+     正在启动 xinetd：                                          [确定]
+	 
+###  安装httpd服务
+####  代码如下
+     #！/bin/bash
+     . /etc/rc.d/init.d/functions
+     nginx_name="nginx-1.14.0.tar.gz"
+     Nginx_Dir="nginx-1.14.0"
+     Nginx_Install_Dir="/application/nginx-1.14.0"
+     Install_Nginx(){
+         #跟新源
+       wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo
+      # 安装依赖包
+       yum install -y pcre pcre-devel openssl openssl-devel gcc make gcc-c++
+       if [ -f $nginx_name ]
+         then
+           echo 'nginx need have'
+           # t解压文件
+           tar zxf ${nginx_name} && cd ${Nginx_Dir}
+           # 添加僵尸用户
+           useradd nginx -s /sbin/nologin -M -u 664 
+           # 编译安装
+           ./configure --user=nginx --group=nginx --prefix=${Nginx_Install_Dir} --with-http_stub_status_module --with-http_ssl_module
+           [ $(echo $?) -eq 0 ] && make && make install
+           [ $(echo $?) -eq 0 ] && action nginx安装 /bin/true || action nginx安装 /bin/false  
+             #创建软链接
+          ln -s ${Nginx_Install_Dir} /application/nginx
+      fi
+     }
+     Install_Nginx
+	 
+####  ps:nginx的tar文件要和脚本放一起
+
+####  配置nginx.conf
+     [root@yum scripts]# vim /application/nginx-1.14.0/conf/nginx.conf
+     worker_processes  1;
+     events {
+         worker_connections  1024;
+     }
+     http {
+         include       mime.types;
+         default_type  application/octet-stream;
+         sendfile        on;
+         keepalive_timeout  65;
+         server {
+             listen       80;
+             server_name  localhost;
+             location / {
+                 autoindex on;
+                 root   html;
+                 index  index.html index.htm;
+             }
+             error_page   500 502 503 504  /50x.html;
+             location = /50x.html {
+                 root   html;
+             }
+         }
+     }
+####  启动nginx
+     [root@yum scripts]# /application/nginx/sbin/nginx 
+	 
+###  挂载光盘
+     [root@yum html]# cd /application/nginx-1.14.0/html/ && \rm *.html
+     [root@yum html]# mkdir -p /application/nginx-1.14.0/html/iso
+     [root@yum html]# mount /dev/cdrom /application/nginx-1.14.0/html/iso/
+     mount: block device /dev/sr0 is write-protected, mounting read-only
+####  这里除了一个小问题。。。解决
+     [root@yum html]# mount -o remount,rw /dev/cdrom /application/nginx/html/iso/
+     [root@yum html]# df -h
+     Filesystem      Size  Used Avail Use% Mounted on
+     /dev/sda3        18G  5.7G   12G  34% /
+     tmpfs           238M     0  238M   0% /dev/shm
+     /dev/sda1       190M   35M  146M  19% /boot
+     /dev/sr0        3.7G  3.7G     0 100% /mnt
+     /dev/sr0        3.7G  3.7G     0 100% /application/nginx-1.14.0/html/iso
+     
+###  配置支持pxe的启动程序
+     [root@yum html]# yum install -y syslinux
+     已安装:
+       syslinux.x86_64 0:4.04-3.el6                                                        
+     
+     作为依赖被安装:
+       mtools.x86_64 0:4.0.12-1.el6          syslinux-nonlinux.noarch 0:4.04-3.el6   
+	   
+###  配置自动安装
+####  设置grub密码
+     [root@yum html]# grub-crypt 
+     Password: 123456
+     Retype password: 123456
+     $6$smYDIsCJH7v7P9Zn$tcZDWFGZVmr/.JShj.oyobPreZxK6rI7qarSndiSAZ4WeC/glIcakiw6/qA.6ZrerFGfpaIR4OQVQsqJIG6nX1
+
+####  配置文件
+     [root@yum html]# vim /var/lib/tftpboot/pxelinux.cfg/default
+     [root@jumpserver ks_config]# cat /var/lib/tftpboot/pxelinux.cfg/default
+     default ks
+     prompt 0
+     timeout 600
+     
+     display boot.msg
+     
+     menu background splash.jpg
+     menu title Welcome to CentOS 6.9!
+     menu color border 0 #ffffffff #00000000
+     menu color sel 7 #ffffffff #ff000000
+     menu color title 0 #ffffffff #00000000
+     menu color tabmsg 0 #ffffffff #00000000
+     menu color unsel 0 #ffffffff #00000000
+     menu color hotsel 0 #ff000000 #ffffffff
+     menu color hotkey 7 #ffffffff #ff000000
+     menu color scrollbar 0 #ffffffff #00000000
+     
+     label linux
+       menu label ^Install or upgrade an existing system
+       menu default
+       kernel vmlinuz
+       append initrd=initrd.img
+     label vesa
+       menu label Install system with ^basic video driver
+       kernel vmlinuz
+       append initrd=initrd.img nomodeset
+     label rescue
+       menu label ^Rescue installed system
+       kernel vmlinuz
+       append initrd=initrd.img rescue
+     label local
+       menu label Boot from ^local drive
+       localboot 0xffff
+     label memtest86
+       menu label ^Memory test
+       kernel memtest
+       append -
+     label ks
+       kernel vmlinuz
+       append initrd=initrd.img ks=http://10.0.0.71/ks_config/CentOS-6.9-ks.cfg
+     
+     [root@yum html]# mkdir -p /application/nginx-1.14.0/html/ks_config  
+     [root@yum html]# vim /application/nginx-1.14.0/html/ks_config/Centos-6.9-ks.cfg
+     install
+     url --url="http://10.0.0.71/ios/"
+     text
+     lang en_US.UTF-8
+     keyboard us
+     zerombr
+     bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet"
+     network --bootproto=dhcp --device=eth0 --onboot=yes --noipv6 --hostname=CentOS6
+     install
+     url --url="http://10.0.0.71/ios/"
+     text
+     lang en_US.UTF-8
+     keyboard us
+     zerombr
+     bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet"
+     network --bootproto=dhcp --device=eth0 --onboot=yes --noipv6 --hostname=CentOS6
+     timezone --utc Asia/Shanghai
+     authconfig --enableshadow --passalgo=sha512
+     clearpart --all --initlabel
+     part /boot --fstype=ext4 --asprimary --size=200
+     part swap --size=768
+     part / --fstype=ext4 --grow --asprimary --size=200
+     firstboot --disable
+     selinux --disabled
+     firewall --disabled
+     logging --level=info
+     reboot
+     %packages
+     @base
+     @compat-libraries
+     @debugging
+     @development
+     tree
+     nmap
+     sysstat
+     lrzsz
+     dos2unix
+     telnet
+     %post
+     wget -O /tmp/linux.sh http://10.0.0.71/ks_config/linux.sh &>/dev/null
+     /bin/sh /tmp/linux.sh
+     %end
+
+	   

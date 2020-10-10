@@ -1,0 +1,44 @@
+编译升级gcc 
+下载包
+wget http://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.gz
+
+解压& cd
+tar xf gcc-9.2.0.tar.gz
+cd gcc-9.2.0
+
+环境准备
+./contrib/download_prerequisites
+
+创建编译输出目录，将所有的中间文件都放到该目录 
+mdkir gcc-build-9.2.0
+cd gcc-build-9.2.0
+
+
+配置
+../configure --enable-checking=release --enable-languages=c,c++,fortran --disable-multilib
+
+开始编译
+编译前先确认本机是否有 gcc g++  没有的话安装一下，不然make会报错
+安装gcc g++ :yum install gcc g++ 即可
+make -j10  #这样速度快一点，只需要半个小时左右，不然需要一个小时
+卸载之前版本gcc
+rpm -q gcc
+yum remove 找到的版本
+
+make install
+
+添加软链接
+ln /usr/local/bin/gcc /usr/bin/gcc
+gcc --version 
+
+
+
+
+
+'GLIBCXX_3.4.21' not found 报错解决
+首先升级gcc版本，如上。
+然后找到/usr/local/lib64/libstdc++ 并更新
+cp /usr/local/lib64/libstdc++.so.6.0.24 /lib64
+cd /lib64
+rm -rf libstdc++.so.6               # 这一步不确定的话可以用mv 代替rm
+ln -s libstdc++.so.6.0.21 libstdc++.so.6

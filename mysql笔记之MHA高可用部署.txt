@@ -1,0 +1,157 @@
+mysql笔记之MHA高可用构建
+####  环境准备
+     master：10.0.0.51   db1
+     node1： 10.0.0.52   db2
+     node2:  10.0.0.53   db3
+     Linux版本：
+     [root@db03 tools]# cat /etc/centos-release
+     CentOS Linux release 7.5.1804 (Core) 
+#####  数据库版本：
+     [root@db03 tools]# mysql --version
+     mysql  Ver 14.14 Distrib 5.6.38, for Linux (x86_64) using  EditLine wrapper
+#####  主从环境：
+     一主二从，51为主，其余为从，配置就略过了，看之前博文
+
+####  配置准备：
+     设置从库relay的自动删除功能，从库设置只读
+     命令：
+     set global relay_log_purge = 0; 	临时（建议三个节点都做）
+     set global read_only=1; 
+     PS：若要永久生效将其写到配置文件即可
+
+####  配置关键程序软链接：
+     ln -s /application/mysql/bin/mysqlbinlog /usr/bin/mysqlbinlog
+     ln -s /application/mysql/bin/mysql /usr/bin/mysql
+
+####  配置各节点互信：
+     rm -rf /root/.ssh 
+     ssh-keygen（一路回车即可）
+     cd /root/.ssh 
+     mv id_rsa.pub authorized_keys
+     scp  -r  /root/.ssh  10.0.0.52:/root 
+     scp  -r  /root/.ssh  10.0.0.53:/root 
+
+####  各节点验证：
+     db01:
+     ssh 10.0.0.51 date
+     ssh 10.0.0.52 date
+     ssh 10.0.0.53 date
+     
+     db02:
+     ssh 10.0.0.51 date
+     ssh 10.0.0.52 date
+     ssh 10.0.0.53 date
+     
+     db03:
+     ssh 10.0.0.51 date
+     ssh 10.0.0.52 date
+     ssh 10.0.0.53 date
+     PS：实现其可以免密互信即可
+
+####  安装软件：
+     下载mha软件，mha官网：https://code.google.com/archive/p/mysql-master-ha/
+     github下载地址：https://github.com/yoshinorim/mha4mysql-manager/wiki/Downloads
+    PS：官网的话需要科学上网
+
+####  开始部署：
+*step1*：将下载好的MHA.zip上传到服务器，并解压
+*step2*：安装依赖
+      yum install perl-DBD-MySQL -y
+*step3*：安装node软件
+      rpm -ivh mha4mysql-node-0.57-0.el7.noarch.rpm
+*step4*：在db01主库中创建mha需要的用户
+      grant all privileges on *.* to mha@'10.0.0.%' identified by 'mha';
+*step5*：安装manager软件（db3）
+
+#####  依赖：
+     yum install -y perl-Config-Tiny epel-release perl-Log-Dispatch perl-Parallel-ForkManager perl-Time-HiRes
+#####  manager包：
+     rpm -ivh mha4mysql-manager-0.57-0.el7.noarch.rpm 
+
+####  编写配置文件
+#####  创建相关目录
+     配置文件目录：mkdir -p /etc/mha
+     日志目录： mkdir -p /var/log/mha/app1
+     
+#####  编辑mha配置文件：
+     vim /etc/mha/app1.cnf
+      
+     [server default]
+     manager_log=/var/log/mha/app1/manager        
+     manager_workdir=/var/log/mha/app1            
+     master_binlog_dir=/data/mysql/       
+     user=mha                                   
+     password=mha                               
+     ping_interval=2
+     repl_password=123
+     repl_user=repl
+     ssh_user=root                               
+     
+     [server1]                                   
+     hostname=10.0.0.51
+     port=3306                                  
+     
+     [server2]            
+     hostname=10.0.0.52
+     port=3306
+     
+     [server3]
+     hostname=10.0.0.53
+     port=3306
+
+####  状态检查
+#####  互信检查：
+     masterha_check_ssh  --conf=/etc/mha/app1.cnf   
+#####  截取部分显示：
+     Mon Nov 26 19:53:54 2018 - [info] All SSH connection tests passed successfully.
+     全部ok显示信息最后一行
+
+#####  主从状态：
+     masterha_check_repl  --conf=/etc/mha/app1.cnf 
+#####  截取部分显示：
+     MySQL Replication Health is OK.
+
+####  开启MHA：
+     nohup masterha_manager --conf=/etc/mha/app1.cnf --remove_dead_master_conf --ignore_last_failover < /dev/null > /var/log/mha/app1/manager.log 2>&1 &
+
+####  查看MHA状态
+     [root@db03 tools]# masterha_check_status  --conf=/etc/mha/app1.cnf 
+     app1 (pid:6521) is running(0:PING_OK), master:10.0.0.52
+     [root@db03 tools]# mysql -umha -pmha -h 10.0.0.51 -e "show variables like 'server_id'"
+     Warning: Using a password on the command line interface can be insecure.
+     +---------------+-------+
+     | Variable_name | Value |
+     +---------------+-------+
+     | server_id     | 51    |
+     +---------------+-------+
+     
+
+####  故障处理
+     （1）db01:
+     	 停主库：	
+          /etc/init.d/mysqld stop
+     	 
+     观察manager日志 
+     tail -f /var/log/mha/app1/manager
+     末尾必须显示successfully，才算正常切换成功。
+                                     
+     	
+     （2）db01:  
+     启动db01,mysql数据库
+     /etc/init.d/mysqld start
+     
+     CHANGE MASTER TO MASTER_HOST='10.0.0.52', MASTER_PORT=3306, MASTER_AUTO_POSITION=1, MASTER_USER='repl', MASTER_PASSWORD='123';	
+     将自己添加会主从环境
+     	
+     (3)db03:
+     
+     在/etc/mha/app1.cnf加入
+     [server1]                                   
+     hostname=10.0.0.51
+     port=3306  
+     在51宕机的时候mha自动文件会自动删除51的内容，需要自己再次添加
+     
+     再次启动：
+     nohup masterha_manager --conf=/etc/mha/app1.cnf --remove_dead_master_conf --ignore_last_failover < /dev/null > /var/log/mha/app1/manager.log 2>&1 &
+
+

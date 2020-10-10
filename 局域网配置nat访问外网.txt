@@ -1,0 +1,12 @@
+局域网NAT印射转发
+一个局域网中，只有一台主机可以访问外网，现配置nat，使其他主机都能访问外网
+
+eno1:外网网卡
+eno2:内网网卡
+
+在有公网的主机上配置：iptables -t nat -A POSTROUTING -s 10.40.13.103/8 -o en01 -j MASQUERADE 
+开启转发功能：echo "1" > /proc/sys/net/ipv4/ip_forward
+永久开启：编辑/etc/sysctl.conf
+增加：net.ipv4.ip_forward = 1
+sysctl -p
+内网主机：iptables -t nat -A POSTROUTING -s 10.40.13.103/8 -o en01 -j MASQUERADE 

@@ -1,0 +1,9 @@
+red='\E[1;31m'
+green='\E[1;32m'
+yellow='\E[1;33m'
+blue='\E[1;5;34m'
+res='\E[0m'
+5=闪烁
+分号隔开
+echo 添加颜色
+echo -e "\E[1;5;31m 内容 \E[0m"

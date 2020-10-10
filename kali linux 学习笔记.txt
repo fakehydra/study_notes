@@ -1,0 +1,39 @@
+kali linux 笔记
+
+xshell 连接不上
+  看ssh 服务是不是开启了
+  service ssh start  --开启
+  
+  修改 /etc/ssh/sshd.conf 配置文件
+  vim /etc/ssh/sshd.conf
+  PermitRootLogin yes
+  保存退出
+  再重启ssh服务即可
+  
+更新
+替换sources.list里面的内容
+
+可以使用以下三个源（使用一个即可）
+
+    #kali官方源
+
+    deb http://http.kali.org/kali kali-rolling main non-free contrib
+	
+	#阿里云源
+
+    deb http://mirrors.aliyun.com/kali sana main non-free contrib
+
+    deb http://mirrors.aliyun.com/kali-security/ sana/updates main contrib non-free
+
+    deb-src http://mirrors.aliyun.com/kali-security/ sana/updates main contrib non-free
+
+　#清华大学源
+
+    deb http://mirrors.tuna.tsinghua.edu.cn/kali  kali-rolling main contrib non-free
+　  deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free
+  
+然后执行
+执行 apt-get update 命令即可更新源
+执行 apt-get upgrade 更新软件
+然后安装下载更新，使用如下命令
+apt-get dist-upgrade

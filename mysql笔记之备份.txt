@@ -1,0 +1,179 @@
+备份恢复
+
+1.设计备份策略
+2.日常备份
+3.恢复演练
+4.故障恢复
+5.迁移
+
+
+备份类型
+
+热备：
+在数据库正常业务时，备份数据，并且能够一致性恢复
+
+冷备：
+关闭数据库业务，数据库没有任何变更的情况下，进行备份数据
+
+温备：
+锁表备份，只能查询不能修改
+
+
+备份方式
+
+逻辑备份：
+mysqldump ,
+mysqlbinlog
+物理备份：
+基于磁盘文件备份：
+cp
+xtrabackup
+
+
+备份策略
+全备： 全库备份
+增量： 备份变化的数据
+逻辑备份=mysqldump+mysqlbinlog
+物理备份=xtrabackup
+备份周期 ：根据数据量设计备份周期
+
+
+备份工具使用
+
+1.mysqldump（用于逻辑备份的客户端工具）
+通用参数： -u -p -S -h -P
+备份专用参数：
+-A 全备参数
+mysqldump -uroot -p -A >/backup/full.sql
+
+-B db1 db2 db3  备份多个单库
+
+备份单个或多个表
+mysqldump -uroot -p word city country >/backup/111.sql
+PS:以上备份恢复时，必须库实现存在，并且use才能source恢复
+
+特殊参数使用
+-R          备份存储过程及函数
+--triggers  备份触发器
+mysqldump -uroot -p  -A  -R --triggers  >/backup/full.sql
+
+-F        在备份开始的时候，刷新一个binlog日志
+
+
+
+适合多引擎混合（例如：myisam与innodb混合）的备份命令如下：
+mysqldump -uroot -p -A -R --triggers --master-data=2 --single-transaction |gzip >/backup/all_$(date +%F-%T).sql.gz
+
+mysqldump 备份策略
+1.比较适合小于100G以下数据量
+2.mysqldump原生态不支持增量
+3.要实现增量可以配合binlog实现增量
+4.如果对于大数据量的数据库备份，可以从架构上拆分，分别备份
+
+优点：
+1.可读性强
+2.文本形式备份，压缩比比较高
+
+
+物理备份工具：
+XBK(percona Xtrabackup)
+MEB(Mysql Enterprise Backup)
+
+
+XBK 安装
+[root@db01 tools]# yum -y install perl perl-devel libaio libaio-devel perl-Time-HiRes perl-DBD-MySQL
+[root@db01 tools]# wget https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-2.4.4/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.4-1.el7.x86_64.rpm
+[root@db01 tools]# yum -y install percona-xtrabackup-24-2.4.4-1.el7.x86_64.rpm
+
+
+备份实现原理
+1.非innodb引擎：锁定表，直接拷贝表的数据文件
+2.innodb引擎（过程）：
+     在备份开始的时刻（10:00开始，备份结束10:02），立即触发checkpoint动作，将内存数据页刷写到磁盘
+	 拷贝此时所有的数据文件(lsn=1000)及日志文件，在此过程中产生的日志文件（from_lsn=1000 redo last_lsn=1020和undo）也进行备份
+	 数据页+日志
+	 
+	 
+热备：备份某时间点的数据，将备份过程中产生的变化也备份出来
+
+
+备份命令简单使用及备份内容介绍
+     [root@db01 tools]# innobackupex --user=root --password=123 /backup
+     [root@db01 2018-11-22_12-10-44]# ll /backup/2018-11-22_12-10-44/
+     总用量 77852
+     -rw-r-----. 1 root root      418 11月 22 12:10 backup-my.cnf
+     -rw-r-----. 1 root root 79691776 11月 22 12:10 ibdata1
+     drwxr-x---. 2 root root     4096 11月 22 12:10 mysql
+     drwxr-x---. 2 root root       48 11月 22 12:10 oldboy
+     drwxr-x---. 2 root root     4096 11月 22 12:10 performance_schema
+     drwxr-x---. 2 root root       20 11月 22 12:10 school
+     drwxr-x---. 2 root root       48 11月 22 12:10 taobao
+     drwxr-x---. 2 root root       50 11月 22 12:10 test
+     drwxr-x---. 2 root root       48 11月 22 12:10 testdb
+     drwxr-x---. 2 root root      172 11月 22 12:10 world
+     -rw-r-----. 1 root root       22 11月 22 12:10 xtrabackup_binlog_info
+     -rw-r-----. 1 root root      117 11月 22 12:10 xtrabackup_checkpoints
+     -rw-r-----. 1 root root      466 11月 22 12:10 xtrabackup_info
+     -rw-r-----. 1 root root     2560 11月 22 12:10 xtrabackup_logfile
+
+
+####  xtrabackup_binlog_info
+     [root@db01 2018-11-22_12-10-44]# cat xtrabackup_binlog_info 
+     mysql-bin.000003	1319
+####  xtrabackup_checkpoints
+     [root@db01 2018-11-22_12-10-44]# cat xtrabackup_checkpoints 
+     backup_type = full-backuped
+     from_lsn = 0
+     to_lsn = 139212885
+     last_lsn = 139212885
+     compact = 0
+     recover_binlog_info = 0
+####  xtrabackup_info
+     [root@db01 2018-11-22_12-10-44]# cat xtrabackup_info 
+     uuid = 9abb463a-ee0c-11e8-81a8-000c297a9d3c
+     name = 
+     tool_name = innobackupex
+     tool_command = --user=root --password=... /backup
+     tool_version = 2.4.4
+     ibbackup_version = 2.4.4
+     server_version = 5.6.38-log
+     start_time = 2018-11-22 12:10:45
+     end_time = 2018-11-22 12:10:53
+     lock_time = 0
+     binlog_pos = filename 'mysql-bin.000003', position '1319'
+     innodb_from_lsn = 0
+     innodb_to_lsn = 139212885
+     partial = N
+     incremental = N
+     format = file
+     compact = N
+     compressed = N
+     encrypted = N
+####  xtrabackup_logfile(备份期间产生的)
+
+
+####  全备实现：
+     [root@db01 full]# innobackupex --user=root --password=123 --no-timestamp /backup/full
+     --no-timestamp  不以时间戳生成备份目录名，指定目录full
+
+#####  恢复全备：
+==PS：恢复的路径必须是空的，mysql不需要启动==
+     step1：停止数据库 pkill mysqld
+     step2: 删数据： rm -rf /application/mysql/data/*
+     step3: 准备备份（使用redo前滚，使用undo回滚，保证数据的一致性）
+           [root@db01 full]# innobackupex --apply-log /backup/full/
+     	   181122 12:33:50 completed OK!
+     step4: 恢复数据
+     cd /backup/full
+     cp -a * /application/mysql/data/
+     或者:
+     innobackupex --copy-back /backup/full/
+     step5： 起数据库
+     chown -R mysql. /application/mysql/data/*
+     /etc/init.d/mysqld start
+
+增量备份实现
+增量备份介绍：
+基于上一次备份的增量备份，优点是节约磁盘空间和时间
+局限性：依赖于全备和上一次备份
+备份策略：每周日全备，周一到周六是增量

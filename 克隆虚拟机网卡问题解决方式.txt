@@ -1,0 +1,17 @@
+虚拟主机克隆之后设置网卡的时候出现：device eth0 does not seem to be present ,delaying initialization 解决方法
+
+出现原因：Linux网卡绑定了原先的mac地址
+
+解决方式：
+
+首先：ifconfig -a 查看当前主机的mac地址
+
+然后：修改eth0网卡的mac地址为当前地址
+     vim /etc/sysconfig/network-scripts/ifcfg-eth0
+将HWADDR=  后面的内容改成当前的mac地址
+
+删除70-persistent-net.rules文件
+     rm -rf /etc/udev/rules.d/70-persistent-net.rules 
+	 
+最后：重启系统
+     reboot

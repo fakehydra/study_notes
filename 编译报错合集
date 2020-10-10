@@ -1,0 +1,38 @@
+# 编译报错01：
+ccl:code mode kernel does not support PIC mode
+
+# 报错原因：系统内核版本高于4.0，需要在系统的Makefile文件中支持
+# 问题解决：
+root@ubuntu:~# uname -r 
+4.15.0-29-generic
+
+cd /usr/src/linux-headers-4.15.0-29-generic/arch/x86
+vim Makefile
+ 61 KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow
+ 62 KBUILD_CFLAGS += -fno-pic
+保存退出
+PS:62行内容为新增内容
+
+
+
+# 编译报错02：
+./include/linux/kernel.h:6:10: fatal error: stdarg.h: No such file or directory
+
+问题原因:缺少头文件gcc需要
+
+# 解决方案:
+# 两种方法
+
+# 方法一:
+# 链接到本地文件:
+sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h /lib/modules/4.15.0-91-generic/build/include/stdarg.h
+
+
+# 方法二:
+# 修改Makefile文件:
+# 新增一行:
+ccflags-y = -Wno-declaration-after-statement -mpopcnt -I/usr/lib/gcc/x86_64-linux-gnu/5/include
+
+PS:该路径为自己系统实际路径，不同系统路径不一定相同
+
+

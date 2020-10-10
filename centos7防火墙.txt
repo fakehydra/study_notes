@@ -1,0 +1,42 @@
+查看是否允许状态
+firewall-cmd --state 
+
+在不改变状态的条件下重新加载防火墙：firewall-cmd --reload
+
+
+
+查看开启服务或者端口
+
+firewall-cmd --permanent --zone=public --list-services //服务空格隔开 例如 dhcpv6-client https ss
+
+firewall-cmd --permanent --zone=public --list-ports //端口空格隔开 例如 8080-8081/tcp 8388/tcp 80/tcp
+
+
+启用某个服务
+
+firewall-cmd --zone=public --add-service=https //临时
+
+firewall-cmd --permanent --zone=public --add-service=https //永久
+
+
+开启某个端口
+
+firewall-cmd --permanent --zone=public --add-port=8080/tcp //永久
+
+firewall-cmd --zone=public --add-port=8080/tcp //临时
+
+
+设置某个ip 访问某个服务
+firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address="192.168.0.4/24" service name="http" accept"
+
+ip 192.168.0.4/24 访问 http
+
+
+删除上面的规则
+firewall-cmd --permanent --zone=public --remove-rich-rule="rule family="ipv4" source address="192.168.0.4/24" service name="http" accept"
+
+
+检查是否生效
+ iptables -L -n | grep 21
+
+ 

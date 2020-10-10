@@ -1,0 +1,21 @@
+修改i18n文件
+
+#vi /etc/sysconfig/i18n
+
+--------------内容---------------------
+
+LANG="en_US.UTF-8"
+
+-----------------------------------------
+
+还有一种方法就是改变环境变量LANG
+
+#export LANG="en_US.UTF-8"
+
+不过这样一重新启动就没有，所以要加到/etc/profile里面，这样一开机就会运行这个变量了。
+
+-----------------------------内容-------------------------------
+
+LANG="en_US.UTF-8"
+
+export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE INPUTRC LANG 

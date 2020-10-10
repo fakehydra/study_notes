@@ -1,0 +1,70 @@
+###  LNMP--相关案例
+####  企业案例：无法打开网站
+     1.ping网站
+	 2.确认服务是否开启
+	 3.检查nginx主配置文件
+	 4.检查nginx虚拟主机配置文件
+	 5.检查PHP服务状态
+	 6.检查数据库服务状态
+	 7.确认程序代码文件中连接数据库配置信息
+	 8.写入数据有问题，检查nfs存储映射是否正确
+	    web01（客户端）----nfs（服务端）
+	    www普通用户      映射为相应用户
+	 解决问题：
+	 1.在服务端进行检查
+	    端口号变化
+		防火墙状态
+		服务开启状态
+
+#### 案例配置实战 ---实现动静分离
+     a.当用户请求www.jinc.org/uploads/ 地址时，实现访问上传服务器集群
+	 b.当用户请求www.jinc.org/static 地址时，实现访问静态服务器集群
+	 c.除此之外，其他全部由默认的动态服务器集群
+
+####  配置文件如下	 
+	 http {
+    upstream upload {
+        server 10.0.0.8:80;
+}
+    upstream static {
+        server 10.0.0.7:80;
+}
+    upstream default {
+        server 10.0.0.9:80;
+}
+
+    location ~* /upload {
+        proxy_pass http://upload;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+}
+    location ~* /static {
+        proxy_pass http://static;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+}
+    location ~* / {
+        proxy_pass http://default;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+}
+
+
+###  案例实战--根据用户客户端信息进行负载均衡
+
+
+####  配置代码如下
+     location ~* / {
+        if ($http_user_agent ~* "iphone") {
+        proxy_pass http://static;
+        }
+        if ($http_user_agent ~* "chrome") {
+        proxy_pass http://upload;
+        }
+        proxy_pass http://default;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        }
+
+
+

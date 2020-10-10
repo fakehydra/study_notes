@@ -1,0 +1,105 @@
+docker笔记之管理私有仓库
+
+####  上传镜像到私有仓库
+
+#####  将镜像打一个标签
+     [root@ct7-mb ~]#  docker tag wordpress:v1 10.0.0.205:5000/wordpress:v1
+     [root@ct7-mb ~]# docker images
+     REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
+     10.0.0.205:5000/wordpress   v1                  bea1e43ccfd7        23 minutes ago   
+
+####  push 上去
+     [root@ct7-mb ~]# docker push 10.0.0.205:5000/wordpress
+     The push refers to repository [10.0.0.205:5000/wordpress]
+     Get https://10.0.0.205:5000/v2/: http: server gave HTTP response to HTTPS client
+
+这里有一个报错，解决方式：
+编写/etc/docker/daemon.json文件，添加{"insecure-registries":["10.0.0.205:5000"]}
+     [root@ct7-mb ~]# cat /etc/docker/daemon.json 
+     {"insecure-registries":["10.0.0.205:5000"]}
+####  重启docker服务
+     [root@ct7-mb ~]# systemctl restart docker
+     [root@ct7-mb ~]# docker ps
+     CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+     05e89480b397        registry            "/entrypoint.sh /etc…"   16 minutes ago      Up 3 seconds        0.0.0.0:5000->5000/tcp   registry
+
+####  再次push
+      [root@ct7-mb ~]# docker push 10.0.0.205:5000/wordpress
+      The push refers to repository [10.0.0.205:5000/wordpress]
+      523212ccb0eb: Pushed 
+      7e0f9a75232f: Pushed 
+      5b7fbb7d42b0: Pushed 
+      a784ad0dd013: Pushed 
+      a9428e238894: Pushed 
+      5d574ede99e4: Pushed 
+      v1: digest: sha256:391e56b3bc4c6de50beef889755f4a55b77e2b6ca24b7208171691307f63760b size: 1573
+####  上传成功
+####  查看
+     [root@ct7-mb ~]# curl http://10.0.0.205:5000/v2/_catalog
+     {"repositories":["wordpress"]}
+     查看版本：
+     [root@ct7-mb ~]# curl http://10.0.0.205:5000/v2/wordpress/tags/list
+     {"name":"wordpress","tags":["v1"]}
+
+####  确认是否有用：
+####  先删除WordPress镜像
+     [root@ct7-mb ~]# docker rmi wordpress:v1
+     Untagged: wordpress:v1
+     [root@ct7-mb ~]# docker rmi 10.0.0.205:5000/wordpress:v1
+     Error response from daemon: conflict: unable to remove repository reference "10.0.0.205:5000/wordpress:v1" (must force) - container e25d20fcd627 is using its referenced image bea1e43ccfd7
+     [root@ct7-mb ~]# docker rm wordpress
+     wordpress
+     [root@ct7-mb ~]# docker rmi 10.0.0.205:5000/wordpress:v1
+     Untagged: 10.0.0.205:5000/wordpress:v1
+     Untagged: 10.0.0.205:5000/wordpress@sha256:391e56b3bc4c6de50beef889755f4a55b77e2b6ca24b7208171691307f63760b
+     Deleted: sha256:bea1e43ccfd788ea729e79770055e329b2e441e437679d96416af46c1cc10095
+     Deleted: sha256:91c411af1a9a8b8f2fc492c72bd69dd2b15c3038ffb1217c49156bef4b3fd08d
+     Deleted: sha256:2d81b05d18e9be1d961f40eaf0aef5a31da432fa19e88320d9d44680688f6628
+     Deleted: sha256:0ae2fcef844a972fe14f17c7c9e615227a8cd0d3684e584e4c70969166d048b6
+     Deleted: sha256:7842789c2f70225ee98205e04724161e93c710ea4bcf6e01750b679b81112b02
+     Deleted: sha256:7aa445e3963701c145e412ffeb89fcb36ae9d56b72f5ee58f561aaa4d1d83ccf
+     Deleted: sha256:55264a2ec093e357109fc0a28be67d6b32fa221c2b6b0eb51a9973a7e1e830f8
+     Deleted: sha256:c96ec40c4840b33a3b6e8643cc82198b0adb2c0de95d0ee85b2b4bd015b368fb
+     Deleted: sha256:31d6996ec2e812ad0501f324495fb143797958da54d3a1bf8fd626ffac923236
+     Deleted: sha256:ebc8e532f874721a9f8a80e9a3d37d361f389e989054a9d1b93f1426ed359006
+     Deleted: sha256:bbac2b35c544d4c92fc59e2a5ecd1eb133ab738ad03cf3eaf9f914f1d6e727fa
+     Deleted: sha256:e84d4c68c0a8fe5dca88138b9455dd17506a4b1e5bfee9d56a17dceae561262e
+     Deleted: sha256:0a08909f87c74afa0b436d1eeec41018fba89bcda76c2dbdc3698e1b59ade759
+     Deleted: sha256:62e2920573c715c19c5fbe1afa94f088efe95917f01e5271ad7dc508936bbf31
+     Deleted: sha256:1a3dd4c659629a57371bfa6d6ae558bd4800823fe52589ac92ba7a664b95c437
+####  确认删除：
+     [root@ct7-mb ~]# docker images
+     REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+     <none>                    <none>              2ef6f54e59b4        45 minutes ago      378MB
+     <none>                    <none>              3ae4e9f39c92        About an hour ago   378MB
+     <none>                    <none>              67605dda8a82        About an hour ago   386MB
+     richarvey/nginx-php-fpm   latest              359a8d82408a        7 days ago          304MB
+     mysql                     latest              2dd01afbe8df        2 weeks ago         485MB
+     ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+     centos                    6                   0cbf37812bff        4 weeks ago         194MB
+     registry                  latest              2e2f252f3c88        8 weeks ago         33.3MB
+     [root@ct7-mb ~]# 
+
+####  从私有仓库下载镜像
+     [root@ct7-mb ~]# docker pull 10.0.0.205:5000/wordpress:v1
+     v1: Pulling from wordpress
+     9bfcefca2b8d: Already exists 
+     635529d147f5: Pull complete 
+     a3b300acc75d: Pull complete 
+     23ad9a1f0d42: Pull complete 
+     09af8c41ab93: Pull complete 
+     eac628f6c646: Pull complete 
+     Digest: sha256:391e56b3bc4c6de50beef889755f4a55b77e2b6ca24b7208171691307f63760b
+     Status: Downloaded newer image for 10.0.0.205:5000/wordpress:v1
+####  查看镜像：
+     [root@ct7-mb ~]# docker images
+     REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
+     10.0.0.205:5000/wordpress   v1                  bea1e43ccfd7        38 minutes ago    
+
+####  使用一下:
+     [root@ct7-mb ~]# docker run -itd --name wordpress -p 88:80 10.0.0.205:5000/wordpress:v1
+     c3f78aeb65222fbef45c6d14f640532e732fc611393bf20c19cd048afb6ad719
+     [root@ct7-mb ~]# docker ps -l
+     CONTAINER ID        IMAGE                          COMMAND                  CREATED             STATUS              PORTS                          NAMES
+     c3f78aeb6522        10.0.0.205:5000/wordpress:v1   "/bin/sh -c /start.sh"   6 seconds ago       Up 4 seconds        3306/tcp, 0.0.0.0:88->80/tcp   wordpress
+     

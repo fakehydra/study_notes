@@ -1,0 +1,282 @@
+NFS配置流程
+
+为什么要用NFS
+ 　　NFS（Network File System）即网络文件系统，是FreeBSD支持的文件系统中的一种，它允许网络中的计算机之间通过TCP/IP网络共享资源。在NFS的应用中，本地NFS的客户端应用可以透明地读写位于远端NFS服务器上的文件，就像访问本地文件一样。
+　　 NFS最早是由Sun公司发展出来的，
+　　简单的来说：它就是是可以透过网络，让不同的主机、不同的操作系统可以共享存储。
+
+以下是NFS最显而易见的好处：
+
+　　1. 节省本地存储空间，将常用的数据存放在一台NFS服务器上且可以通过网络访问，那么本地终端将可以减少自身存储空间的使用。
+
+　　2. 用户不需要在网络中的每个机器上都建有Home目录，Home目录可以放在NFS服务器上且可以在网络上被访问使用。
+
+　　3. 一些存储设备CDROM和Zip（一种高储存密度的磁盘驱动器与磁盘）等都可以在网络上被别的机器使用。这可以减少整个网络上可移动介质设备的数量。
+
+　　NFS 的基本原则是“容许不同的客户端及服务端通过一组RPC分享相同的文件系统”，它是独立于操作系统，容许不同硬件及操作系统的系统共同进行文件的分享。
+
+　　NFS在文件传送或信息传送过程中依赖于RPC协议。RPC，远程过程调用 (Remote Procedure Call) 是能使客户端执行其他系统中程序的一种机制。NFS本身是没有提供信息传输的协议和功能的，但NFS却能让我们通过网络进行资料的分享，这是因为NFS使用了一些其它的传输协议。而这些传输协议用到这个RPC功能的。可以说NFS本身就是使用RPC的一个程序。或者说NFS也是一个RPC SERVER。所以只要用到NFS的地方都要启动RPC服务，不论是NFS SERVER或者NFS CLIENT。这样SERVER和CLIENT才能通过RPC来实现PROGRAM PORT的对应。可以这么理解RPC和NFS的关系：NFS是一个文件系统，而RPC是负责负责信息的传输。
+
+
+服务器端：
+
+
+下载安装
+
+nfs-utils: 这个是NFS服务主程序（包含rpc.nfsd、rpc.mountd、daemons）
+rpcbind: 这个是CentOS6.X的RPC主程序（CentOS5.X的为portmap）
+
+检查一下软件是否安装
+
+[root@jinc2 data]# rpm -qa nfs-utils rpcbind
+rpcbind-0.2.0-16.el6.x86_64
+nfs-utils-1.2.3-78.el6.x86_64
+
+我是装好了的，没有的话直接用yum命令进行安装上面两个包
+
+yum install -y nfs-utils rpcbind #安装上述所需的两个软件包
+
+[root@jinc2 data]# /etc/init.d/rpcbind status
+rpcbind (pid  2958) is running...
+# 查询rpc服务器运行状态，若没开启，则start ，关闭为stop
+
+[root@jinc2 data]# lsof -i :111   #查询rpcbinfd监听状态（ 111为rpcbind的主端口）
+COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+rpcbind 2958  rpc    6u  IPv4  18329      0t0  UDP *:sunrpc 
+rpcbind 2958  rpc    8u  IPv4  18331      0t0  TCP *:sunrpc (LISTEN)
+rpcbind 2958  rpc    9u  IPv6  18332      0t0  UDP *:sunrpc 
+rpcbind 2958  rpc   11u  IPv6  18334      0t0  TCP *:sunrpc (LISTEN)
+
+[root@jinc2 data]# netstat -lntup |grep rpcbind #查询rpcbind服务启动状态 (同lsof查询端口效果一样)
+tcp 0 0 0.0.0.0:111 0.0.0.0:* LISTEN 1281/rpcbind
+tcp 0 0 :::111 :::* LISTEN 1281/rpcbind
+udp 0 0 0.0.0.0:608 0.0.0.0:* 1281/rpcbind
+udp 0 0 0.0.0.0:111 0.0.0.0:* 1281/rpcbind
+udp 0 0 :::608 :::* 1281/rpcbind
+udp 0 0 :::111 :::* 1281/rpcbind
+
+[root@jinc2 data]# chkconfig --list rpcbind #检查rpcbind自启动情况
+rpcbind 0:off 1:off 2:on 3:on 4:on 5:on 6:off
+
+其他我们先不管，但是在3级别我们是要让他开启的
+
+若不会，命令为 ：chkconfig --level 3 rpcbind on
+
+启动NFS服务
+
+[root@jinc2 data]# /etc/init.d/nfs status
+rpc.svcgssd is stopped
+rpc.mountd (pid 4029) is running...
+nfsd (pid 4045 4044 4043 4042 4041 4040 4039 4038) is running...
+rpc.rquotad (pid 4024) is running...
+[root@jinc2 data]# 
+这是查看nfs的启动状态，我这是已经开启的。同理，start 为启动，stop为停止
+
+
+[root@jinc2 data]# netstat -lntup|grep nfs #查看NFS端口启动(FNS默认端口为2049)
+[root@jinc2 data]# lsof -i :2049 #查看NFS端口启动(FNS默认端口为2049)
+[root@jinc2 data]# netstat -lntup|grep 2049 #查看NFS端口启动(FNS默认端口为2049)
+tcp 0 0 0.0.0.0:2049 0.0.0.0:* LISTEN -
+tcp 0 0 :::2049 :::* LISTEN -
+udp 0 0 0.0.0.0:2049 0.0.0.0:* -
+udp 0 0 :::2049 :::* -
+
+
+[root@jinc2 data]# rpcinfo -p localhost  #启动NFS过后rpcbind服务已经启用了对FNS的端口映射
+   program vers proto   port  service
+    100000    4   tcp    111  portmapper
+    100000    3   tcp    111  portmapper
+    100000    2   tcp    111  portmapper
+    100000    4   udp    111  portmapper
+    100000    3   udp    111  portmapper
+    100000    2   udp    111  portmapper
+    100024    1   udp  45306  status
+    100024    1   tcp  45572  status
+    100011    1   udp    875  rquotad
+    100011    2   udp    875  rquotad
+    100011    1   tcp    875  rquotad
+    100011    2   tcp    875  rquotad
+    100005    1   udp  49102  mountd
+    100005    1   tcp  36166  mountd
+    100005    2   udp  49400  mountd
+    100005    2   tcp  53483  mountd
+    100005    3   udp  51649  mountd
+    100005    3   tcp  38618  mountd
+    100003    2   tcp   2049  nfs
+    100003    3   tcp   2049  nfs
+    100227    2   tcp   2049  nfs_acl
+    100227    3   tcp   2049  nfs_acl
+    100003    2   udp   2049  nfs
+    100003    3   udp   2049  nfs
+    100227    2   udp   2049  nfs_acl
+    100227    3   udp   2049  nfs_acl
+    100021    1   udp  57035  nlockmgr
+    100021    3   udp  57035  nlockmgr
+    100021    4   udp  57035  nlockmgr
+    100021    1   tcp  46170  nlockmgr
+    100021    3   tcp  46170  nlockmgr
+    100021    4   tcp  46170  nlockmgr
+
+[root@jinc2 data]#  chkconfig --list nfs  #查看nfs的开机自启动情况
+nfs 0:off 1:off 2:on 3:on 4:on 5:on 6:off
+[root@jinc2 data]#  chkconfig nfs on #让FNS开机自启动
+
+
+[root@jinc2 data]# less /etc/init.d/rpcbind
+
+#! /bin/sh
+#
+# rpcbind       Start/Stop RPCbind
+#
+# chkconfig: 2345 13 87
+
+《2345 --启动的等级
+  13 --启动服务的顺序
+  87 --关闭服务的顺序》
+
+同理，我们查看nfs的自启动详情
+
+[root@jinc2 data]# less /etc/init.d/nfs
+#!/bin/sh
+#
+# nfs           This shell script takes care of starting and stopping
+#               the NFS services.
+#
+# chkconfig: - 30 60
+
+<由上面可以看出系统默认会让rpcbind服务先启动，再启动nfs服务，但是在实际生产环境中，我们最好不要用chkconfig来控制服务的开机自启动，我们生产环境中我们一般用rc.local来管理。主要是为了方便以后查阅哪些服务开机自己，并且能控制先后顺序>
+<为了规范化我们用rc.local来管理开机自启动>
+[root@jinc2 data]# vim /etc/rc.local
+#!/bin/sh
+#
+# This script will be executed *after* all the other init sc
+ripts.
+# You can put your own initialization stuff in here if you d
+on't
+# want to do the full Sys V style init stuff.
+
+touch /var/lock/subsys/local
+ntpdate ntp.api.bz
+/etc/init.d/rpcbind start
+/etc/init.d/nfs start
+~                         
+
+NFS服务常见进程的详细说明
+
+[root@jinc2 data]# ps -ef |egrep "rpc|nfs" #查看nfs相进程
+rpcuser 1303 1 0 Nov22 ? 00:00:00 rpc.statd  #检查文件一致性
+root 1512 2 0 Nov22 ? 00:00:00 [rpciod/0]
+rpc 2723 1 0 02:43 ? 00:00:00 rpcbind
+root 2896 1 0 02:56 ? 00:00:00 rpc.rquotad  #磁盘配额进程
+root 2901 1 0 02:56 ? 00:00:00 rpc.mountd #权限管理验证等
+root 2908 2 0 02:56 ? 00:00:00 [nfsd4]
+root 2909 2 0 02:56 ? 00:00:00 [nfsd4_callbacks]
+root 2910 2 0 02:56 ? 00:00:00 [nfsd]
+root 2911 2 0 02:56 ? 00:00:00 [nfsd]
+root 2912 2 0 02:56 ? 00:00:00 [nfsd]
+root 2913 2 0 02:56 ? 00:00:00 [nfsd] #NFS主进程，管理登入，身份判定
+root 2914 2 0 02:56 ? 00:00:00 [nfsd]
+root 2915 2 0 02:56 ? 00:00:00 [nfsd]
+root 2916 2 0 02:56 ? 00:00:00 [nfsd]
+root 2917 2 0 02:56 ? 00:00:00 [nfsd]
+root 2948 1 0 02:56 ? 00:00:00 rpc.idmapd  #名称映射
+
+<如果对上述进程不明白可以 用man命令查阅帮助信息，如 “man rpc.statd”>
+
+配置服务端
+
+前面介绍了NFS的启动，接下来我们配置NFS服务端的配置
+/etc/exports 是NFS程序的配置文件。并且默认为空
+/etc/exports文件的配置格式为：
+NFS共享目录 NFS客户端地址1(参数1,参数2,参数3......) 客户端地址2(参数1,参数2,参数3......)
+NFS共享目录 NFS客户端地址(参数1,参数2,参数3......) 
+
+[root@jinc2 data]# cat /etc/exports 
+/data 10.0.0.0/24(insecure,rw,async,no_root_squash)
+
+<我们在此共享给 10.0.0.0/24所有主机，>
+<man exports 查看 例子和参数详情。如下：>
+
+配置完成exports后平滑重启NFS服务 
+
+[root@NFS-server ~]# /etc/init.d/nfs reload
+
+[root@jinc2 data]# showmount -e 10.0.0.203  #查看本机挂载情况
+
+[root@jinc2 data]# mount -t nfs 10.0.0.203:/data /mnt #在本机测试挂载
+
+[root@jinc2 data]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+/dev/sda3          18G  2.5G   15G  15% /
+tmpfs             491M     0  491M   0% /dev/shm
+/dev/sda1         190M   35M  146M  19% /boot
+10.0.0.203:/data   18G  2.5G   15G  15% /mnt  --已经挂载成功
+
+
+
+接下来就是客户端的安装了
+
+
+下载和启动我就不多说了。
+
+我们直接查看挂载状态
+[root@jinc2 ~]# showmount -e 10.0.0.203
+Export list for 10.0.0.203:
+/data 10.0.0.0/24
+
+然后进行挂载
+[root@jinc2 ~]# mount -t nfs 10.0.0.203:/data /mnt
+[root@jinc2 ~]# df -h
+Filesystem        Size  Used Avail Use% Mounted on
+/dev/sda3          18G  1.5G   16G   9% /
+tmpfs             491M     0  491M   0% /dev/shm
+/dev/sda1         190M   35M  146M  19% /boot
+10.0.0.203:/data   18G  2.5G   15G  15% /mnt
+
+
+[root@jinc2 ~]# mount
+/dev/sda3 on / type ext4 (rw)
+proc on /proc type proc (rw)
+sysfs on /sys type sysfs (rw)
+devpts on /dev/pts type devpts (rw,gid=5,mode=620)
+tmpfs on /dev/shm type tmpfs (rw,rootcontext="system_u:object_r:tmpfs_t:s0")
+/dev/sda1 on /boot type ext4 (rw)
+none on /proc/sys/fs/binfmt_misc type binfmt_misc (rw)
+sunrpc on /var/lib/nfs/rpc_pipefs type rpc_pipefs (rw)
+10.0.0.203:/data on /mnt type nfs (rw,addr=10.0.0.203)
+
+[root@jinc2 ~]# cat /proc/mounts 
+rootfs / rootfs rw 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,seclabel,relatime 0 0
+devtmpfs /dev devtmpfs rw,seclabel,relatime,size=487436k,nr_inodes=121859,mode=755 0 0
+devpts /dev/pts devpts rw,seclabel,relatime,gid=5,mode=620,ptmxmode=000 0 0
+tmpfs /dev/shm tmpfs rw,seclabel,relatime 0 0
+/dev/sda3 / ext4 rw,seclabel,relatime,barrier=1,data=ordered 0 0
+none /selinux selinuxfs rw,relatime 0 0
+devtmpfs /dev devtmpfs rw,seclabel,relatime,size=487436k,nr_inodes=121859,mode=755 0 0
+/proc/bus/usb /proc/bus/usb usbfs rw,relatime 0 0
+/dev/sda1 /boot ext4 rw,seclabel,relatime,barrier=1,data=ordered 0 0
+none /proc/sys/fs/binfmt_misc binfmt_misc rw,relatime 0 0
+sunrpc /var/lib/nfs/rpc_pipefs rpc_pipefs rw,relatime 0 0
+10.0.0.203:/data /mnt nfs rw,relatime,vers=3,rsize=131072,wsize=131072,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.0.0.203,mountvers=3,mountport=51649,mountproto=udp,local_lock=none,addr=10.0.0.203 0 0
+
+客户端到这边也暂时配置完成了，接下来，我们回到服务端，给data目录添加nfsnobody权限
+
+[root@jinc2 data]# grep 65534 /etc/passwd
+nfsnobody:x:65534:65534:Anonymous NFS User:/var/lib/nfs:/sbin/nologin
+添加权限
+[root@jinc2 ~]# chown -R nfsnobody /data
+[root@jinc2 ~]# ll /data/
+total 0
+[root@jinc2 ~]# ll -d /data/
+drwxr-xr-x. 2 nfsnobody root 4096 Jul 24 13:27 /data/
+
+
+[root@jinc2 data]# cat /var/lib/nfs/etab --查看一条配置的详细信息
+/data	10.0.0.0/24(rw,async,wdelay,hide,nocrossmnt,insecure,no_root_squash,no_all_squash,no_subtree_check,secure_locks,acl,anonuid=65534,anongid=65534,sec=sys,rw,no_root_squash,no_all_squash)
+
+现在我们可以对挂载目录进行各种操作，但是还没有完。我们需要把挂载命令放在rc.local里面，
+我们不要把挂载命令放在fstab，因为fstab比网络先启动，会出现挂载不上网络NFS
+
+

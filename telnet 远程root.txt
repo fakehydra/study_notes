@@ -1,0 +1,24 @@
+关于telnet无法远程root用户解决
+
+移除securetty文件
+
+  验证规则设置在/etc/security文件中，该文件定义root用户只能在tty1-tty6的终端上记录，删除该文件或者将其改名即可避开验证规则实现root用户远程登录。
+  
+  [root@jinc1 ~]# mv /etc/securetty /etc/securetty.bak
+
+  
+  [root@jinc ~]# telnet 10.0.0.201
+   Trying 10.0.0.201...
+   Connected to 10.0.0.201.
+   Escape character is '^]'.
+   CentOS release 6.9 (Final)
+   Kernel 2.6.32-696.el6.x86_64 on an x86_64
+   jinc1 login: root
+   Password: 
+   Last login: Fri Jul 20 08:19:07 from 10.0.0.1
+   [root@jinc1 ~]# pwd
+   /root
+   [root@jinc1 ~]# ifconfig
+   eth0      Link encap:Ethernet  HWaddr 00:0C:29:17:CB:55  
+             inet addr:10.0.0.201  Bcast:10.0.0.255  Mask:255.255.255.0
+             i

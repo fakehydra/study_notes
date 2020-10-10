@@ -1,0 +1,53 @@
+面试题整理
+1.你知道哪些Linux发行版本？最熟悉哪个？
+Ubuntu、Redhat、centOS、Debian、suse、fredore 红旗Linux 麒麟Linux
+熟悉Redhat centos 
+2.在你的运维工作中，平时的日常操作有哪些？
+
+3.用tar命令打包压缩/data/log 目录下的所有文件，并解压到/data/tmp/log目录
+tar -zcvf ./log.tar.gz && tar -xf ./log.tar.gz  -C /data/tmp/log/
+4.编译安装nginx到/opt/nginx 目录下，并修改默认端口为8080启动
+./configure --prefix=/opt/nginx 
+vim /opt/nginx/conf/nginx.conf
+把http 下的server 中的listen 后的80 修改为8080即可
+5.修改nginx的默认网站路径为/data/www ,并能通过浏览器访问www.test.com这个默认网站显示“hello World”
+vim conf/nginx.conf
+    server {
+        listen      80;
+        server_name  www.test.com;
+        location / {
+            root   data/www ;
+            index  index.html index.htm;
+}
+echo "hello word" >/nginx/html/index.html
+6.查看/var/log 目录下文件数
+find /var/log/ -type f |wc -l
+7.软链接和硬链接的区别
+硬链接不可以是目录软链接可以
+硬链接删除源文件对链接文件不影响
+软链接删除源文件链接文件会死掉
+8.现在需要每天0.05分点删除/data/log目录下的七天前的以log为后缀的文件，说说思路，脚本怎么写？
+先用find命令找出/data/log目录下七天前的以log为后缀的文件
+然后删除
+将上面执行的命令写成脚本，然后在定时任务执行脚本
+脚本：
+vim rm.sh
+#！/bin/bash
+rm -rf $(find /data/log/ -type f -name "*.log" -mtime +7) 
+保存退出
+编写定时任务
+crontab -e 
+05 00 * * * /bin/sh rm.sh
+保存退出
+9.过滤出系统中所有以PHP为后缀的进程，并杀死其中一个pid是3658的进程。
+ps -ef |grep php
+kill 3658
+10.备份mysql数据库test库，并导入etek库
+mysqldump -databases test
+
+11.每隔2小时执行一次/usr/bin/httpd.sh 怎么实现？
+添加到定时任务
+crontab -e
+* */2 * * * /bin/sh /usr/bin/httpd.sh
+保存退出
+12.现在有个需求，PHP已经编译好了，给现有的PHP添加一个模块，怎么添加？

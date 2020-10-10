@@ -1,0 +1,11 @@
+Ubuntu 18.04制作本地镜像源
+
+# 挂载镜像
+# 创建目录
+mkdir /media/cdrom
+# mount
+mount /dev/sr0 /media/cdrom
+# 添加本地目录到软件源
+apt-cdrom -m -d=/media/cdrom add
+# 刷新
+apt update

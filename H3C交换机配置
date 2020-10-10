@@ -1,0 +1,102 @@
+ [H3C-M-GigabitEthernet0/0/0]ip address 10.15.10.243 24
+
+[H3C]ip route-static 0.0.0.0 0 10.15.10.1
+[H3C]dis cu | include route
+[H3C]dhcp enable
+
+
+[H3C]vlan 10
+[H3C-vlan10]quit
+[H3C]vlan 20
+[H3C-vlan20]quit
+[H3C]vlan 30
+[H3C-vlan30]quit
+
+
+[H3C]dhcp  server  ip-pool  vlan10
+
+
+telnet配置部分：
+使用telnet功能需要本机具有up状态的三层接口
+ telnet server enable  //开启本机telnet功能
+ ssh server enable 
+ local-user admin class manage    //创建一个名为admin的管理用户，用户分两种，一种是manage，一种是network，manage是用来管理的，network用户是用来给业务使用的，比如说vpn用户
+ password simple xxxxx //创建用户成功后，会进入用户的视图，给用户配置密码
+ service-type telnet terminal ssh   //设置用户的服务类型为telnet和终端，这个账号主要用来telnet登录，所以可只选择telnet
+ authorization-attribute user-role level-15  //设置用户的等级为15级，等级分1-15级，15级最高，建议设置15级，等级低的时候，用户可能仅具有查看权限，不具有配置权限
+ authorization-attribute user-role network-operator    //默认生成的配置
+ 
+line vty 0 4   //开启0-4，共五个通道，即可同时允许五个用户使用
+ authentication-mode scheme    //将通道的鉴权方式改为AAA任职，即账号密码认证
+ user-role network-operator
+
+
+dhcp服务器配置部分：
+ dhcp enable   //开启dhcp服务器
+dhcp server ip-pool vlan10   //创建名为vlan10的dhcp地址池
+ gateway-list 192.168.10.1   //配置地址池分配的网关
+ network 192.168.10.0 mask 255.255.255.0    //配置地址池分配的地址段
+ dns-list 114.114.114.114   //配置地址池分配的dns
+ forbidden-ip 192.168.10.1   //配置dhcp不分配网关地址
+#
+dhcp server ip-pool vlan20
+ gateway-list 192.168.20.1
+ network 192.168.20.0 mask 255.255.255.0
+ dns-list 114.114.114.114
+ forbidden-ip 192.168.20.1
+#
+dhcp server ip-pool vlan30
+ gateway-list 192.168.30.1
+ network 192.168.30.0 mask 255.255.255.0
+ dns-list 114.114.114.114
+ forbidden-ip 192.168.30.1
+vlan 10   //创建vlan10
+#
+vlan 20
+#
+vlan 30
+interface Vlan-interface10   //进入vlanif接口
+ ip address 192.168.10.1 255.255.255.0  //配置vlan10的网关在vlanif上，这后面有一步dhcp select server ,可不配置，默认即为全局方式分配地址
+#
+interface Vlan-interface20
+ ip address 192.168.20.1 255.255.255.0
+#
+interface Vlan-interface30
+ ip address 192.168.30.1 255.255.255.0
+注意：现在的dhcp还不能用，因为未将接口加入相关vlan，使用时，进入对应接口，将接口模式更改为access，port link-type access，然后加入vlan，port access vlan 10
+
+
+
+解决风扇出现问题：%Apr 11 23:11:56:623 1983 H3C DEV/1/FAN_DIRECTION_NOT_PREFERRED: Fan 1 airflow direction is not preferred on slot 1, please check it.
+
+line  aux 0
+fan prefer-direction slot 1 port-to-power
+
+
+# 开启web登录
+ip http enable
+
+
+
+# 允许某个端口通过多个vlan
+# 1、trunk配置方法：
+
+int gi 1/0/1
+
+port link-type trunk
+
+undo port trunk permit vlan 1
+
+port trunk permit vlan 10 20 30 40 50
+
+quit
+
+# 2、hybrid配置方法：
+
+int gi 1/0/1
+
+port link-type hybrid
+
+port hybrid vlan 10 20 tagged
+
+quit

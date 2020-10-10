@@ -1,0 +1,82 @@
+基础网站优化之PHP优化
+####  PHP软件程序优化：给软件打补丁（添加扩展插件）
+
+####  解决部分加速软件的Perl编译问题
+	 配置环境变量LC_ALL，过程如下：
+     [root@www ~]# echo 'export LC_ALL=C'>> /etc/profile
+     #←设置环境变量，解决后面Perl程序插件的编译问题。符号">>"表示向文件追加内容
+	 
+####  PHP缓存加速器扩展部署
+#####  xcache缓存加速模块
+	 cd /server/tools/
+     wget http://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.bz2
+     tar xf xcache-3.2.0.tar.bz2
+     cd xcache-3.2.0
+     /application/php/bin/phpize
+     ./configure --enable-xcache  --with-php-config=/application/php/bin/php-config
+     make
+     make install
+     ls -l /application/php-5.5.32/lib/php/extensions/no-debug-non-zts-20121212/
+     cd ..
+	   
+####  配置XCache插件加速并优化参数
+#####  1) 先在配置XCache参数前加个配置分界符，配置命令如下
+	   cd /application/php/lib
+       echo >>php.ini
+       echo '; xcache config by oldboy 20150501----------------------' >>php.ini
+#####  2) 编辑xcache.ini，修改XCache的配置参数
+	   vim /server/tools/xcache-3.2.0/xcache.ini
+       xcache.size		    =		256M
+	   xcache.count		    =		2
+	   xcache.ttl			=		86400
+	   xcache.gc_interval	=		3600
+	   xcache.var_size		=		64M
+       cat /server/tools/xcache-3.2.0/xcache.ini >>php.ini
+#####  3) 检查XCache加速情况配置 	
+	   [root@web02 lib]# /application/php/bin/php -v
+	   
+####  ZendOpcache缓存加速模块
+	 cd /server/tools/
+     wget http://pecl.php.net/get/zendopcache-7.0.5.tgz
+     tar xf zendopcache-7.0.5.tgz
+     cd zendopcache-7.0.5
+     /application/php/bin/phpize
+     ./configure --enable-opcache --with-php-config=/application/php/bin/php-config
+     make
+     make install
+     ls -l /application/php-5.5.32/lib/php/extensions/no-debug-non-zts-20121212/
+     cd ..
+
+####  安装PHP Memcached扩展插件
+	 cd /server/tools/
+     wget http://pecl.php.net/get/memcache-2.2.7.tgz
+     tar zxf memcache-2.2.7.tgz
+     cd memcache-2.2.7
+     /application/php/bin/phpize
+     ./configure  --enable-memcache  --with-php-config=/application/php/bin/php-config
+     make
+     make install
+     ls -l /application/php-5.5.32/lib/php/extensions/no-debug-non-zts-20121212/
+	 cd ..
+	   
+####  安装PHP redis扩展插件
+	 cd /server/tools/
+     wget https://github.com/nicolasff/phpredis/archive/master.zip 
+     unzip master.zip
+     cd phpredis-master/
+     /application/php/bin/phpize
+     ./configure -with-php-config=/application/php/bin/php-config
+     make
+	 make install
+     ls -l /application/php-5.5.32/lib/php/extensions/no-debug-non-zts-20121212/
+     cd ../
+	 
+###  PHP优化总结说明:
+####  01. 下载安装软件模块
+	    ls -l /application/php-5.5.32/lib/php/extensions/no-debug-non-zts-20121212/
+####  02. 进行加载php插件模块
+#####  1) 直接编写php.ini文件进行加载
+		extension_dir = "/application/php-5.5.32/lib/php/extensions/no-debug-non-zts-20121212/"
+		extension = memcache.so
+#####  2) 通过已有配置文件添加到php.ini文件中进行加载插件
+		cat /server/tools/xcache-3.2.0/xcache.ini >>php.ini

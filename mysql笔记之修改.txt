@@ -1,0 +1,83 @@
+####  数据库 数据类型
+####  创建表
+     MariaDB [oldboy]> CREATE TABLE student(sid INT,sname VARCHAR(20),sage TINYINT,sgender ENUM('m','f'),scomtime DATETIME);
+     
+     --int 整数  -2^31 ~ 3^31-1
+     --varchar（20）  变长
+     --char（20）     定长  
+     --tinyint        整数  255
+     --ENUM（‘m’,‘f’） 枚举类型 （男，女）
+     --datetime       时间类型  年月日时分秒
+     
+     show create table stu;
+     
+     | stu   | CREATE TABLE `stu` (
+       `sid` int(11) NOT NULL AUTO_INCREMENT COMMENT '学号',
+       `sname` varchar(20) NOT NULL COMMENT '姓名',
+       `sage` tinyint(3) unsigned DEFAULT NULL COMMENT '年龄',
+       `sgender` enum('m','f') DEFAULT 'm' COMMENT '性别',
+       `scomtime` datetime NOT NULL COMMENT '入学时间',
+       PRIMARY KEY (`sid`)
+     ) ENGINE=InnoDB DEFAULT CHARSET=utf8   
+####  以下选项会影响到数据的录入
+     -- not null  非空的
+     --primary key  唯一且非空的
+     --auto_increment  自增长  需要有 primary key 或者unique key
+     --default      默认值
+     --unsigned     非负数
+     --comment ‘xx’  注释
+
+     show tables； --查看当前数据库下所有表
+     show create table   --查看表的创建语句
+     desc stu;     --查看表中列的定义信息
+
+###  修改表定义
+#####  重命名表名
+     MariaDB [oldboy]> show tables;
+     +------------------+
+     | Tables_in_oldboy |
+     +------------------+
+     | stu              |
+     | student          |
+     +------------------+
+     MariaDB [oldboy]> ALTER TABLE stu RENAME stt;
+     MariaDB [oldboy]> show tables;
+     +------------------+
+     | Tables_in_oldboy |
+     +------------------+
+     | stt              |
+     | student          |
+     +------------------+
+     2 rows in set (0.00 sec)
+####  添加列
+     MariaDB [oldboy]> desc stt;
+     +----------+---------------------+------+-----+---------+----------------+
+     | Field    | Type                | Null | Key | Default | Extra          |
+     +----------+---------------------+------+-----+---------+----------------+
+     | sid      | int(11)             | NO   | PRI | NULL    | auto_increment |
+     | sname    | varchar(20)         | NO   |     | NULL    |                |
+     | sage     | tinyint(3) unsigned | YES  |     | NULL    |                |
+     | sgender  | enum('m','f')       | YES  |     | m       |                |
+     | scomtime | datetime            | NO   |     | NULL    |                |
+     +----------+---------------------+------+-----+---------+----------------+
+     5 rows in set (0.00 sec)
+     
+     MariaDB [oldboy]> alter table stt add stest int;
+     Query OK, 0 rows affected (0.01 sec)               
+     Records: 0  Duplicates: 0  Warnings: 0
+     
+     MariaDB [oldboy]> desc stt;
+     +----------+---------------------+------+-----+---------+----------------+
+     | Field    | Type                | Null | Key | Default | Extra          |
+     +----------+---------------------+------+-----+---------+----------------+
+     | sid      | int(11)             | NO   | PRI | NULL    | auto_increment |
+     | sname    | varchar(20)         | NO   |     | NULL    |                |
+     | sage     | tinyint(3) unsigned | YES  |     | NULL    |                |
+     | sgender  | enum('m','f')       | YES  |     | m       |                |
+     | scomtime | datetime            | NO   |     | NULL    |                |
+     | stest    | int(11)             | YES  |     | NULL    |                |
+     +----------+---------------------+------+-----+---------+----------------+
+     6 rows in set (0.00 sec)
+     
+
+

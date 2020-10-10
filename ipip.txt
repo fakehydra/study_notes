@@ -1,0 +1,3580 @@
+﻿
+Starting Nmap 7.60 ( https://nmap.org ) at 2018-08-14 13:35 CST
+NSE: Loaded 1 scripts for scanning.
+NSE: Script Pre-scanning.
+NSE: Starting runlevel 1 (of 1) scan.
+Initiating NSE at 13:35
+Completed NSE at 13:35, 0.00s elapsed
+Initiating SYN Stealth Scan at 13:35
+Scanning 425 hosts [1 port/host]
+Discovered open port 21/tcp on 101.81.255.0[上海市 电信]
+Discovered open port 21/tcp on 101.81.220.2[上海市 电信]
+Discovered open port 21/tcp on 101.81.231.3[上海市 电信]
+Discovered open port 21/tcp on 101.81.141.3[上海市 电信]
+Discovered open port 21/tcp on 101.81.12.4[上海市 电信]
+Discovered open port 21/tcp on 101.81.141.4[上海市 电信]
+Discovered open port 21/tcp on 101.81.181.4[上海市 电信]
+Discovered open port 21/tcp on 101.81.33.5[上海市 电信]
+Discovered open port 21/tcp on 101.81.110.4[上海市 电信]
+Discovered open port 21/tcp on 101.81.94.5[上海市 电信]
+Discovered open port 21/tcp on 101.81.93.6[上海市 电信]
+Discovered open port 21/tcp on 101.81.251.5[上海市 电信]
+Discovered open port 21/tcp on 101.81.32.7[上海市 电信]
+Discovered open port 21/tcp on 101.81.41.7[上海市 电信]
+Discovered open port 21/tcp on 101.81.223.8[上海市 电信]
+Discovered open port 21/tcp on 101.81.237.8[上海市 电信]
+Discovered open port 21/tcp on 101.81.236.10[上海市 电信]
+Discovered open port 21/tcp on 101.81.141.11[上海市 电信]
+Discovered open port 21/tcp on 101.81.162.11[上海市 电信]
+Discovered open port 21/tcp on 101.81.12.12[上海市 电信]
+Discovered open port 21/tcp on 101.81.164.11[上海市 电信]
+Discovered open port 21/tcp on 101.81.88.12[上海市 电信]
+Discovered open port 21/tcp on 101.81.104.12[上海市 电信]
+Discovered open port 21/tcp on 101.81.149.12[上海市 电信]
+Discovered open port 21/tcp on 101.81.223.14[上海市 电信]
+Discovered open port 21/tcp on 101.81.191.14[上海市 电信]
+Discovered open port 21/tcp on 101.81.107.13[上海市 电信]
+Discovered open port 21/tcp on 101.81.217.14[上海市 电信]
+Discovered open port 21/tcp on 101.81.95.17[上海市 电信]
+Discovered open port 21/tcp on 101.81.122.17[上海市 电信]
+Discovered open port 21/tcp on 101.81.138.18[上海市 电信]
+Discovered open port 21/tcp on 101.81.60.18[上海市 电信]
+Discovered open port 21/tcp on 101.81.140.19[上海市 电信]
+Discovered open port 21/tcp on 101.81.51.19[上海市 电信]
+Discovered open port 21/tcp on 101.81.220.20[上海市 电信]
+Discovered open port 21/tcp on 101.81.231.20[上海市 电信]
+Discovered open port 21/tcp on 101.81.145.19[上海市 电信]
+Discovered open port 21/tcp on 101.81.11.21[上海市 电信]
+Discovered open port 21/tcp on 101.81.252.22[上海市 电信]
+Discovered open port 21/tcp on 101.81.105.21[上海市 电信]
+Discovered open port 21/tcp on 101.81.205.23[上海市 电信]
+Discovered open port 21/tcp on 101.81.112.24[上海市 电信]
+Discovered open port 21/tcp on 101.81.48.24[上海市 电信]
+Discovered open port 21/tcp on 101.81.116.24[上海市 电信]
+Discovered open port 21/tcp on 101.81.148.24[上海市 电信]
+Discovered open port 21/tcp on 101.81.160.24[上海市 电信]
+Discovered open port 21/tcp on 101.81.236.25[上海市 电信]
+Discovered open port 21/tcp on 101.81.230.26[上海市 电信]
+Discovered open port 21/tcp on 101.81.119.28[上海市 电信]
+Discovered open port 21/tcp on 101.81.86.29[上海市 电信]
+Discovered open port 21/tcp on 101.81.82.30[上海市 电信]
+Discovered open port 21/tcp on 101.81.91.31[上海市 电信]
+Discovered open port 21/tcp on 101.81.106.31[上海市 电信]
+Discovered open port 21/tcp on 101.81.251.31[上海市 电信]
+Discovered open port 21/tcp on 101.81.146.32[上海市 电信]
+Discovered open port 21/tcp on 101.81.210.32[上海市 电信]
+Discovered open port 21/tcp on 101.81.243.32[上海市 电信]
+Discovered open port 21/tcp on 101.81.105.34[上海市 电信]
+Discovered open port 21/tcp on 101.81.162.34[上海市 电信]
+Discovered open port 21/tcp on 101.81.109.35[上海市 电信]
+Discovered open port 21/tcp on 101.81.126.36[上海市 电信]
+Discovered open port 21/tcp on 101.81.126.39[上海市 电信]
+Discovered open port 21/tcp on 101.81.190.40[上海市 电信]
+Discovered open port 21/tcp on 101.81.225.39[上海市 电信]
+Discovered open port 21/tcp on 101.81.234.39[上海市 电信]
+Discovered open port 21/tcp on 101.81.55.42[上海市 电信]
+Discovered open port 21/tcp on 101.81.204.40[上海市 电信]
+Discovered open port 21/tcp on 101.81.171.42[上海市 电信]
+Discovered open port 21/tcp on 101.81.63.42[上海市 电信]
+Discovered open port 21/tcp on 101.81.231.42[上海市 电信]
+Discovered open port 21/tcp on 101.81.186.42[上海市 电信]
+Discovered open port 21/tcp on 101.81.165.44[上海市 电信]
+Discovered open port 21/tcp on 101.81.190.43[上海市 电信]
+Discovered open port 21/tcp on 101.81.219.44[上海市 电信]
+Discovered open port 21/tcp on 101.81.111.45[上海市 电信]
+Discovered open port 21/tcp on 101.81.140.46[上海市 电信]
+Discovered open port 21/tcp on 101.81.151.45[上海市 电信]
+Discovered open port 21/tcp on 101.81.208.46[上海市 电信]
+Discovered open port 21/tcp on 101.81.14.48[上海市 电信]
+Discovered open port 21/tcp on 101.81.237.46[上海市 电信]
+Discovered open port 21/tcp on 101.81.193.50[上海市 电信]
+Discovered open port 21/tcp on 101.81.84.50[上海市 电信]
+Discovered open port 21/tcp on 101.81.248.50[上海市 电信]
+Discovered open port 21/tcp on 101.81.235.50[上海市 电信]
+Discovered open port 21/tcp on 101.81.12.51[上海市 电信]
+Discovered open port 21/tcp on 101.81.36.51[上海市 电信]
+Discovered open port 21/tcp on 101.81.50.51[上海市 电信]
+Discovered open port 21/tcp on 101.81.120.52[上海市 电信]
+Discovered open port 21/tcp on 101.81.106.52[上海市 电信]
+Discovered open port 21/tcp on 101.81.50.52[上海市 电信]
+Discovered open port 21/tcp on 101.81.189.52[上海市 电信]
+Discovered open port 21/tcp on 101.81.33.53[上海市 电信]
+Discovered open port 21/tcp on 101.81.106.53[上海市 电信]
+Discovered open port 21/tcp on 101.81.183.53[上海市 电信]
+Discovered open port 21/tcp on 101.81.98.55[上海市 电信]
+Discovered open port 21/tcp on 101.81.238.53[上海市 电信]
+Discovered open port 21/tcp on 101.81.171.55[上海市 电信]
+Discovered open port 21/tcp on 101.81.114.56[上海市 电信]
+Discovered open port 21/tcp on 101.81.91.59[上海市 电信]
+Discovered open port 21/tcp on 101.81.51.59[上海市 电信]
+Discovered open port 21/tcp on 101.81.86.60[上海市 电信]
+Discovered open port 21/tcp on 101.81.147.60[上海市 电信]
+Discovered open port 21/tcp on 101.81.91.62[上海市 电信]
+Discovered open port 21/tcp on 101.81.239.62[上海市 电信]
+Discovered open port 21/tcp on 101.81.191.63[上海市 电信]
+Discovered open port 21/tcp on 101.81.222.63[上海市 电信]
+Discovered open port 21/tcp on 101.81.230.63[上海市 电信]
+Discovered open port 21/tcp on 101.81.142.64[上海市 电信]
+Discovered open port 21/tcp on 101.81.36.64[上海市 电信]
+Discovered open port 21/tcp on 101.81.112.66[上海市 电信]
+Discovered open port 21/tcp on 101.81.126.65[上海市 电信]
+Discovered open port 21/tcp on 101.81.146.66[上海市 电信]
+Discovered open port 21/tcp on 101.81.204.66[上海市 电信]
+Discovered open port 21/tcp on 101.81.248.66[上海市 电信]
+Discovered open port 21/tcp on 101.81.85.67[上海市 电信]
+Discovered open port 21/tcp on 101.81.183.68[上海市 电信]
+Discovered open port 21/tcp on 101.81.105.67[上海市 电信]
+Discovered open port 21/tcp on 101.81.188.68[上海市 电信]
+Discovered open port 21/tcp on 101.81.37.69[上海市 电信]
+Discovered open port 21/tcp on 101.81.232.68[上海市 电信]
+Discovered open port 21/tcp on 101.81.111.69[上海市 电信]
+Discovered open port 21/tcp on 101.81.88.70[上海市 电信]
+Discovered open port 21/tcp on 101.81.114.70[上海市 电信]
+Discovered open port 21/tcp on 101.81.126.71[上海市 电信]
+Discovered open port 21/tcp on 101.81.230.72[上海市 电信]
+Discovered open port 21/tcp on 101.81.227.73[上海市 电信]
+Discovered open port 21/tcp on 101.81.149.74[上海市 电信]
+Discovered open port 21/tcp on 101.81.60.76[上海市 电信]
+Discovered open port 21/tcp on 101.81.245.76[上海市 电信]
+Discovered open port 21/tcp on 101.81.201.77[上海市 电信]
+Discovered open port 21/tcp on 101.81.154.79[上海市 电信]
+Discovered open port 21/tcp on 101.81.39.78[上海市 电信]
+Discovered open port 21/tcp on 101.81.101.82[上海市 电信]
+Discovered open port 21/tcp on 101.81.154.80[上海市 电信]
+Discovered open port 21/tcp on 101.81.163.82[上海市 电信]
+Discovered open port 21/tcp on 101.81.36.83[上海市 电信]
+Discovered open port 21/tcp on 101.81.217.82[上海市 电信]
+Discovered open port 21/tcp on 101.81.62.83[上海市 电信]
+Discovered open port 21/tcp on 101.81.86.83[上海市 电信]
+Discovered open port 21/tcp on 101.81.206.84[上海市 电信]
+Discovered open port 21/tcp on 101.81.113.85[上海市 电信]
+Discovered open port 21/tcp on 101.81.219.86[上海市 电信]
+Discovered open port 21/tcp on 101.81.49.86[上海市 电信]
+Discovered open port 21/tcp on 101.81.250.86[上海市 电信]
+Discovered open port 21/tcp on 101.81.118.90[上海市 电信]
+Discovered open port 21/tcp on 101.81.219.91[上海市 电信]
+Discovered open port 21/tcp on 101.81.109.92[上海市 电信]
+Discovered open port 21/tcp on 101.81.204.92[上海市 电信]
+Discovered open port 21/tcp on 101.81.208.93[上海市 电信]
+Discovered open port 21/tcp on 101.81.55.94[上海市 电信]
+Discovered open port 21/tcp on 101.81.106.95[上海市 电信]
+Discovered open port 21/tcp on 101.81.169.95[上海市 电信]
+Discovered open port 21/tcp on 101.81.238.95[上海市 电信]
+Discovered open port 21/tcp on 101.81.114.96[上海市 电信]
+Discovered open port 21/tcp on 101.81.66.96[上海市 电信]
+Discovered open port 21/tcp on 101.81.181.96[上海市 电信]
+Discovered open port 21/tcp on 101.81.204.96[上海市 电信]
+Discovered open port 21/tcp on 101.81.88.97[上海市 电信]
+Discovered open port 21/tcp on 101.81.218.98[上海市 电信]
+Discovered open port 21/tcp on 101.81.253.98[上海市 电信]
+Discovered open port 21/tcp on 101.81.53.99[上海市 电信]
+Discovered open port 21/tcp on 101.81.115.99[上海市 电信]
+Discovered open port 21/tcp on 101.81.9.100[上海市 电信]
+Discovered open port 21/tcp on 101.81.140.100[上海市 电信]
+Discovered open port 21/tcp on 101.81.142.100[上海市 电信]
+Discovered open port 21/tcp on 101.81.208.101[上海市 电信]
+Discovered open port 21/tcp on 101.81.54.102[上海市 电信]
+Discovered open port 21/tcp on 101.81.49.103[上海市 电信]
+Discovered open port 21/tcp on 101.81.167.103[上海市 电信]
+Discovered open port 21/tcp on 101.81.90.104[上海市 电信]
+Discovered open port 21/tcp on 101.81.234.104[上海市 电信]
+Discovered open port 21/tcp on 101.81.155.105[上海市 电信]
+Discovered open port 21/tcp on 101.81.127.107[上海市 电信]
+Discovered open port 21/tcp on 101.81.217.107[上海市 电信]
+Discovered open port 21/tcp on 101.81.11.108[上海市 电信]
+Discovered open port 21/tcp on 101.81.236.108[上海市 电信]
+Discovered open port 21/tcp on 101.81.250.113[上海市 电信]
+Discovered open port 21/tcp on 101.81.50.114[上海市 电信]
+Discovered open port 21/tcp on 101.81.101.114[上海市 电信]
+Discovered open port 21/tcp on 101.81.148.117[上海市 电信]
+Discovered open port 21/tcp on 101.81.217.117[上海市 电信]
+Discovered open port 21/tcp on 101.81.185.115[上海市 电信]
+Discovered open port 21/tcp on 101.81.221.117[上海市 电信]
+Discovered open port 21/tcp on 101.81.254.118[上海市 电信]
+Discovered open port 21/tcp on 101.81.133.119[上海市 电信]
+Discovered open port 21/tcp on 101.81.110.119[上海市 电信]
+Discovered open port 21/tcp on 101.81.80.120[上海市 电信]
+Discovered open port 21/tcp on 101.81.118.121[上海市 电信]
+Discovered open port 21/tcp on 101.81.203.121[上海市 电信]
+Discovered open port 21/tcp on 101.81.112.123[上海市 电信]
+Discovered open port 21/tcp on 101.81.206.123[上海市 电信]
+Discovered open port 21/tcp on 101.81.140.124[上海市 电信]
+Discovered open port 21/tcp on 101.81.226.122[上海市 电信]
+Discovered open port 21/tcp on 101.81.103.125[上海市 电信]
+Discovered open port 21/tcp on 101.81.235.125[上海市 电信]
+Discovered open port 21/tcp on 101.81.35.126[上海市 电信]
+Discovered open port 21/tcp on 101.81.146.126[上海市 电信]
+Discovered open port 21/tcp on 101.81.54.126[上海市 电信]
+Discovered open port 21/tcp on 101.81.241.126[上海市 电信]
+Discovered open port 21/tcp on 101.81.106.128[上海市 电信]
+Discovered open port 21/tcp on 101.81.224.129[上海市 电信]
+Discovered open port 21/tcp on 101.81.228.129[上海市 电信]
+Discovered open port 21/tcp on 101.81.141.130[上海市 电信]
+Discovered open port 21/tcp on 101.81.229.131[上海市 电信]
+Discovered open port 21/tcp on 101.81.92.136[上海市 电信]
+Discovered open port 21/tcp on 101.81.118.136[上海市 电信]
+Discovered open port 21/tcp on 101.81.166.136[上海市 电信]
+Discovered open port 21/tcp on 101.81.249.136[上海市 电信]
+Discovered open port 21/tcp on 101.81.185.137[上海市 电信]
+Discovered open port 21/tcp on 101.81.251.137[上海市 电信]
+Discovered open port 21/tcp on 101.81.237.138[上海市 电信]
+Discovered open port 21/tcp on 101.81.140.139[上海市 电信]
+Discovered open port 21/tcp on 101.81.182.139[上海市 电信]
+Discovered open port 21/tcp on 101.81.247.139[上海市 电信]
+Discovered open port 21/tcp on 101.81.14.140[上海市 电信]
+Discovered open port 21/tcp on 101.81.55.140[上海市 电信]
+Discovered open port 21/tcp on 101.81.14.142[上海市 电信]
+Discovered open port 21/tcp on 101.81.219.142[上海市 电信]
+Discovered open port 21/tcp on 101.81.143.143[上海市 电信]
+Discovered open port 21/tcp on 101.81.124.144[上海市 电信]
+Discovered open port 21/tcp on 101.81.231.144[上海市 电信]
+Discovered open port 21/tcp on 101.81.62.145[上海市 电信]
+Discovered open port 21/tcp on 101.81.82.145[上海市 电信]
+Discovered open port 21/tcp on 101.81.200.145[上海市 电信]
+Discovered open port 21/tcp on 101.81.216.145[上海市 电信]
+Discovered open port 21/tcp on 101.81.61.146[上海市 电信]
+Discovered open port 21/tcp on 101.81.112.146[上海市 电信]
+Discovered open port 21/tcp on 101.81.223.146[上海市 电信]
+Discovered open port 21/tcp on 101.81.10.147[上海市 电信]
+Discovered open port 21/tcp on 101.81.85.147[上海市 电信]
+Discovered open port 21/tcp on 101.81.250.147[上海市 电信]
+Discovered open port 21/tcp on 101.81.88.147[上海市 电信]
+Discovered open port 21/tcp on 101.81.85.148[上海市 电信]
+Discovered open port 21/tcp on 101.81.137.148[上海市 电信]
+Discovered open port 21/tcp on 101.81.15.149[上海市 电信]
+Discovered open port 21/tcp on 101.81.57.149[上海市 电信]
+Discovered open port 21/tcp on 101.81.120.149[上海市 电信]
+Discovered open port 21/tcp on 101.81.238.149[上海市 电信]
+Discovered open port 21/tcp on 101.81.225.149[上海市 电信]
+Discovered open port 21/tcp on 101.81.55.151[上海市 电信]
+Discovered open port 21/tcp on 101.81.108.151[上海市 电信]
+Discovered open port 21/tcp on 101.81.60.151[上海市 电信]
+Discovered open port 21/tcp on 101.81.249.151[上海市 电信]
+Discovered open port 21/tcp on 101.81.62.154[上海市 电信]
+Discovered open port 21/tcp on 101.81.81.155[上海市 电信]
+Discovered open port 21/tcp on 101.81.58.156[上海市 电信]
+Discovered open port 21/tcp on 101.81.82.158[上海市 电信]
+Discovered open port 21/tcp on 101.81.232.156[上海市 电信]
+Discovered open port 21/tcp on 101.81.58.159[上海市 电信]
+Discovered open port 21/tcp on 101.81.86.161[上海市 电信]
+Discovered open port 21/tcp on 101.81.152.160[上海市 电信]
+Discovered open port 21/tcp on 101.81.228.161[上海市 电信]
+Discovered open port 21/tcp on 101.81.11.162[上海市 电信]
+Discovered open port 21/tcp on 101.81.82.162[上海市 电信]
+Discovered open port 21/tcp on 101.81.55.163[上海市 电信]
+Discovered open port 21/tcp on 101.81.81.163[上海市 电信]
+Discovered open port 21/tcp on 101.81.119.164[上海市 电信]
+Discovered open port 21/tcp on 101.81.143.165[上海市 电信]
+Discovered open port 21/tcp on 101.81.230.165[上海市 电信]
+Discovered open port 21/tcp on 101.81.228.165[上海市 电信]
+Discovered open port 21/tcp on 101.81.104.166[上海市 电信]
+Discovered open port 21/tcp on 101.81.96.166[上海市 电信]
+Discovered open port 21/tcp on 101.81.100.167[上海市 电信]
+Discovered open port 21/tcp on 101.81.48.168[上海市 电信]
+Discovered open port 21/tcp on 101.81.106.168[上海市 电信]
+Discovered open port 21/tcp on 101.81.116.168[上海市 电信]
+Discovered open port 21/tcp on 101.81.56.170[上海市 电信]
+Discovered open port 21/tcp on 101.81.81.170[上海市 电信]
+Discovered open port 21/tcp on 101.81.35.172[上海市 电信]
+Discovered open port 21/tcp on 101.81.142.170[上海市 电信]
+Discovered open port 21/tcp on 101.81.111.172[上海市 电信]
+Discovered open port 21/tcp on 101.81.58.173[上海市 电信]
+Discovered open port 21/tcp on 101.81.170.173[上海市 电信]
+Discovered open port 21/tcp on 101.81.222.173[上海市 电信]
+Discovered open port 21/tcp on 101.81.51.175[上海市 电信]
+Discovered open port 21/tcp on 101.81.9.176[上海市 电信]
+Discovered open port 21/tcp on 101.81.107.175[上海市 电信]
+Discovered open port 21/tcp on 101.81.105.177[上海市 电信]
+Discovered open port 21/tcp on 101.81.245.177[上海市 电信]
+Discovered open port 21/tcp on 101.81.83.178[上海市 电信]
+Discovered open port 21/tcp on 101.81.32.178[上海市 电信]
+Discovered open port 21/tcp on 101.81.184.178[上海市 电信]
+Discovered open port 21/tcp on 101.81.108.180[上海市 电信]
+Discovered open port 21/tcp on 101.81.81.184[上海市 电信]
+Discovered open port 21/tcp on 101.81.238.183[上海市 电信]
+Discovered open port 21/tcp on 101.81.124.184[上海市 电信]
+Discovered open port 21/tcp on 101.81.113.185[上海市 电信]
+Discovered open port 21/tcp on 101.81.11.186[上海市 电信]
+Discovered open port 21/tcp on 101.81.223.186[上海市 电信]
+Discovered open port 21/tcp on 101.81.110.187[上海市 电信]
+Discovered open port 21/tcp on 101.81.232.187[上海市 电信]
+Discovered open port 21/tcp on 101.81.89.188[上海市 电信]
+Discovered open port 21/tcp on 101.81.143.188[上海市 电信]
+Discovered open port 21/tcp on 101.81.90.189[上海市 电信]
+Discovered open port 21/tcp on 101.81.48.190[上海市 电信]
+Discovered open port 21/tcp on 101.81.59.190[上海市 电信]
+Discovered open port 21/tcp on 101.81.114.190[上海市 电信]
+Discovered open port 21/tcp on 101.81.129.190[上海市 电信]
+Discovered open port 21/tcp on 101.81.49.191[上海市 电信]
+Discovered open port 21/tcp on 101.81.190.192[上海市 电信]
+Discovered open port 21/tcp on 101.81.53.192[上海市 电信]
+Discovered open port 21/tcp on 101.81.99.193[上海市 电信]
+Discovered open port 21/tcp on 101.81.114.193[上海市 电信]
+Discovered open port 21/tcp on 101.81.236.193[上海市 电信]
+Discovered open port 21/tcp on 101.81.88.194[上海市 电信]
+Discovered open port 21/tcp on 101.81.93.194[上海市 电信]
+Discovered open port 21/tcp on 101.81.227.196[上海市 电信]
+Discovered open port 21/tcp on 101.81.239.196[上海市 电信]
+Discovered open port 21/tcp on 101.81.81.197[上海市 电信]
+Discovered open port 21/tcp on 101.81.90.197[上海市 电信]
+Discovered open port 21/tcp on 101.81.229.197[上海市 电信]
+Discovered open port 21/tcp on 101.81.51.198[上海市 电信]
+Discovered open port 21/tcp on 101.81.37.198[上海市 电信]
+Discovered open port 21/tcp on 101.81.119.198[上海市 电信]
+Discovered open port 21/tcp on 101.81.111.198[上海市 电信]
+Discovered open port 21/tcp on 101.81.203.198[上海市 电信]
+Discovered open port 21/tcp on 101.81.126.199[上海市 电信]
+Discovered open port 21/tcp on 101.81.141.199[上海市 电信]
+Discovered open port 21/tcp on 101.81.226.199[上海市 电信]
+Discovered open port 21/tcp on 101.81.15.200[上海市 电信]
+Discovered open port 21/tcp on 101.81.80.200[上海市 电信]
+Discovered open port 21/tcp on 101.81.122.201[上海市 电信]
+Discovered open port 21/tcp on 101.81.129.202[上海市 电信]
+Discovered open port 21/tcp on 101.81.132.202[上海市 电信]
+Discovered open port 21/tcp on 101.81.145.203[上海市 电信]
+Discovered open port 21/tcp on 101.81.224.203[上海市 电信]
+Discovered open port 21/tcp on 101.81.233.203[上海市 电信]
+Discovered open port 21/tcp on 101.81.104.205[上海市 电信]
+Discovered open port 21/tcp on 101.81.190.206[上海市 电信]
+Discovered open port 21/tcp on 101.81.8.207[上海市 电信]
+Discovered open port 21/tcp on 101.81.106.207[上海市 电信]
+Discovered open port 21/tcp on 101.81.102.210[上海市 电信]
+Discovered open port 21/tcp on 101.81.204.210[上海市 电信]
+Discovered open port 21/tcp on 101.81.111.210[上海市 电信]
+Discovered open port 21/tcp on 101.81.243.211[上海市 电信]
+Discovered open port 21/tcp on 101.81.233.213[上海市 电信]
+Discovered open port 21/tcp on 101.81.104.213[上海市 电信]
+Discovered open port 21/tcp on 101.81.248.214[上海市 电信]
+Discovered open port 21/tcp on 101.81.103.214[上海市 电信]
+Discovered open port 21/tcp on 101.81.58.214[上海市 电信]
+Discovered open port 21/tcp on 101.81.236.216[上海市 电信]
+Discovered open port 21/tcp on 101.81.12.220[上海市 电信]
+Discovered open port 21/tcp on 101.81.235.216[上海市 电信]
+Discovered open port 21/tcp on 101.81.249.222[上海市 电信]
+Discovered open port 21/tcp on 101.81.51.222[上海市 电信]
+Discovered open port 21/tcp on 101.81.254.224[上海市 电信]
+Discovered open port 21/tcp on 101.81.14.225[上海市 电信]
+Discovered open port 21/tcp on 101.81.97.225[上海市 电信]
+Discovered open port 21/tcp on 101.81.248.225[上海市 电信]
+Discovered open port 21/tcp on 101.81.12.226[上海市 电信]
+Discovered open port 21/tcp on 101.81.151.226[上海市 电信]
+Discovered open port 21/tcp on 101.81.55.226[上海市 电信]
+Discovered open port 21/tcp on 101.81.171.226[上海市 电信]
+Discovered open port 21/tcp on 101.81.12.227[上海市 电信]
+Discovered open port 21/tcp on 101.81.123.227[上海市 电信]
+Discovered open port 21/tcp on 101.81.225.227[上海市 电信]
+Discovered open port 21/tcp on 101.81.57.229[上海市 电信]
+Discovered open port 21/tcp on 101.81.205.229[上海市 电信]
+Discovered open port 21/tcp on 101.81.113.230[上海市 电信]
+Discovered open port 21/tcp on 101.81.119.230[上海市 电信]
+Discovered open port 21/tcp on 101.81.80.231[上海市 电信]
+Discovered open port 21/tcp on 101.81.36.232[上海市 电信]
+Discovered open port 21/tcp on 101.81.95.232[上海市 电信]
+Discovered open port 21/tcp on 101.81.222.232[上海市 电信]
+Discovered open port 21/tcp on 101.81.254.232[上海市 电信]
+Discovered open port 21/tcp on 101.81.51.234[上海市 电信]
+Discovered open port 21/tcp on 101.81.62.234[上海市 电信]
+Discovered open port 21/tcp on 101.81.87.236[上海市 电信]
+Discovered open port 21/tcp on 101.81.231.232[上海市 电信]
+Discovered open port 21/tcp on 101.81.109.236[上海市 电信]
+Discovered open port 21/tcp on 101.81.124.237[上海市 电信]
+Discovered open port 21/tcp on 101.81.95.238[上海市 电信]
+Discovered open port 21/tcp on 101.81.140.237[上海市 电信]
+Discovered open port 21/tcp on 101.81.104.238[上海市 电信]
+Discovered open port 21/tcp on 101.81.123.239[上海市 电信]
+Discovered open port 21/tcp on 101.81.126.239[上海市 电信]
+Discovered open port 21/tcp on 101.81.123.240[上海市 电信]
+Discovered open port 21/tcp on 101.81.11.242[上海市 电信]
+Discovered open port 21/tcp on 101.81.32.243[上海市 电信]
+Discovered open port 21/tcp on 101.81.11.244[上海市 电信]
+Discovered open port 21/tcp on 101.81.62.244[上海市 电信]
+Discovered open port 21/tcp on 101.81.94.244[上海市 电信]
+Discovered open port 21/tcp on 101.81.127.245[上海市 电信]
+Discovered open port 21/tcp on 101.81.145.245[上海市 电信]
+Discovered open port 21/tcp on 101.81.240.245[上海市 电信]
+Discovered open port 21/tcp on 101.81.254.246[上海市 电信]
+Discovered open port 21/tcp on 101.81.91.247[上海市 电信]
+Discovered open port 21/tcp on 101.81.115.246[上海市 电信]
+Discovered open port 21/tcp on 101.81.226.248[上海市 电信]
+Discovered open port 21/tcp on 101.81.216.248[上海市 电信]
+Discovered open port 21/tcp on 101.81.249.248[上海市 电信]
+Discovered open port 21/tcp on 101.81.61.249[上海市 电信]
+Discovered open port 21/tcp on 101.81.230.249[上海市 电信]
+Discovered open port 21/tcp on 101.81.146.252[上海市 电信]
+Discovered open port 21/tcp on 101.81.226.253[上海市 电信]
+Discovered open port 21/tcp on 101.81.117.253[上海市 电信]
+Discovered open port 21/tcp on 101.81.116.255[上海市 电信]
+Discovered open port 21/tcp on 101.81.142.0[上海市 电信]
+Discovered open port 21/tcp on 101.81.228.5[上海市 电信]
+Discovered open port 21/tcp on 101.81.247.5[上海市 电信]
+Discovered open port 21/tcp on 101.81.235.6[上海市 电信]
+Discovered open port 21/tcp on 101.81.141.6[上海市 电信]
+Discovered open port 21/tcp on 101.81.61.9[上海市 电信]
+Discovered open port 21/tcp on 101.81.235.9[上海市 电信]
+Discovered open port 21/tcp on 101.81.95.15[上海市 电信]
+Discovered open port 21/tcp on 101.81.180.16[上海市 电信]
+Discovered open port 21/tcp on 101.81.248.25[上海市 电信]
+Discovered open port 21/tcp on 101.81.102.26[上海市 电信]
+Discovered open port 21/tcp on 101.81.56.54[上海市 电信]
+Discovered open port 21/tcp on 101.81.123.54[上海市 电信]
+Discovered open port 21/tcp on 101.81.200.87[上海市 电信]
+Discovered open port 21/tcp on 101.81.92.88[上海市 电信]
+Discovered open port 21/tcp on 101.81.234.124[上海市 电信]
+Discovered open port 21/tcp on 101.81.63.125[上海市 电信]
+Discovered open port 21/tcp on 101.81.227.152[上海市 电信]
+Discovered open port 21/tcp on 101.81.238.152[上海市 电信]
+Discovered open port 21/tcp on 101.81.254.188[上海市 电信]
+Discovered open port 21/tcp on 101.81.8.189[上海市 电信]
+Discovered open port 21/tcp on 101.81.165.221[上海市 电信]
+Discovered open port 21/tcp on 101.81.231.221[上海市 电信]
+Discovered open port 21/tcp on 101.81.231.251[上海市 电信]
+Discovered open port 21/tcp on 101.81.52.252[上海市 电信]
+Completed SYN Stealth Scan at 13:35, 5.42s elapsed (425 total ports)
+NSE: Script scanning 425 hosts.
+NSE: Starting runlevel 1 (of 1) scan.
+Initiating NSE at 13:35
+NSE Timing: About 79.38% done; ETC: 13:36 (0:00:08 remaining)
+Completed NSE at 13:36, 49.85s elapsed
+Nmap scan report for 101.81.58.173[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.124.19[上海市 电信]
+Host is up, received user-set.
+Scanned at 2018-08-14 13:35:42 CST for 2s
+
+PORT   STATE    SERVICE REASON
+21/tcp filtered ftp     no-response
+
+Nmap scan report for 101.81.226.253[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.110.187[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.86.83[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.239.62[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.41.7[上海市 电信]
+Host is up, received user-set (0.085s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.52.252[上海市 电信]
+Host is up, received user-set (0.10s latency).
+Scanned at 2018-08-14 13:35:42 CST for 46s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.106.128[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 41s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.146.32[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.50.114[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.61.9[上海市 电信]
+Host is up, received user-set (0.087s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.145.203[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.251.5[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.106.95[上海市 电信]
+Host is up, received user-set (0.091s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.238.53[上海市 电信]
+Host is up, received user-set (0.091s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.123.240[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.106.52[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.36.51[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.100.167[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.51.175[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.104.12[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.239.196[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+|_ftp-anon: got code 550 "Permission denied".
+
+Nmap scan report for 101.81.12.226[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.146.126[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.55.94[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.183.68[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.231.3[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.104.238[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+|_ftp-anon: got code 532 "Login incorrect.".
+
+Nmap scan report for 101.81.66.96[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.220.20[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.86.60[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.123.54[上海市 电信]
+Host is up, received user-set (0.089s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_Can't get directory listing: PASV failed: 450 Data connection busy.
+
+Nmap scan report for 101.81.84.50[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.86.29[上海市 电信]
+Host is up, received user-set (0.061s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.15.200[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.232.156[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.81.170[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.107.13[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.226.122[上海市 电信]
+Host is up, received user-set (0.095s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.36.232[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.206.84[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.106.31[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.60.76[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 55
+
+Nmap scan report for 101.81.88.12[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.145.19[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.226.248[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxr-xr-x   7 root     root           78 Dec 25  2015 disk1
+|_drwxr-xr-x   6 root     root           56 Sep 11  2015 disk2
+
+Nmap scan report for 101.81.126.71[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.208.93[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.85.67[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.102.26[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.141.199[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.232.68[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.94.5[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.11.244[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 43s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.14.142[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.252.22[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.50.52[上海市 电信]
+Host is up, received user-set (0.085s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.225.227[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.229.131[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.37.69[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.201.77[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.109.35[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.82.158[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.114.70[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.149.12[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.253.98[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.254.232[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 47s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.113.185[上海市 电信]
+Host is up, received user-set (0.073s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.237.138[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.80.200[上海市 电信]
+Host is up, received user-set (0.089s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.193.50[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.91.247[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.126.65[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 55
+
+Nmap scan report for 101.81.12.51[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.32.178[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.93.6[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.112.24[上海市 电信]
+Host is up, received user-set (0.061s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.112.123[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.254.188[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 23s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.48.24[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.61.146[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| 03-08-17  04:07PM            409597952 AM_WinXP-SP3.iso
+| 01-17-17  10:38AM       <DIR>          AutoCAD_2016_64bit
+| 03-01-17  02:31PM       <DIR>          doc
+| 12-06-17  02:38PM       <DIR>          DOC\xCE\xC4\xB5\xB5
+| 11-23-17  09:03AM             39011832 FileFormatConverters.exe
+| 02-27-13  09:26AM             45211160 IE10-Windows6.1-x64.exe
+| 11-14-12  08:51AM             23853568 IE10-Windows6.1-x86.exe
+| 11-12-15  11:46AM             16901472 IE8-WindowsXP-x86-CHS.exe
+| 08-22-15  04:01PM       <DIR>          JPG\xCE\xC4\xB5\xB5
+| 05-28-08  05:52PM             63958883 MicrosoftOffice_2007SP1.exe
+| 08-08-18  01:57PM       <DIR>          office
+| 08-22-15  04:01PM       <DIR>          Office2003
+| 01-29-18  10:42AM           1785335823 Office2003.rar
+| 09-21-17  04:27PM           1071761224 PB_11(DISK).GHO
+| 09-10-15  12:26PM            306265782 PC104.GHO
+| 05-22-18  04:07PM             11273721 PDF Print.rar
+| 08-22-15  04:00PM       <DIR>          PDF\xCE\xC4\xB5\xB5
+| 02-09-18  09:18AM               495960 webex.exe
+| 11-24-16  02:10PM       <DIR>          Win10
+| 06-13-16  11:35AM           3530358784 Win7_x64_Nvme.iso
+| 10-10-16  01:54PM            163310888 Win7\xD3\xA2\xCE\xC4\xD3\xEF\xD1\xD4\xB0\xFC.exe
+| 10-25-12  03:50PM              1245936 WindowsXP-KB893357-v2-x86-CHS.exe
+| 08-22-15  04:00PM       <DIR>          XLS\xCE\xC4\xB5\xB5
+| 01-01-11  03:08AM            618299923 xpx3d.GHO
+| 02-09-18  03:19PM       <DIR>          \xC9\xCF\xB4\xAB\xCE\xC4\xB5\xB5
+| 02-05-18  02:39PM       <DIR>          \xC6\xBD\xB0\xE5\xBE\xB5\xCF\xF1
+| 04-17-18  01:24PM       <DIR>          \xD7\xB0\xBB\xFA\xCF\xB5\xCD\xB3
+| 08-22-15  03:57PM       <DIR>          \xCA\xD3\xC6\xB5\xCE\xC4\xB5\xB5
+| 08-22-15  03:57PM       <DIR>          \xC7\xFD\xB6\xAF\xB4\xF3\xC8\xAB(W7)
+|_08-22-15  03:57PM       <DIR>          \xC7\xFD\xB6\xAF\xB4\xF3\xC8\xAB(XP)
+
+Nmap scan report for 101.81.95.238[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.101.114[上海市 电信]
+Host is up, received user-set (0.061s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.230.26[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.191.14[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.232.187[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.105.34[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.171.226[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.51.234[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 44s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.123.239[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.140.124[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.113.85[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.62.154[上海市 电信]
+Host is up, received user-set (0.085s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.223.146[上海市 电信]
+Host is up, received user-set (0.10s latency).
+Scanned at 2018-08-14 13:35:42 CST for 41s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.141.6[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.90.197[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.82.30[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 119
+
+Nmap scan report for 101.81.111.172[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.243.211[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.35.126[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.55.163[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.141.130[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.154.79[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxr-xr-x    2 0          0                1024 Jul 13 15:48 .
+| drwxr-xr-x    2 0          0                1024 Jul 13 15:48 ..
+|_drwxrwxrwx    1 0          0                  27 Jul 13 15:48 OriginalPhoto [NSE: writeable]
+
+Nmap scan report for 101.81.226.199[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.228.5[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.48.168[上海市 电信]
+Host is up, received user-set (0.085s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.110.4[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.143.143[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.223.14[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.36.83[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.145.245[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.230.165[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.103.125[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.133.119[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.12.220[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.51.198[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.146.66[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.219.91[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 23s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.235.125[上海市 电信]
+Host is up, received user-set (0.089s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.204.210[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.49.191[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.182.139[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.167.103[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.141.3[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.151.226[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.115.246[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.243.32[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.223.8[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.90.104[上海市 电信]
+Host is up, received user-set (0.073s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.118.121[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.165.44[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.80.231[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.105.67[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.36.64[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.60.151[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.56.54[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.82.162[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.221.117[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.238.152[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.237.8[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.228.129[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| 02-19-17  04:26AM                  114 .htaccess
+| 10-07-17  08:05AM       <DIR>          171007020538p
+| 08-13-18  10:50PM       <DIR>          ACC
+| 08-13-18  11:46PM       <DIR>          ACCT
+| 02-19-17  04:30AM       <DIR>          DATACOLOR
+| 08-10-18  01:11PM       <DIR>          FAB
+| 09-13-17  07:34PM                   12 g1ec7g.txt
+| 08-10-18  01:22PM       <DIR>          GMT
+| 11-01-17  09:25PM       <DIR>          HR
+| 01-25-18  07:40PM                  569 index.html
+| 08-10-18  07:04PM       <DIR>          LNG
+| 08-10-18  07:08PM       <DIR>          PCO
+| 02-19-17  04:36AM       <DIR>          SHP
+| 07-28-17  01:35PM               240313 SP9138-UA-2343-39-1 $$W=39,5 T=3 S M=1.tum
+| 04-02-17  01:28AM                   22 temp.txt
+| 08-10-18  07:08PM       <DIR>          tofactory
+|_08-10-18  07:10PM       <DIR>          TRADE
+
+Nmap scan report for 101.81.141.4[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 44s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.223.186[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 47s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.210.32[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 32
+
+Nmap scan report for 101.81.206.123[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.190.43[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 41s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| 02-10-14  10:50AM               184320 AddinAssign.dll
+| 11-06-13  10:40AM               110592 AddInGroup.dll
+| 02-02-14  12:01PM       <DIR>          aspnet_client
+| 04-23-14  10:10PM                98304 AuthorManager.dll
+| 10-24-16  07:40AM               339968 BFTFrame.exe
+| 05-07-18  03:40PM                94208 BFTMoldDll.dll
+| 03-10-17  09:23AM             21049499 BFTSoftSystem.exe
+| 03-06-14  11:10AM               110592 DFunction.dll
+| 04-14-17  10:05AM              1351680 DJMIS.dll
+| 04-14-17  10:05AM               831488 DJMISRun.dll
+| 03-01-16  11:48AM               888832 DJReport.dll
+| 04-14-17  02:04AM                90112 DSDataDownList.ocx
+| 04-14-17  04:05PM               290816 DSInput.ocx
+| 04-14-17  04:05PM               266240 DSInputNL.ocx
+| 07-21-14  09:35AM                69632 ExcelBillIO.dll
+| 08-28-14  03:25PM                57344 ExcelBillPrint.dll
+| 07-10-18  05:18PM               147456 FileUpdate.mdb
+| 07-19-18  08:39PM              3528005 info.zip
+| 03-08-09  10:10AM                36864 LicenceDLL.dll
+| 11-18-13  02:47PM                  272 OfficeActiveX.reg
+| 08-06-18  02:20PM              1578496 Photo.scr
+| 03-10-17  09:23AM             20983963 RegeditInfo.exe
+| 03-10-17  09:24AM             20983963 RegLicence.exe
+| 05-22-14  11:28AM               557056 RubberExpandDll.dll
+| 11-21-17  10:21PM              1904640 RubberPurchase.dll
+| 12-09-13  02:20PM               410555 RubberWDll(3).rar
+| 07-10-18  05:18PM              4112384 RubberWDll.dll
+| 11-20-13  11:07AM               376361 RubberWDll.rar
+| 11-05-13  05:29PM                39936 SCG\xBC\xD3\xC1\xF2\xBF\xA8.xls
+| 03-10-17  09:24AM             21004443 SetDataConnection.exe
+| 08-05-14  12:08AM               462848 YueJieCunR.dll
+| 12-03-13  02:29PM                53248 \xBC\xD3\xC1\xF2\xB9\xA4\xD7\xF7\xBF\xA8.xls
+| 04-14-14  10:38AM                17408 \xD4\xAD\xC1\xCF\xC8\xEB\xBF\xE2\xB5\xA5SCG.xls
+| 02-10-14  10:52AM                24064 \xD4\xAD\xC1\xCF\xB2\xC9\xB9\xBA\xB0\xFC\xD7\xB0\xBF\xA8.xls
+| 04-15-14  10:40AM                25088 \xD4\xAD\xC1\xCF\xB2\xC9\xB9\xBA\xC4\xA3\xB0\xE5SCG.xls
+| 08-02-14  09:07PM                25088 \xCD\xE2\xB9\xBA\xC6\xB7\xB2\xC9\xB9\xBA\xC4\xA3\xB0\xE5.xls
+| 04-17-14  02:02PM                23552 \xB5\xAF\xBB\xC9\xC1\xEC\xD3\xC3\xBF\xA8.xls
+| 04-14-14  10:38AM                16896 \xB3\xC9\xC6\xB7\xC8\xEB\xBF\xE2\xC3\xF7\xCF\xB8\xB5\xA5SCG.xls
+| 04-14-14  10:38AM                16896 \xB3\xC9\xC6\xB7\xC8\xEB\xBF\xE2\xBB\xE3\xD7\xDC\xB5\xA5SCG.xls
+| 05-21-18  02:38PM                21504 \xB3\xC9\xC6\xB7\xB3\xF6\xBB\xF5\xB5\xA5SCG.xls
+| 04-14-14  10:38AM                15872 \xB3\xC9\xC6\xB7\xB7\xA2\xBB\xF5\xB5\xA5SCG.xls
+| 06-13-18  09:35PM                20992 \xB3\xC9\xC6\xB7\xCB\xCD\xBB\xF5\xB5\xA5SCG.xls
+| 11-22-13  11:18AM                36864 \xCF\xF0\xBD\xBA\xB9\xA4\xD7\xF7\xBF\xA8.xls
+| 12-17-13  12:18PM                25088 \xCF\xE4\xB1\xEA\xC7\xA9SCG1.xls
+| 01-06-14  04:23PM                22016 \xCF\xE4\xB1\xEA\xC7\xA9SCG2.xls
+| 12-11-13  09:47AM                22528 \xBD\xBA\xC1\xCF\xB1\xEA\xC7\xA9.xls
+| 05-09-14  12:10PM                25088 \xB8\xA8\xD6\xFA\xC6\xB7\xB2\xC9\xB9\xBA\xC4\xA3\xB0\xE5SCG.xls
+| 02-10-14  10:52AM                24064 \xB2\xC9\xB9\xBA\xB0\xFC\xD7\xB0\xBF\xA8.xls
+| 04-16-14  12:05AM                16384 \xC1\xE3\xBC\xFE\xC8\xEB\xBF\xE2\xB5\xA5SCG.xls
+| 04-14-14  10:38AM                15872 \xC1\xE3\xBC\xFE\xB3\xF6\xBF\xE2\xB5\xA5SCG.xls
+| 04-08-14  03:41PM                19456 \xC1\xE3\xBC\xFE\xB2\xC9\xB9\xBA\xC4\xA3\xB0\xE5SCG.xls
+| 11-19-13  08:14AM                34816 \xB9\xC7\xBC\xD3\xB9\xA4\xD7\xF7\xBF\xA8.xls
+|_02-02-16  01:45PM                50688 \xB9\xC7\xBC\xDC\xB9\xA4\xD7\xF7\xBF\xA8.xls
+
+Nmap scan report for 101.81.108.180[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.154.80[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.143.188[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 41s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.181.96[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.247.139[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.33.53[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 23s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.107.175[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.112.146[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.57.229[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+
+Nmap scan report for 101.81.14.225[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.247.5[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.231.232[上海市 电信]
+Host is up, received user-set (0.13s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.219.142[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.186.42[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.108.151[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.140.100[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.240.245[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.218.98[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.217.14[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.51.59[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 119
+
+Nmap scan report for 101.81.184.178[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.106.53[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.91.62[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.58.214[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.126.239[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.171.42[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.203.121[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.164.11[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.12.4[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.85.147[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.254.224[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.171.55[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.204.96[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.140.46[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.140.237[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.220.2[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 25
+
+Nmap scan report for 101.81.217.82[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 55
+
+Nmap scan report for 101.81.88.147[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.90.189[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.248.66[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.123.227[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.59.190[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.183.53[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.235.216[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.33.5[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.238.56[上海市 电信]
+Host is up, received user-set.
+Scanned at 2018-08-14 13:35:42 CST for 3s
+
+PORT   STATE    SERVICE REASON
+21/tcp filtered ftp     no-response
+
+Nmap scan report for 101.81.93.194[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 119
+
+Nmap scan report for 101.81.236.216[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 53
+
+Nmap scan report for 101.81.241.126[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.85.148[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.114.190[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 55
+
+Nmap scan report for 101.81.57.149[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 55
+
+Nmap scan report for 101.81.94.244[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.55.140[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.155.105[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxrwxrwx   3 root     root         4096 Jul 30  2016 Public [NSE: writeable]
+|_drwxrwxrwx   8 root     root        53248 Apr  2 09:23 \xE5\x85\xA8\xE9\x83\xA8\xE5\x85\xB1\xE4\xBA\xAB [NSE: writeable]
+
+Nmap scan report for 101.81.224.203[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 42s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.200.145[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.119.230[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.250.113[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.254.246[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.188.68[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.142.100[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+|_ftp-anon: got code 550 "Permission denied".
+
+Nmap scan report for 101.81.235.6[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+|_ftp-anon: got code 550 "Permission denied".
+
+Nmap scan report for 101.81.245.76[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.116.24[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 232
+
+Nmap scan report for 101.81.62.145[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.87.236[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.112.66[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.11.108[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.126.39[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 44s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.88.70[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.92.136[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.163.82[上海市 电信]
+Host is up, received user-set (0.073s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.8.207[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.248.25[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.104.166[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.111.45[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.248.225[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.49.86[上海市 电信]
+Host is up, received user-set (0.094s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.249.248[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.81.184[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.251.31[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.230.72[上海市 电信]
+Host is up, received user-set (0.087s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.219.86[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.169.95[上海市 电信]
+Host is up, received user-set (0.088s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.54.126[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 55s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.39.78[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.35.172[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.170.173[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.166.136[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.117.253[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.91.31[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.230.249[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.110.119[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.58.156[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.126.36[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.236.108[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.228.165[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.216.248[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.9.176[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.83.178[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.81.155[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.200.87[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.62.244[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.222.173[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.80.120[上海市 电信]
+Host is up, received user-set (0.073s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.217.107[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.249.222[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.222.232[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.149.74[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| 07-17-12  05:01PM                36902 FTP\xC4\xBF\xC2\xBC.txt
+| 03-31-12  10:50AM       <DIR>          \xB0\xEC\xB9\xAB\xC8\xED\xBC\xFE
+| 10-16-12  10:55AM       <DIR>          \xB1\xC3\xC0\xE0_\xD7\xCA\xC1\xCF
+| 07-17-12  02:38PM       <DIR>          \xB2\xFA\xC6\xB7\xCB\xB5\xC3\xF7\xCA\xE9
+| 03-31-12  10:25AM       <DIR>          \xB2\xFA\xC6\xB7\xD7\xCA\xC1\xCF-\xD3\xA2\xCE\xC4
+| 03-31-12  10:19AM       <DIR>          \xB2\xFA\xC6\xB7\xD7\xCA\xC1\xCF-\xD6\xD0\xCE\xC4
+| 03-31-12  12:29PM       <DIR>          \xB4\xF3\xCC\xEF\xB9\xE2\xC5\xCC
+| 03-31-12  10:48AM       <DIR>          \xB4\xF3\xCC\xEF\xCE\xC4\xB5\xB5
+| 03-31-12  12:37PM       <DIR>          \xB9\xAB\xB9\xB2\xBF\xC9\xD0\xB4\xC5\xCC
+| 03-31-12  12:48PM       <DIR>          \xC6\xF3\xD2\xB5\xCE\xC4\xBB\xAF
+| 03-31-12  12:29PM       <DIR>          \xC6\xF3\xD2\xB5\xD7\xCA\xD6\xCA
+|_03-31-12  12:26PM       <DIR>          \xD3\xA1\xCB\xA2\xD1\xF9\xB1\xBEPDF
+
+Nmap scan report for 101.81.236.25[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 38s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.190.40[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.48.190[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.185.137[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.146.252[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.122.17[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 29s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.236.193[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.180.16[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.49.103[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.127.107[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.32.7[上海市 电信]
+Host is up, received user-set (0.088s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.119.198[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.227.196[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.111.210[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.181.4[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.227.152[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 23s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.114.56[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.254.118[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.251.137[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.95.17[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.51.19[上海市 电信]
+Host is up, received user-set (0.100s latency).
+Scanned at 2018-08-14 13:35:42 CST for 50s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.116.255[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.63.42[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 119
+
+Nmap scan report for 101.81.233.203[上海市 电信]
+Host is up, received user-set (0.085s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.120.149[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.105.21[上海市 电信]
+Host is up, received user-set (0.085s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.11.242[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.203.198[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.104.213[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.231.20[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.255.0[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.125.254[上海市 电信]
+Host is up, received user-set.
+Scanned at 2018-08-14 13:35:42 CST for 5s
+
+PORT   STATE    SERVICE REASON
+21/tcp filtered ftp     no-response
+
+Nmap scan report for 101.81.92.88[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 55
+
+Nmap scan report for 101.81.89.188[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.58.159[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.151.45[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.114.96[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.204.66[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.216.145[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.191.63[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 31s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.113.230[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.190.192[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.122.201[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.32.243[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.63.125[上海市 电信]
+Host is up, received user-set (0.073s latency).
+Scanned at 2018-08-14 13:35:42 CST for 43s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 55
+
+Nmap scan report for 101.81.129.190[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 29s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.204.40[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.15.149[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.53.99[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.205.229[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.142.0[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.148.24[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.62.83[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.118.136[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 40s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.137.148[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.140.19[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.231.251[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.234.104[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.229.197[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.8.189[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.11.162[上海市 电信]
+Host is up, received user-set (0.085s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.88.97[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.119.164[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.98.55[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.11.186[上海市 电信]
+Host is up, received user-set (0.071s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.142.170[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.234.39[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.249.136[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 47s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.99.193[上海市 电信]
+Host is up, received user-set (0.087s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.129.202[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.160.24[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.231.42[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.14.48[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+
+Nmap scan report for 101.81.228.161[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 6s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.118.90[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.185.115[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.9.100[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.249.151[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+| ftp-anon: Anonymous FTP login allowed (FTP code 220)
+|_Can't get directory listing: PASV failed: 530 User anonymous unknown.
+
+Nmap scan report for 101.81.12.12[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.250.86[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.219.44[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.81.197[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.143.165[上海市 电信]
+Host is up, received user-set (0.087s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.162.34[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.231.221[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.88.194[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.97.225[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.234.124[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.11.21[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.120.52[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.62.234[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxr-xr-x    2 0        0            4096 Jul 03 03:04 Java
+| drwxr-xr-x    2 0        0            4096 Sep 13  2016 Linux
+| -rwxr-xr-x    1 0        0         8309367 Jun 11 05:22 ShadowsocksX-NG.1.7.1.zip
+| drwxr-xr-x    3 0        0            4096 Jul 03 03:09 Spring
+| drwxr-xr-x    2 0        0            4096 Jul 03 03:10 architecture
+| drwxr-xr-x    3 0        0            4096 Jul 03 03:09 db
+| drwxr-xr-x    3 0        0            4096 Jul 03 03:11 os
+| drwxr-xr-x    2 0        0            4096 Jul 03 03:04 other
+| drwxr-xr-x    2 0        0            4096 Mar 22  2017 pub
+| drwxr-xr-x    2 0        0            4096 Jul 03 03:04 server
+| drwxr-xr-x    2 0        0            4096 Nov 27  2017 \xE6\x90\x9C\xE7\xB4\xA2
+|_drwxr-xr-x    2 0        0            4096 Sep 13  2016 \xE6\x95\xB0\xE6\x8D\xAE\xE7\xBB\x93\xE6\x9E\x84
+
+Nmap scan report for 101.81.126.199[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.95.232[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 27s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.111.198[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 23s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.114.193[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 24s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.222.63[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.238.183[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 23s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.50.51[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.189.52[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.10.147[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.217.117[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxrwxrwx   1 user     group           0 Aug 14 09:35 \xE8\xAF\xBE\xE7\xA8\x8B\xE6\xA1\x88\xE4\xBE\x8B [NSE: writeable]
+|_drwxrwxrwx   1 user     group           0 Aug  7 11:03 \xE9\xA2\x84\xE4\xB9\xA0\xE8\xB5\x84\xE6\x96\x99 [NSE: writeable]
+
+Nmap scan report for 101.81.109.236[上海市 电信]
+Host is up, received user-set (0.086s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.225.149[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.248.50[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.86.161[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 34s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.55.42[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.208.46[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.190.206[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.250.147[上海市 电信]
+Host is up, received user-set (0.064s latency).
+Scanned at 2018-08-14 13:35:42 CST for 26s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.81.163[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 11s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.60.18[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 22s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.238.149[上海市 电信]
+Host is up, received user-set (0.068s latency).
+Scanned at 2018-08-14 13:35:42 CST for 23s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.225.39[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 30s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.51.222[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.14.140[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxr-xr-x    2 0          0                1024 Jul 14 23:38 .
+| drwxr-xr-x    2 0          0                1024 Jul 14 23:38 ..
+| drwxrwxrwx    1 0          0                  18 Jul 14 23:38 wzld [NSE: writeable]
+|_drwxrwxrwx    1 0          0                  26 Jul 14 23:38 \xBA\xA3\xD4\xCB\xBD\xF8\xBF\xDA [NSE: writeable]
+
+Nmap scan report for 101.81.235.9[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 21s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.96.166[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.236.10[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.237.46[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 8s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.111.69[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.205.23[上海市 电信]
+Host is up, received user-set (0.074s latency).
+Scanned at 2018-08-14 13:35:42 CST for 35s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.141.11[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 29s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.140.139[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.37.198[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| drwxrwxrwx    2 0        0            4096 Jul 17 18:48 common [NSE: writeable]
+|_drwxrwxrwx    2 0        0            4096 Aug 13 23:09 mp3 [NSE: writeable]
+
+Nmap scan report for 101.81.142.64[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.231.144[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.227.73[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.238.95[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 20s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.104.205[上海市 电信]
+Host is up, received user-set (0.065s latency).
+Scanned at 2018-08-14 13:35:42 CST for 19s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.152.160[上海市 电信]
+Host is up, received user-set (0.090s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.91.59[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 39s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.116.168[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.127.245[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.53.192[上海市 电信]
+Host is up, received user-set (0.097s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.105.177[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.119.28[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.101.82[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 25s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.56.170[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.208.101[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.54.102[上海市 电信]
+Host is up, received user-set (0.079s latency).
+Scanned at 2018-08-14 13:35:42 CST for 33s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.55.151[上海市 电信]
+Host is up, received user-set (0.066s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 247
+
+Nmap scan report for 101.81.61.249[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 17s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.124.237[上海市 电信]
+Host is up, received user-set (0.080s latency).
+Scanned at 2018-08-14 13:35:42 CST for 42s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.162.11[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.115.99[上海市 电信]
+Host is up, received user-set (0.069s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.245.177[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 18s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.235.50[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 12s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.103.214[上海市 电信]
+Host is up, received user-set (0.075s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.102.210[上海市 电信]
+Host is up, received user-set (0.087s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.132.202[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 58
+
+Nmap scan report for 101.81.55.226[上海市 电信]
+Host is up, received user-set (0.088s latency).
+Scanned at 2018-08-14 13:35:42 CST for 32s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.82.145[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+
+Nmap scan report for 101.81.147.60[上海市 电信]
+Host is up, received user-set (0.072s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.138.18[上海市 电信]
+Host is up, received user-set (0.067s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.230.63[上海市 电信]
+Host is up, received user-set (0.082s latency).
+Scanned at 2018-08-14 13:35:42 CST for 37s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 248
+
+Nmap scan report for 101.81.233.213[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 15s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.95.15[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.106.168[上海市 电信]
+Host is up, received user-set (0.084s latency).
+Scanned at 2018-08-14 13:35:42 CST for 36s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 56
+|_ftp-anon: got code 500 "OOPS: capset".
+
+Nmap scan report for 101.81.109.92[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 9s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.124.144[上海市 电信]
+Host is up, received user-set (0.063s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.224.129[上海市 电信]
+Host is up, received user-set (0.077s latency).
+Scanned at 2018-08-14 13:35:42 CST for 10s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.248.214[上海市 电信]
+Host is up, received user-set (0.062s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 120
+
+Nmap scan report for 101.81.124.184[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 14s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.148.117[上海市 电信]
+Host is up, received user-set (0.070s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 121
+
+Nmap scan report for 101.81.12.227[上海市 电信]
+Host is up, received user-set (0.076s latency).
+Scanned at 2018-08-14 13:35:42 CST for 13s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 119
+
+Nmap scan report for 101.81.165.221[上海市 电信]
+Host is up, received user-set (0.081s latency).
+Scanned at 2018-08-14 13:35:42 CST for 16s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.204.92[上海市 电信]
+Host is up, received user-set (0.083s latency).
+Scanned at 2018-08-14 13:35:42 CST for 7s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+Nmap scan report for 101.81.106.207[上海市 电信]
+Host is up, received user-set (0.078s latency).
+Scanned at 2018-08-14 13:35:42 CST for 28s
+
+PORT   STATE SERVICE REASON
+21/tcp open  ftp     syn-ack ttl 57
+
+NSE: Script Post-scanning.
+NSE: Starting runlevel 1 (of 1) scan.
+Initiating NSE at 13:36
+Completed NSE at 13:36, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+Nmap done: 425 IP addresses (425 hosts up) scanned in 56.55 seconds
+           Raw packets sent: 43329 (1.906MB) | Rcvd: 839 (35.528KB)

@@ -1,0 +1,437 @@
+常用命令汇总
+PS:用英文词语去记住命令
+01.mkdir  make directory 创建一个新的空目录
+  mkdir /data <--在根目录下创建一个data空目录
+  mkdir -p (parents) 创建父目录以及子目录；多级目录
+        -v 显示详细信息
+		
+02.ls    list    列表显示文件或目录
+   ls /data   <--查看data目录下面的数据信息
+   ls -l <---l参数表示查看文件目录详细信息
+   ls -d <---至查看当前指定目录信息
+   ls -ld <---查看当前指定的目录详细信息
+       -F <---给一些特殊文件信息，加上标识
+	   -p <---给目录添加 /
+03.cd   change directory  切换当前所在路径信息
+   cd /data    <---切换根目录下面的data 目录中
+04.pwd print working directort  显示当前所在路径信息
+   pwd 
+05.touch  摸一下，摸出一个文件（修改文件时间戳信息）
+  touch oldboy.txt <--相对路径方式创建文件
+  touch /data/oldboy.txt <--绝对路径方式创建文件菜单
+06.vi/vim 编辑文件内容命令
+   vi/vim oldboy.txt
+  命令模式/编辑模式
+  i 进入插入模式
+  esc --->:wq
+  实现编辑多行内容：
+  选中编辑行：CTRL+v（进入视图模式）
+  上下方向键选择内容
+  ctrl +i 进行编辑
+  esc 退出视图模式
+  
+  vi --windows系统自带的记事本功能
+  vim --nodepad++  emeditor  sublime text(高级一点)
+     
+07.echo    将输入的内容输入到屏幕
+   echo “hello world” >/data/oldboy.txt  --将编写的内容放入到一个文件中
+   -n  表示输出信息结束后不会换行
+   -e  识别扩展正则&特殊符号
+
+  
+08.cat    查看显示文件内容信息
+   cat oldboy.txt  --查看oldboy.txt 文件的内容
+   cat oldboy.txt<<EOF
+        01.oldboy
+		02.oldboy
+		EOF     ---一次性编辑多行内容信息
+		A   显示文件中一些特殊标记内容（$)
+		tab --^I
+		等价于-EvT
+		
+09.mv move   移动
+
+10.rm   remove  删除（记得备份）
+        rm -rf 强制删除
+		
+11.xargs  管道功能，常与find搭配；后边不识别别名
+
+12.find  查找目录或文件 ：查看目录文件”路径“
+   find /root/ -type f -name "*.扩展名"
+         -type f  --指定查找的文件类型  f表示文件 d 表示目录
+	   -name 数据名称  --指定查找的数据名称
+	   -mtime    --按照时间找寻数据信息（以天为单位）
+	   -mmin     --按照时间找寻数据信息（以分钟为单位）
+	   -size     --按照文件按大小找出相应数据信息（K M G）
+	   -iname    --忽略大小写
+	   -o        --多个查询条件之间为（or）或的关系
+	   -inum     --查询指定inode文件
+	   -a        -- 多个查询条件之间为(and)和的关系
+   
+
+13.grep      过滤  在文件中找东西 linux三剑客拉三
+   -v        排除
+   -A10      往后数10行   
+   -B10      往前数10行
+   -o        显示命令匹配的过程（只显示匹配的信息，按行显示）
+
+14.head      头    显示文件的前几行，默认显示文件的前10行
+   -n2   === -2    显示文件的前两行
+           
+15.tail      尾巴  显示文件的最后几行，默认显示文件的最后10行
+   -n2   === -2    显示文件的最后两行
+   -f    ---实时监控一个日志文件信息变化
+            （当所监控文件丢失则不监控）
+   -F    ---实时监控一个日志文件信息变化
+            （即使所监控文件丢失继续监控）
+
+16.awk       linux三剑客老大  擅长取列     awk  '/GBN/' /data/test.txt 
+       
+
+17.sed       linux三剑客老二  擅长取某一行 sed  '/GBN/d' /data/test.txt   d=删除
+   sed  -n  ‘20p’p===print 显示
+   -n 取消默认输出 
+   -i 修改文件内容
+18 swq   
+
+19.alias     设置或显示别名
+
+20.source    让别名/配置生效  需要source 生效暂时只有这一个
+   /etc/profile
+21.uname      查看系统信息
+        -r     显示内核信息
+		-m     显示系统架构信息
+		-a     显示系统全部信息
+22.useradd    创建用户命令
+
+23.passwd      设置用户密码信息
+          --stdin   免交互设置用户密码信息
+		  
+24.whoami      查看当前登陆系统用户的用户名称信息
+
+25.su -        表示切换当前用户
+26.mount    --挂载命令
+      mount 要挂载什么  挂载到什么位置 （目录-挂载点）
+	  
+27.umount   --卸载命令
+     umount 挂载点信息
+	 
+28.df       --查看磁盘使用情况，查看设备挂载情况
+      -h    --人类可以看懂的
+29.date     --时间
+        -s 要修改的时间
+		
+
+30.cp      --复制
+     -p    |   复制文件时保持源文件的所有者、权限信息及时间属性
+     -d    |   若源文件为符号链接，则只复制符号链接本身，而且保留符号链接所指向的目标文件或目录
+     -r    |   递归复制目录，即复制目录下的所有层级的子目录和文件
+     -a    |   等同于上面的 p.d.r这三个选项功能的总和
+     -i    |   覆盖已有文件前提示用户确认
+     -t    |   可颠倒命令格式，变为：cp -t 目标文件 源文件
+     -v    |  显示执行过程
+	 
+31.xargs    --将得到信息内容按行显示输出，默认利用空格分隔
+            -n2    一行只显示2个字符信息 
+			-i     将得到的信息按行放到命令后面的{}中
+			-I     将得到的信息复制给参数后面的{}，然后再用相应的命令调用{}
+			
+32.init    设置系统运行级别
+        
+33.runlevel  查看当前系统运行级别以及系统修改前的运行级别
+
+34.chkconfig    查看或者配置系统服务是否会开机自启
+   chkconfig [--level 运行级别] 服务名称 on/off
+   chkconfig [--list] 服务名称  <--只查看指定服务的运行级别状态
+   
+35.ps -ef    查看系统中进程信息
+
+36. wc          统计文件系统命令
+    wc -l       行数
+
+37.tar       打包压缩
+   tar zcvf   --压缩
+   z  -- 通过gzip压缩
+   c  -- 压缩文件
+   v  -- 显示压缩过程
+   f  --指定压缩的文件或目录
+   
+   tar zxvf   解压缩
+   x  --解压缩
+   --exclude=  --排除文件
+   --exclude-from=  --排除多个文件
+   
+38.cut    --切割一行字符串信息
+       -d --指定利用什么字符进行切割列的信息
+	   -f3,7  --	取出切割后的几列信息，逗号分数字信息时表示取出第3，7列
+	   -f3-7  --短横线分隔数字信息时，表示从3到7
+   
+39.rpm     --用于系统管理软件包 
+       -q  --查询软件包信息的
+       -a  --整个系统查询软件包是否存在
+	   -f  --查看命令文件属于哪个大礼包软件
+	   -e  -- 进行卸载指定软件包
+	   -ivh--安装软件包
+   
+40.lsof    查看系统进程是否被相应进程调用
+       [root@jinc oldboy]# lsof |head -2
+COMMAND     PID      USER   FD      TYPE             DEVICE SIZE/OFF       NODE NAME
+init          1      root  cwd       DIR                8,3     4096          2 /
+第一列：调取进程名信息
+第二列：进程号码
+第三列：管理进程的用户信息
+第四列：
+第五列：调用的文件类型  dir 目录  REG-普通文件
+第七列：文件大小信息
+第八列：文件inode号码信息
+第九列：调取文件的路径信息
+
+41.du       查看文件或目录占用了多少磁盘空间
+
+42.less     查看文件信息
+43. more   查看文件信息
+
+44.tr      替换
+45.ntpdate    同步时间命令
+   ntpdate 时间服务器信息
+   
+46.sort    对列的信息进行排序
+        -n 按照数字排列
+		-r 进行反向排序
+		-k 指定列
+		-h 以人类可读显示
+		
+47.dos2unix   --实现windows转换成unix
+
+48.ping    <-- 主要用于测试网络链路
+      -c   --- 指定ping多少个包
+      -i   --- 指定ping包间隔多久发送一次
+      -q   --- 指定ping包过程不用显示,只看结果信息
+      -f   --- 进行极速ping操作
+
+
+
+
+
+
+
+
+
+
+
+   
+监控系统信息的命令
+1.uptime 查看负载信息情况命令
+2.top    查看系统运行情况（实时监控）
+3.w      查看系统用户登录信息
+4.lscpu  查看CPU信息
+5.free -m  查看内存信息
+  
+  
+常用命令帮助方法
+ 01.man 
+    man touch  <--查看touch命令使用方法
+  搜索：/ 想要搜索内容
+        n --向下搜索
+		N（shift+n)--向上搜索
+		q --退出
+  
+  
+  
+  
+  
+常用快捷方式
+01.tab   补全命令快捷方式
+02.方向键上下  调用用过的命令
+03.-a 参数   --归档参数 汇总参数（多个参数进行整合）
+cp -a ==cp -r -p -d ==cp -rpd
+04.-r 参数   --表示递归复制
+05.-p参数    --保持文件或目录属性信息不会发生改变（权限属性信息）
+06.CTRL + d  --用户退出当前登陆状态
+07.CTRL +c   --表示中断或者取消命令操作或输出
+08.esc +.    --显示上一个命令最后一个字符串信息
+09.CTRL+a 快速将光标移动到命令行首
+10.CTRL+e 快速将光标移动到命令行末
+11.CTRL+左右方向键 快速向左右移动光标
+12.CTRL+k 剪切光标所在位置之后所有字符串信息
+13.CTRL+u 剪切光标所在位置之前的所有字符串信息
+14.CTRL+y 粘贴剪切内容
+15.
+
+
+
+
+
+常用符号信息(正则表达式--一般被三剑客使用)
+
+^    以什么什么信息开头
+$    以什么什么信息结尾
+.    表示任意字符信息
+|     取出多个信息（扩展正则符号）
+
+标准输出（默认 1>）
+
+>  将一个内容信息放入到指定文件中（标准输出重定向符号）
+[root@jinc data]# ifconfig >/data/oldboy.txt 
+[root@jinc data]# cat /data/oldboy.txt 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:2A:5D:CE  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe2a:5dce/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:3886 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2609 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:347131 (338.9 KiB)  TX bytes:266218 (259.9 KiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+会覆盖原有文件的内容（慎用）进行添加新内容
+
+
+>> 标准输出追加重定向符号 
+[root@jinc data]# ls /data/>>/data/oldboy.txt 
+[root@jinc data]# cat /data/oldboy.txt 
+eth0      Link encap:Ethernet  HWaddr 00:0C:29:2A:5D:CE  
+          inet addr:10.0.0.200  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe2a:5dce/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:3886 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2609 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:347131 (338.9 KiB)  TX bytes:266218 (259.9 KiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+data
+oldboy.txt
+
+错误输出
+
+2>错误输出重定向（只输入错误信息到文件中）
+[root@jinc data]# mdir data/ 2>/data/oldboy.txt  
+[root@jinc data]# cat /data/oldboy.txt 
+-bash: mdir: command not found
+[root@jinc data]# 
+
+2>>错误追加重定向
+[root@jinc data]# touc 1.txt 2>>/data/oldboy.txt 
+[root@jinc data]# cat /data/oldboy.txt 
+-bash: mdir: command not found
+-bash: touc: command not found
+[root@jinc data]# 
+
+
+
+标准输入
+
+<  
+
+
+<<  --标准输入重定向符号（一次性写入多行，但会覆盖原文件内容）
+
+
+
+>>  << 一次性写入多行且不会覆盖原文件内容
+
+ps:将所有命令放入一个文件里面，使之批量执行命令（脚本文件）
+
+
+将正确与错误的结果放入一个文件，即为日志文件
+第一中方法：
+     ifconfig >/data/info.log 2>/data/info.log
+     cat /data/info.log 
+
+
+
+第二种方法：
+     ifconfig >/data/info.log 2>&1
+     cat /data/info.log 
+   
+第三种方法：
+     ifconfig &>/data/info.log 
+     cat /data/info.log 
+
+     企业案例：清空一个文件中的内容
+	 cat /空文件 >/data/要清空的文件
+	 
+	 ca /空文件 >/data/清空的文件
+	 >/data/清空的文件
+
+	 
+*    匹配所有
+     [root@jinc ~]# find /root/data/ -type f -name "*.txt"
+     /root/data/error.txt
+     /root/data/right.txt
+     /root/data/oldboy.txt
+
+|    管道符号  管道前面的命令输出结果交给管道后面的命令处理	
+     [root@jinc ~]# find /root/data/ -type f -name "*.txt"|xargs ls -l
+     -rw-r--r--. 1 root root 34 Jul  6 00:59 /root/data/error.txt
+     -rw-r--r--. 1 root root 21 Jul  6 00:51 /root/data/oldboy.txt
+     -rw-r--r--. 1 root root  0 Jul  6 00:59 /root/data/right.txt
+ 
+`` 反引号    先执行反引号里面的命令，将结果交给外面的命令处理
+
+$()          先执行小括号里面的命令，将结果交给外面的命令处理
+
+..         <--上层目录
+cd ..     --返回上一层目录
+cd ../../../    --返回到上上上级目录（最高到跟/）
+.      <--当前目录
+          以点‘.’开始的文件都是隐藏文件
+！     <--取反
+#      <--在一行的信息开头出现，表示注释掉
+\      <--转义符号（还原字符信息本来意思）
+;      <--在一个命令行上执行两个命令，需要用分号分割
+&&     <--在一个命令行上执行两个命令,前面的命令执行成功后再执行后面的命令
+
+
+
+
+
+常见报错总结
+
+1.文件已存在错误--cannot create directory 
+
+
+
+
+2.command not found   --找不到命令
+
+3.没有这个文件或目录--No such file or directory
+
+4.vi/vim只能操作文件，不能操作目录
+
+5.编辑的文件所在的目录必须要存在--"/alex/old.txt" E212: Can't open file for writin
+g
+
+6.head和tail 命令结合用出错
+
+7.当前登陆系统用户权限不够，操作被拒绝
+
+
+
+
+
+运维规范操作：
+01.所偶文件编辑修改时请用cp命令首先进行备份
+
+02.在移动数据之前，先确保目标路径是否有存在目录信息
+
+
+
+
+

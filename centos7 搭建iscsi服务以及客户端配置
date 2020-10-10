@@ -1,0 +1,241 @@
+# 安装server端target，添加一块磁盘分区
+[root@localhost ~]# yum -y install targetd targetcli
+[root@localhost ~]# systemctl restart targetd
+[root@localhost ~]# systemctl enable targetd 
+Created symlink from /etc/systemd/system/multi-user.target.wants/targetd.service to /usr/lib/systemd/system/targetd.service.
+
+[root@localhost ~]# fdisk /dev/sdb
+欢迎使用 fdisk (util-linux 2.23.2)。
+
+更改将停留在内存中，直到您决定将更改写入磁盘。
+使用写入命令前请三思。
+
+
+命令(输入 m 获取帮助)：n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p): 
+Using default response p
+分区号 (1-4，默认 1)：
+起始 扇区 (2048-20971519，默认为 2048)：
+将使用默认值 2048
+Last 扇区, +扇区 or +size{K,M,G} (2048-20971519，默认为 20971519)：+2G
+分区 1 已设置为 Linux 类型，大小设为 2 GiB
+
+命令(输入 m 获取帮助)：w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+
+WARNING: Re-reading the partition table failed with error 16: 设备或资源忙.
+The kernel still uses the old table. The new table will be used at
+the next reboot or after you run partprobe(8) or kpartx(8)
+正在同步磁盘。
+[root@localhost ~]# partprobe
+
+# 配置iscsi服务端共享资源
+# 在执行targetcli命令后就能看到交互式的配置界面了。在该界面中可以使用很多Linux命令，比如利用ls查看目录参数的结构，使用cd切换到不同的目录中。/backstores/block是iSCSI服务端配置共享设备的位置。我们需要把刚刚创建的磁盘分区文件加入到配置共享设备的“资源池”中，并将该文件重新命名为block1，这样用户就不会知道是由服务器中的哪块硬盘来提供共享存储资源，而只会看到一个名为block1的存储设备。
+[root@localhost ~]# targetcli 
+targetcli shell version 2.1.fb41
+Copyright 2011-2013 by Datera, Inc and others.
+For help on commands, type 'help'.
+
+/> 
+/> ls
+o- / ...................................................... [...]
+  o- backstores ........................................... [...]
+  | o- block ............................... [Storage Objects: 0]
+  | o- fileio .............................. [Storage Objects: 0]
+  | o- pscsi ............................... [Storage Objects: 0]
+  | o- ramdisk ............................. [Storage Objects: 0]
+  o- iscsi ......................................... [Targets: 0]
+  o- loopback ...................................... [Targets: 0]
+/> /> cd backstores/block    #创建一个名为block1的存储块
+/backstores/block> create name=block1 dev=/dev/sdb1 
+Created block storage object block1 using /dev/sdb1.
+
+# 创建iSCSI target名称及配置共享资源。
+
+/> cd iscsi 
+/iscsi> ls
+o- iscsi ........................................... [Targets: 0]
+/iscsi> create wwn=iqn.2020-07.pactera.com:server
+Created target iqn.2020-07.pactera.com:server.
+Created TPG 1.
+Global pref auto_add_default_portal=true
+Created default portal listening on all IPs (0.0.0.0), port 3260.
+/iscsi> cd iqn.2020-07.pactera.com:server/
+/iscsi/iqn.20...ra.com:server> ls
+o- iqn.2020-07.pactera.com:server ...................................................................................... [TPGs: 1]
+  o- tpg1 ................................................................................................. [no-gen-acls, no-auth]
+    o- acls ............................................................................................................ [ACLs: 0]
+    o- luns ............................................................................................................ [LUNs: 0]
+    o- portals ...................................................................................................... [Portals: 1]
+      o- 0.0.0.0:3260 ....................................................................................................... [OK]
+#创建需要共享的设备
+
+# 设置访问控制列表（ACL）。
+/iscsi/iqn.20...ver/tpg1/luns> cd ..
+/iscsi/iqn.20...e:server/tpg1> cd acls 
+/iscsi/iqn.20...ver/tpg1/acls> create iqn.2020-07.pactera.com:client
+Created Node ACL for iqn.2020-07.pactera.com:client
+Created mapped LUN 0.
+
+# 设置iSCSI服务端的监听IP地址和端口号。
+/iscsi/iqn.20...ver/tpg1/acls> cd ..
+/iscsi/iqn.20...m:server/tpg1> cd portals/
+/iscsi/iqn.20.../tpg1/portals> create 10.15.5.233 ip_port=3260
+Using default IP port 3260
+Could not create NetworkPortal in configFS
+/iscsi/iqn.20.../tpg1/portals> delete 0.0.0.0 3260
+Deleted network portal 0.0.0.0:3260
+/iscsi/iqn.20.../tpg1/portals> create 10.15.5.233 ip_port=3260
+Using default IP port 3260
+Created network portal 10.15.5.233:3260.
+
+# PS：通过查找相关的资料，发现在启用端口3260和IP监听的时候，已经存在了一个IP和端口，此时需要手动删除。
+# 配置妥当后检查配置信息，重启iSCSI服务端程序并配置防火墙策略。
+]
+/> ls
+o- / ....................................................................................................................... [...]
+  o- backstores ............................................................................................................ [...]
+  | o- block ................................................................................................ [Storage Objects: 1]
+  | | o- block1 ....................................................................... [/dev/sdb1 (0 bytes) write-thru activated]
+  | |   o- alua ................................................................................................. [ALUA Groups: 1]
+  | |     o- default_tg_pt_gp ..................................................................... [ALUA state: Active/optimized]
+  | o- fileio ............................................................................................... [Storage Objects: 0]
+  | o- pscsi ................................................................................................ [Storage Objects: 0]
+  | o- ramdisk .............................................................................................. [Storage Objects: 0]
+  o- iscsi .......................................................................................................... [Targets: 1]
+  | o- iqn.2020-07.pactera.com:server .................................................................................. [TPGs: 1]
+  |   o- tpg1 ............................................................................................. [no-gen-acls, no-auth]
+  |     o- acls ........................................................................................................ [ACLs: 1]
+  |     | o- iqn.2020-07.pactera.com:client ..................................................................... [Mapped LUNs: 1]
+  |     |   o- mapped_lun0 .............................................................................. [lun0 block/block1 (rw)]
+  |     o- luns ........................................................................................................ [LUNs: 1]
+  |     | o- lun0 .................................................................. [block/block1 (/dev/sdb1) (default_tg_pt_gp)]
+  |     o- portals .................................................................................................. [Portals: 1]
+  |       o- 10.15.5.233:3260 ............................................................................................... [OK]
+  o- loopback ....................................................................................................... [Targets: 0]
+/> exit
+Global pref auto_save_on_exit=true
+Configuration saved to /etc/target/saveconfig.json
+# PS：退出使用exit命令退出，不要使用Ctrl+c ，使用ctrl+C 不会保存配置文件
+# 重启以及添加防火墙规则
+[root@localhost ~]# systemctl restart targetd
+[root@localhost ~]# firewall-cmd --permanent --add-port=3260/tcp
+success
+[root@localhost ~]# firewall-cmd --reload
+success
+
+
+
+## 配置Linux客户端
+# 在RHEL 7系统中，已经默认安装了iSCSI客户端服务程序initiator。如果没有安装的话，可以使用Yum软件仓库手动安装。
+# 查看是否安装：
+[root@cobbler ~]# rpm -qa |grep iscsi-initiator
+iscsi-initiator-utils-iscsiuio-6.2.0.874-10.el7.x86_64
+iscsi-initiator-utils-6.2.0.874-10.el7.x86_64
+# 若没有安装，则手动安装
+[root@localhost ~]# yum -y install iscsi-initiator-utils-6.2.0.874-10.el7.x86_64
+
+# 编辑客户端配置：/etc/iscsi/initiatorname.iscsi 把服务端的访问控制列表名称填写进来，然后重启客户端iscsid服务程序并将其加入到开机启动项中
+[root@cobbler ~]# vim /etc/iscsi/initiatorname.iscsi
+[root@cobbler ~]# cat /etc/iscsi/initiatorname.iscsi
+InitiatorName=iqn.2020-07.pactera.com:client
+[root@cobbler ~]# systemctl restart iscsid
+[root@cobbler ~]# systemctl enable iscsid
+Created symlink from /etc/systemd/system/multi-user.target.wants/iscsid.service to /usr/lib/systemd/system/iscsid.service.
+
+#iscsiadm是用于管理、查询、插入、更新或删除iSCSI数据库配置文件的命令行工具，用户需要先使用这个工具扫描发现远程iSCSI服务端，然后查看找到的服务端上有哪些可用的共享存储资源。其中，-m discovery参数的目的是扫描并发现可用的存储资源，-t st参数为执行扫描操作的类型，-p 192.168.245.128参数为iSCSI服务端的IP地址.可通过 man iscsiadm | grep \\-mode 来查看帮助。
+[root@cobbler ~]# man iscsiadm | grep \\-mode
+       -m, --mode op
+            iscsiadm --mode discoverydb --type sendtargets --portal 192.168.1.10 --discover
+            iscsiadm --mode node --targetname iqn.2001-05.com.doe:test --portal 192.168.1.1:3260 --login
+            iscsiadm --mode node --targetname iqn.2001-05.com.doe:test --portal 192.168.1.1:3260 --logout
+            iscsiadm --mode node
+            iscsiadm --mode node --targetname iqn.2001-05.com.doe:test --portal 192.168.1.1:3260
+
+[root@cobbler ~]# iscsiadm --mode discoverydb --type sendtargets --portal 10.15.5.233 --discover
+10.15.5.233:3260,1 iqn.2020-07.pactera.com:server
+# PS：通过该命令可发现指定IP地址的iSCSI服务
+
+# 登录
+[root@cobbler ~]# iscsiadm --mode node --targetname iqn.2020-07.pactera.com:server --portal 10.15.5.233:3260 --login
+Logging in to [iface: default, target: iqn.2020-07.pactera.com:server, portal: 10.15.5.233,3260] (multiple)
+Login to [iface: default, target: iqn.2020-07.pactera.com:server, portal: 10.15.5.233,3260] successful.
+
+
+[root@cobbler ~]# lsblk
+NAME            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda               8:0    0   1.8T  0 disk
+└─sda1            8:1    0   1.8T  0 part
+  └─centos-root 253:0    0     2T  0 lvm  /
+sdb               8:16   0 136.8G  0 disk
+├─sdb1            8:17   0     1G  0 part /boot
+└─sdb2            8:18   0 135.7G  0 part
+  ├─centos-root 253:0    0     2T  0 lvm  /
+  ├─centos-swap 253:1    0   3.9G  0 lvm  [SWAP]
+  └─centos-home 253:2    0  81.9G  0 lvm  /home
+sdc               8:32   0 279.5G  0 disk
+└─sdc1            8:33   0 279.5G  0 part
+  └─centos-root 253:0    0     2T  0 lvm  /
+sdd               8:48   0    20G  0 disk
+# 最下面的sdd就是，通过格式化分区挂载即可使用该硬盘。
+[root@cobbler ~]# file /dev/sdd
+/dev/sdd: block special
+[root@cobbler ~]# mkfs.ext4 /dev/sdd
+mke2fs 1.42.9 (28-Dec-2013)
+/dev/sdd is entire device, not just one partition!
+Proceed anyway? (y,n) y
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=8191 blocks
+1310720 inodes, 5242624 blocks
+262131 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=2153775104
+160 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+        4096000
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+# 创建目录并且挂载
+[root@cobbler ~]# mkdir /mnt/iscsi
+[root@cobbler ~]# mount /dev/sdd /mnt/iscsi/
+[root@cobbler ~]# df -h|grep sdd
+/dev/sdd                  20G   45M   19G   1% /mnt/iscsi
+
+# PS：注意：由于udev服务是按照系统识别硬盘设备的顺序来命名硬盘设备的，当客户端主机同时使用多个远程存储资源时，如果下一次识别远程设备的顺序发生了变化，则客户端挂载目录中的文件也将随之混乱。为了防止发生这样的问题，我们应该在/etc/fstab配置文件中使用设备的UUID唯一标识符进行挂载，这样，不论远程设备资源的识别顺序再怎么变化，系统也能正确找到设备所对应的目录。
+# 由于/dev/sdb是一块网络存储设备，而iSCSI协议是基于TCP/IP网络传输数据的，因此必须在/etc/fstab配置文件中添加上_netdev参数，表示当系统联网后再进行挂载操作，以免系统开机时间过长或开机失败
+
+# blkid命令用于查看设备的名称、文件系统及UUID
+[root@cobbler ~]# blkid
+/dev/sdb1: UUID="94221090-46b3-42c4-a507-c53655dcf99c" TYPE="xfs"
+/dev/sdb2: UUID="xU9X4h-2b6Q-I88L-s8aT-fNz7-8Nz6-4vIUSh" TYPE="LVM2_member"
+/dev/sda1: UUID="G6WJIO-qRsU-l6S0-zeLX-epUI-4gQI-JuGQfJ" TYPE="LVM2_member" PARTUUID="ef6111a6-10c1-4a44-b628-f73ffffa7e12"
+/dev/sdc1: UUID="TxmrGC-HR5e-eMVM-E0GE-ayp3-98HF-FrSfC4" TYPE="LVM2_member"
+/dev/mapper/centos-root: UUID="9deef892-7252-4187-a742-9d37213e1267" TYPE="xfs"
+/dev/mapper/centos-swap: UUID="2bd1ecb0-6040-4c09-8a60-12adf00e14be" TYPE="swap"
+/dev/mapper/centos-home: UUID="af8160c4-9ce4-45c6-b47f-60f7b614e270" TYPE="xfs"
+/dev/sdd: UUID="96cfa944-6490-424e-9506-801034b608d0" TYPE="ext4"
+
+# 当不在需要使用该硬盘时，可通过iscsiadm命令-u卸载(记得先umount)
+[root@cobbler ~]# umount /mnt/iscsi/
+[root@cobbler ~]# iscsiadm -m node -T iqn.2020-07.pactera.com:server -u
+Logging out of session [sid: 1, target: iqn.2020-07.pactera.com:server, portal: 10.15.5.233,3260]
+Logout of [sid: 1, target: iqn.2020-07.pactera.com:server, portal: 10.15.5.233,3260] successful.
+
+
+
+

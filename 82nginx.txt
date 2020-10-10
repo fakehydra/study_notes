@@ -1,0 +1,282 @@
+rtmp {
+ 
+    server {
+        listen 1935;
+        application swaps {
+            live on;
+            wait_video on;
+            drop_idle_publisher 10s;
+            on_publish http://127.0.0.1:87/hiswvideoapi/api/liveLiveChannel/publish;
+            on_publish_done http://127.0.0.1:87/hiswvideoapi/api/liveLiveChannel/publish_done;
+            on_play http://127.0.0.1:87/hiswvideoapi/api/liveLiveChannel/play;
+            on_record_done http://127.0.0.1:87/hiswvideoapi/api/liveLiveChannel/record_done;
+
+       }
+         application rtlive {
+            live on;
+            wait_video on;
+
+       }
+          application demo {
+            live on;
+            wait_video on;
+       }
+           application vn {
+            live on;
+        }
+    }
+
+}
+
+
+
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+   limit_conn_zone $binary_remote_addr zone=perip:10m;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+
+#server {
+#        listen       80;
+#        server_name  video.hisw.com;
+
+ #          location /hiswvideoapi {
+ #          root /usr/local/apache-tomcat-7.0.61_87_live_api/webapps/hiswvideoapi;
+ #         proxy_set_header Host $host;
+#           proxy_set_header X-Real-IP $remote_addr;
+#           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           #proxy_pass http://tomcat/hisw/;
+#                      proxy_pass  http://127.0.0.1:87;
+#                }
+#}
+
+    server {
+        listen       80;
+        server_name  localhost video.fdsm.fudan.edu.cn *.fdsm.fudan.edu.cn org4secvods.57cdn.com;
+ #      client_max_body_size 2000m;
+        #charset koi8-r;
+        client_max_body_size 5g;
+        client_body_buffer_size 8m;
+        #access_log  logs/host.access.log  main;
+
+        location / {
+           # root   html;
+           # index  index.html index.htm;
+            proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_pass   http://127.0.0.1:8080;
+        }
+ 
+        location /hiswvideoapi {
+           root /usr/local/apache-tomcat-7.0.61_87_live_api/webapps/hiswvideoapi;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           #proxy_pass http://tomcat/hisw/;
+           proxy_pass  http://127.0.0.1:87;
+        }
+       
+        location /video {
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_ignore_client_abort on;
+
+         
+          proxy_pass   http://127.0.0.1:8080;
+        }
+         location /fdvideoweb {
+           proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_pass   http://127.0.0.1:8080;
+   }
+
+        location /stat {
+            rtmp_stat all;
+            rtmp_stat_stylesheet stat.xsl;
+        }
+
+ 
+        location /stat.xsl {
+            root /usr/local/ffmpeg/nginx/nginx-rtmp-module;
+        }
+
+
+       location /src/{
+            # alias  /ftp/fdedu/precourse/src/;
+            alias /ftp/company_1/;
+        }
+
+        location /vod {
+
+            #limit_conn perip 2;
+            limit_rate_after 1000k;
+            limit_rate 8000k;
+            
+            alias /streams/vod;
+           
+            index  index.html index.htm;
+         #          if ($http_referer  ~* .*\.hisw.cn) {
+          #   return   403;
+          #  }         
+           
+            location ~ \.flv$ {
+                    flv;
+                    
+            }
+            location ~ \.mp4$ {
+                    mp4;
+             valid_referers   blocked fdweb.3xmt.com bia.hisw.cn  *.fudan.edu.cn org4secvods.57cdn.com;
+            # if ($invalid_referer) {
+            #  return   403;}
+             set $validu 0;
+             if ($invalid_referer) {
+             set $validu 1;
+             }
+             if ($http_user_agent ~* iPad){
+             set $validu 0;
+             }
+            #if ($http_user_agent ~ "((Linux)|(Android)|(iPhone))"){
+             if ($http_user_agent ~* iPhone){
+             set $validu 0;
+             }
+             if ($validu = 1){
+             return   403;
+             }
+
+            }
+              
+      
+       }          
+          
+
+     location /vod_no {
+
+             limit_rate_after 1000k;
+            limit_rate 5000k;
+
+            alias /streams/vod;
+
+            index  index.html index.htm;
+ 
+           location ~ \.flv$ {
+                    flv;
+
+            }
+            location ~ \.mp4$ {
+                    mp4;
+ 
+            }
+
+
+       }
+
+
+
+
+         location /hls {   
+           types{  
+             application/vnd.apple.mpegurl m3u8;  
+             video/mp2t ts;  
+           }  
+            #alias /streams/hls;
+            alias  /dev/shm/hls;  
+            expires 30d;  
+         }  
+          location /chlive {
+           types{
+             application/vnd.apple.mpegurl m3u8;
+             video/mp2t ts;
+           }
+            alias /dev/shm/chlive;
+            expires -1;
+         }
+ 
+
+
+
+          #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+   }
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+}

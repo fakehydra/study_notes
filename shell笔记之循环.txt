@@ -1,0 +1,98 @@
+shell笔记之循环
+####  while循环：一直循环下去
+#####  *使用:*
+     01.编写守护进程
+     02.读取文件信息
+     03.做数值运算
+#####  *格式*
+     while true 
+     do
+     
+     done
+#####  使用：利用while输出1-10
+     [root@zabbix_ser scripts]# cat zy
+     zy05.sh  zy06.sh  zy07.sh  zy08.sh  zy1.sh   zy2.sh   zy3.sh   zy4.sh   
+     [root@zabbix_ser scripts]# cat zy08.sh 
+     #!/bin/bash
+     #################################################
+     #    File Name: zy08.sh
+     #       Author: fakehydra
+     #         Mail: 664341340@qq.com
+     #     Function: 
+     # Created Time: 2018年11月05日 星期一 10时42分42秒
+     #################################################
+     i=0
+     while [ $i -le 9 ]
+     do
+     ((i++))
+     echo $i
+     done
+#####  使用：利用while读取文件内容信息：
+*获取访问日志流量汇总信息*
+     sum=0
+     while read line
+     do
+        size='echo $line|awk '{print $10}'|grep -v -'
+        let sum+=size
+     done<$1(nginx访问日志)
+     echo $sum
+     
+####  小游戏
+*规则*
+     让系统先随机生成一个数字, 给这个数字定一个范围(1-60)
+     让用户输入猜的数字,对输入进行判断,如果不符合要求
+     就给与高或低提示, 猜对后则给出猜对用的次数, 实现while循环语句实现
+#####  实现
+     [root@web01 scripts]# cat game_caishuzi.sh
+     i=`echo $(($RANDOM%+ 60))`
+     caice (){
+     read -p "pls input your num: " num
+     ((sum++))
+     if [  $num -gt $i ]
+     then
+     echo "$num 太大了"
+     elif [ $num -lt $i ]
+     then
+     echo "$num 太小了"
+     else
+     echo "恭喜你猜对了,共$sum次"
+     exit 0
+     wc -l
+     fi
+     }
+     main(){
+     caice
+     }
+     sum=0
+     while true
+     do
+     main
+     done
+
+####  for循环：主要用于执行次数有限的循环
+#####  语法说明
+=根据变量数值进行循环=
+     for 变量名 in 变量取值列表;
+     do --;
+     done
+
+=根据判断条件进行循环=
+     for ((exp1;exp2;exp3));
+     do --;
+     done
+
+####  使用：对数字1到100进行求和运算
+=方法一=
+     [root@web01 scripts]# cat zy01.sh 
+     for num in {1..100}
+     do
+     ((sum+=$num))
+     done
+     echo $sum
+=方法二=
+     [root@web01 scripts]# cat zy02.sh 
+     for ((i=1;i<=100;i++))
+     do
+     sum=`expr $sum + $i`
+     done
+     echo $sum

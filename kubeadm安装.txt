@@ -1,0 +1,42 @@
+部署k8s
+1.部署成系统守护进程
+繁琐 
+2.部署成pod（静态pod static）
+
+静态pod ：不受k8s管理
+
+flannel：动态pod 受k8s管理
+
+
+kubeadm 安装
+1.master，node ：安装kubelet kubeadm docker
+2.master：kubeadm init
+3.nodes：kubelet join
+
+master：10.0.0.11
+node：10.0.0.12
+
+
+
+网络环境：
+[root@k8s-server ~]# firewall-cmd --state
+not running
+[root@k8s-server ~]# setenforce 0
+[root@k8s-server ~]# grep -v "^#" /etc/selinux/config 
+
+SELINUX=disabled
+SELINUXTYPE=targeted 
+
+master部署：
+sysctl -w net.bridge.bridge-nf-call-iptables="1"
+配置kubernets源
+[root@k8s-server ~]# vim /etc/yum.repos.d/kubernets.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+		

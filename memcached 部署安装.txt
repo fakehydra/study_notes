@@ -1,0 +1,89 @@
+###  memcached server 
+     yum install -y libevent libevent-devel nc
+
+     yum install -y memcached
+####  安装
+     libevent libevent-devel  --事件触发的网络库
+	 nc   --连接memcached 的工具（查看工具）
+####  启动
+     memcached -m 16m -p 11211 -d -u root -c 8192
+####  Memcached启动参数
+     
+     -d 启动一个守护进程。
+     
+     -m 分配个memcache使用的内存，单位是MB
+     
+     -u 运行memcache的用户，如果当前为root,需要使用此参数指定用户。
+     
+     -l 监听的服务器ip地址。
+     
+     -p 设定memcache监听的端口，默认11211
+     
+     -c 设置最大运行的并发连接数，默认为1024.
+     
+     -P设置保存Memcache的pid文件 保存pid到指定文件。
+###  添加开机自启
+     echo 'memcached -m 16m -p 11211 -d -u root -c 8192' >>/etc/rc.local
+
+###  memcached client
+####  编译
+~~~
+cd /server/tools/
+tar xf memcache-2.2.7.tgz
+cd memcache-2.2.7
+/application/php-5.5.32/bin/phpize
+./configure -enable-memcache --with-php-config=/application/php-5.5.32/bin/php-config
+make && make install
+\cp /server/file/php.ini /application/php-5.5.32/lib/php.ini
+killall php-fpm
+php-fpm
+~~~
+####  修改配置文件
+     vim /application/php/lib/php.ini
+     extension_dir = "/application/php-5.5.32/lib/php/extensions/no-debug-non-zts-20121212/
+     "
+     extension = memcache.so
+     在后面添加这两行--相当于上面\cp
+	 
+####  修改PHP配置文件
+
+     [root@web01 ~]# vim /application/php/lib/php.ini
+
+####  原配置
+~~~
+session.save_handler = files
+session.save_path = "/tmp"
+~~~
+####  修改为：
+~~~
+session.save_handler = memcache
+session.save_path = "tcp://172.16.1.31:11211"
+~~~
+
+####  做到这里，访问dedecms的后台会出现500错误
+#####  解决方法：
+     修改文件：/application/nginx/html/www/include/commom.inc.php
+     135 //Session保存路径
+     136 $enkey = substr(md5(substr($cfg_cookie_encode,0,5)),0,10);
+     137 //$sessSavePath = DEDEDATA."/sessions_{$enkey}";  --原
+     138 $sessSavePath = "tcp://172.16.1.61:11211";  --修改成
+     139 if ( !is_dir($sessSavePath) ) mkdir($sessSavePath);
+     
+     修改文件：/application/nginx/html/www/include/vdimgck.php
+      24 $enkey = substr(md5(substr($cfg_cookie_encode,0,5)),0,10);
+      25 //$sessSavePath = DEDEDATA."/sessions_{$enkey}";  --原
+      26 $sessSavePath = "tcp://172.16.1.61:11211";  --修改
+      27 if ( !is_dir($sessSavePath) ) mkdir($sessSavePath);
+     
+####  测试memcached 
+     [root@web01 www]# cat test_ss.php
+      <?php
+           $memcache = new Memcache;
+           $memcache->connect('172.16.1.61', 11211) or die ("Could not connect NFS server");
+           $memcache->set('key', 'Memcache connect OK');
+           $get = $memcache->get('key');
+           echo $get;
+      ?>
+     
+     若连接成功，则返回OK ,反之则could not
+	 

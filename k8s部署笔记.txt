@@ -1,0 +1,106 @@
+kubeadm部署k8s集群
+
+前期准备：
+基于主机名通信：/etc/hosts
+防火墙关闭
+时间同步
+
+阿里kubernets镜像：https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+
+key镜像：https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+
+docker 镜像源：https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+
+
+制作yum源：
+kubernets源
+[root@k8s-server yum.repos.d]# cat kubernetes.repo 
+[kubernetes]
+name=Kubernetes Repo
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+gpgcheck=0
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+enabled=1
+
+docker源：
+wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+key:
+[root@k8s-server ~]# wget https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+[root@k8s-server ~]# rpm --import yum-key.gpg 
+
+查看：
+[root@k8s-server ~]# yum repolist
+已加载插件：fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors.aliyun.com
+ * epel: mirrors.aliyun.com
+ * extras: mirrors.aliyun.com
+ * updates: mirrors.aliyun.com
+源标识                    源名称                                           状态
+base/7/x86_64             CentOS-7 - Base - mirrors.aliyun.com             10,019
+docker-ce-stable/x86_64   Docker CE Stable - x86_64                            25
+epel/x86_64               Extra Packages for Enterprise Linux 7 - x86_64   12,735
+extras/7/x86_64           CentOS-7 - Extras - mirrors.aliyun.com              314
+kubernetes                Kubernetes Repo                                     287
+updates/7/x86_64          CentOS-7 - Updates - mirrors.aliyun.com             594
+repolist: 23,974
+
+
+下载：
+
+
+启动docker服务，pull相关镜像
+由于从官网下载需要一些不可描述的条件，所以，先通过不可描述的条件下载好相关image并push到docker hub
+
+docker login
+docker pull fakehydra/kube-proxy
+docker pull fakehydra/kube-proxy:v1.13.0
+docker pull fakehydra/kube-scheduler:v1.13.0
+docker pull fakehydra/kube-apiserver:v1.13.0
+docker pull fakehydra/kube-controller-manager:v1.13.0
+docker pull fakehydra/coredns:1.2.6
+docker pull fakehydra/pause:3.1
+docker pull fakehydra/etcd:3.2.24
+
+查看下载好的：
+[root@k8s-server ~]# docker images
+REPOSITORY                          TAG                 IMAGE ID            CREATED             SIZE
+fakehydra/kube-proxy                v1.13.0             8fa56d18961f        3 days ago          80.2MB
+fakehydra/kube-controller-manager   v1.13.0             d82530ead066        3 days ago          146MB
+fakehydra/kube-scheduler            v1.13.0             9508b7d8008d        3 days ago          79.6MB
+fakehydra/kube-apiserver            v1.13.0             f1ff9b7e3d6e        3 days ago          181MB
+fakehydra/coredns                   1.2.6               f59dcacceff4        4 weeks ago         40MB
+fakehydra/etcd                      3.2.24              3cab8e1b9802        2 months ago        220MB
+fakehydra/pause                     3.1                 da86e6ba6ca1        11 months ago       742kB
+
+
+初始化：
+kubeadm init --kubernetes-version=v1.13.0 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.96.0.0/12
+
+
+
+
+
+
+
+
+
+
+
+ 13 Environment="HTTPS_PROXY=http://www.ik8s.io:10080"
+ 14 Environment="NO_PROXY=127.0.0.0/8,172.20.0.0/16"
+
+ 
+ 
+ 拉取的镜像：
+ [root@hydra ~]# docker image ls
+REPOSITORY                           TAG                 IMAGE ID            CREATED             SIZE
+k8s.gcr.io/kube-proxy                v1.13.0             8fa56d18961f        2 days ago          80.2MB
+k8s.gcr.io/kube-apiserver            v1.13.0             f1ff9b7e3d6e        2 days ago          181MB
+k8s.gcr.io/kube-controller-manager   v1.13.0             d82530ead066        2 days ago          146MB
+k8s.gcr.io/kube-scheduler            v1.13.0             9508b7d8008d        2 days ago          79.6MB
+k8s.gcr.io/coredns                   1.2.6               f59dcacceff4        4 weeks ago         40MB
+k8s.gcr.io/etcd                      3.2.24              3cab8e1b9802        2 months ago        220MB
+k8s.gcr.io/pause                     3.1                 da86e6ba6ca1        11 months ago       742kB

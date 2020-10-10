@@ -1,0 +1,81 @@
+Tomcat笔记之多实例
+####  规划端口定义信息
+     tomcat-01  8081 8006 8010
+     tomcat-02  8082 8007 8011
+
+####  部署多实例目录
+     [root@tomcat tools]# tar xf apache-tomcat-8.0.27.tar.gz 
+     [root@tomcat tools]# mv apache-tomcat-8.0.27 tomcat-01
+     [root@tomcat tools]# tar xf apache-tomcat-8.0.27.tar.gz 
+     [root@tomcat tools]# mv apache-tomcat-8.0.27 tomcat-02
+
+     [root@tomcat tools]# ll
+     总用量 185908
+     -rw-r--r--. 1 root root   9128610 10月 25 15:33 apache-tomcat-8.0.27.tar.gz
+     -rw-r--r--. 1 root root 181238643 10月 25 15:27 jdk-8u60-linux-x64.tar.gz
+     drwxr-xr-x. 9 root root       160 10月 26 09:25 tomcat-01
+     drwxr-xr-x. 9 root root       160 10月 26 09:25 tomcat-02
+
+####  修改端口号
+     [root@tomcat tools]# sed -i 's#8080#8081#g;s#8005#8006#g;s#8009#8010#g' tomcat-01/conf/server.xml
+     
+     [root@tomcat tools]# sed -i 's#8080#8082#g;s#8005#8007#g;s#8009#8011#g' tomcat-02/conf/server.xml 
+     
+####  重新启动
+     [root@tomcat tools]# /application/tomcat-01/bin/startup.sh 
+     Using CATALINA_BASE:   /application/tomcat-01
+     Using CATALINA_HOME:   /application/tomcat-01
+     Using CATALINA_TMPDIR: /application/tomcat-01/temp
+     Using JRE_HOME:        /application/jdk
+     Using CLASSPATH:       /application/tomcat-01/bin/bootstrap.jar:/application/tomcat-01/bin/tomcat-juli.jar
+     Tomcat started.
+     [root@tomcat tools]# /application/tomcat-02/bin/startup.sh 
+     Using CATALINA_BASE:   /application/tomcat-02
+     Using CATALINA_HOME:   /application/tomcat-02
+     Using CATALINA_TMPDIR: /application/tomcat-02/temp
+     Using JRE_HOME:        /application/jdk
+     Using CLASSPATH:       /application/tomcat-02/bin/bootstrap.jar:/application/tomcat-02/bin/tomcat-juli.jar
+     Tomcat started.
+     
+####  确定启动，查看端口
+     [root@tomcat tools]# ss -lntup|grep java
+     tcp    LISTEN     0      1      ::ffff:127.0.0.1:8005                 :::*                   users:(("java",pid=4067,fd=67))
+     tcp    LISTEN     0      1      ::ffff:127.0.0.1:8006                 :::*                   users:(("java",pid=4248,fd=69))
+     tcp    LISTEN     0      1      ::ffff:127.0.0.1:8007                 :::*                   users:(("java",pid=4277,fd=69))
+     tcp    LISTEN     0      100      :::8009                 :::*                   users:(("java",pid=4067,fd=51))
+     tcp    LISTEN     0      100      :::8010                 :::*                   users:(("java",pid=4248,fd=51))
+     tcp    LISTEN     0      100      :::8011                 :::*                   users:(("java",pid=4277,fd=51))
+     tcp    LISTEN     0      100      :::8080                 :::*                   users:(("java",pid=4067,fd=46))
+     tcp    LISTEN     0      100      :::8081                 :::*                   users:(("java",pid=4248,fd=46))
+     tcp    LISTEN     0      100      :::8082                 :::*                   users:(("java",pid=4277,fd=46))
+     
+####  测试页面
+     [root@tomcat tools]# curl 127.0.0.1:8081
+     jinc tomcat-01
+     [root@tomcat tools]# curl 127.0.0.1:8082
+     jinc tomcat-02
+     
+####  添加负载均衡
+     到之前负载均衡主机lb01，修改配置文件，以及修改windows主机hosts解析为负载均衡ip
+####  配置文件代码
+     [root@lb01 ~]# cat /application/nginx/conf/nginx.conf
+     http {
+         upstream jinc {
+     	server 172.16.1.81:8081;
+             server 172.16.1.81:8082;
+     }
+         include       mime.types;
+         default_type  application/octet-stream;
+         sendfile        on;
+         keepalive_timeout  65;
+         server   {
+     	listen      10.0.0.3:80;
+     	server_name  localhost;
+         location ~* / {
+     	proxy_pass http://jinc;
+             proxy_set_header Host $host;
+             proxy_set_header X-Forwarded-For $remote_addr;
+     	}
+     
+     }
+     

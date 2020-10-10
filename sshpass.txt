@@ -1,0 +1,29 @@
+01. 给50台主机分发公钥,实现基于秘钥远程管理?
+    1. 分发公钥时需要输入密码信息	    sshpass
+	2. 分发公钥时总有确认信息(yes/no)  需要查看ssh-copy-id
+	3. 远程主机ssh服务端口号,如果不是22端口如何分发
+	
+1.sshpass -p 123456 ssh 172.16.1.31
+     -p password  --后面接指定的密码
+	 
+2.在/etc/ssh_config最后添加一行
+StrictHostKeyChecking no
+
+3.ssh -p 22 
+   -p+端口号
+
+sshpass 安装
+
+下载：http://sourceforge.net/projects/sshpass/ 
+
+将下载好的tar 拖到Linux服务器
+tar xf sshpass-1.06.tar.gz  --解压
+cd sshpass-1.06  进入到解压后的目录  
+./configure --prefix=/opt/sshpass   --指定安装目录
+make && make install  
+cp /opt/sshpass/bin/sshpass /usr/bin/
+
+[root@m01 sshpass-1.06]# sshpass -V
+sshpass 1.06
+安装成功
+

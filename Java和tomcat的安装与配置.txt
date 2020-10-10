@@ -1,0 +1,162 @@
+tomcat 下载安装时遇到的坑
+
+由于有点需求，开始下载安装配置jdk
+
+开始时在网上找了一个教程，用他给的链接去下载，但是，刚一下完，一解压就报错
+[root@localhost ~]# tar xf jdk-8u60-linux-x64.tar.gz -C /usr/local/
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+然后我就纳闷了。。这是啥情况，看了一下文件的大小
+[root@localhost ~]# ls -lht
+total 48K
+-rw-------. 1 root root 1.1K Jul 16 19:51 anaconda-ks.cfg
+-rw-r--r--. 1 root root  22K Jul 16 19:51 install.log
+-rw-r--r--. 1 root root 5.8K Jul 16 19:49 install.log.syslog
+-rw-r--r--. 1 root root 5.2K Mar 21  2012 jdk-8u60-linux-x64.tar.gz
+黑人问号？？？5.2k的压缩包什么鬼0.0
+跑去官网看了下。。。300+M..我勒个去，还有的东西被谁吃了
+
+找到原因了，那就重新下咯，直接在官网找的最新版的压缩包~
+地址：http://download.oracle.com/otn-pub/java/jdk/10.0.2+13/19aef61b38124481863b1413dce1855f/jdk-10.0.2_linux-x64_bin.tar.gz
+
+[root@localhost ~]# ls -lhi 
+total 339M
+654095 -rw-r--r--. 1 root root 339M Jul 20  2018 jdk-10.0.2_linux-x64_bin.tar.gz
+
+哎，这才对嘛
+
+
+话不多说，继续
+
+将下载好的压缩包解压到 /usr/local/
+进入目录 ：cd /usr/local/
+创建个链接：
+[root@localhost local]# ln -sv jdk-10.0.2/ jdk
+`jdk' -> `jdk-10.0.2/'
+然后就是编辑配置环境了：
+[root@localhost local]# vim /etc/profile.d/jdk.sh
+JAVA_HOME=/usr/local/jdk
+PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME PATH
+~                        
+保存退出
+然后就是让他生效了：
+[root@localhost local]# source /etc/profile.d/jdk.sh 
+检查是否生效：
+[root@localhost local]# java -version
+java version "10.0.2" 2018-07-17
+Java(TM) SE Runtime Environment 18.3 (build 10.0.2+13)
+Java HotSpot(TM) 64-Bit Server VM 18.3 (build 10.0.2+13, mixed mode)
+
+
+接下来就是正主了：tomcat下载安装
+
+同样的过程我就不多说了，看代码：
+
+[root@localhost local]# tar xf apache-tomcat-9.0.10.tar.gz -C /usr/local/
+[root@localhost local]# ls
+apache-tomcat-9.0.10         etc      jdk         lib64    share
+apache-tomcat-9.0.10.tar.gz  games    jdk-10.0.2  libexec  src
+bin                          include  lib         sbin
+[root@localhost local]# ln -sv apache-tomcat-9.0.10 tomcat
+`tomcat' -> `apache-tomcat-9.0.10'
+[root@localhost local]# vim /etc/pro
+profile    profile.d/ protocols  
+[root@localhost local]# vim /etc/pro
+profile    profile.d/ protocols  
+[root@localhost local]# vim /etc/profile.d/tomcat.sh
+CATALINA_BASE=/usr/local/tomcat
+PATH=$CATALINA_BASE/bin:$PATH
+export PATH CATALINA_BASE
+
+保存退出
+生效：[root@localhost local]# source /etc/profile.d/tomcat.sh 
+
+检查：
+[root@localhost local]# catalina.sh version
+Using CATALINA_BASE:   /usr/local/tomcat
+Using CATALINA_HOME:   /usr/local/tomcat
+Using CATALINA_TMPDIR: /usr/local/tomcat/temp
+Using JRE_HOME:        /usr/local/jdk
+Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+Server version: Apache Tomcat/9.0.10
+Server built:   Jun 20 2018 17:32:21 UTC
+Server number:  9.0.10.0
+OS Name:        Linux
+OS Version:     2.6.32-696.el6.x86_64
+Architecture:   amd64
+JVM Version:    10.0.2+13
+JVM Vendor:     "Oracle Corporation"
+
+安装到这就结束了
+
+接下来就是配置了
+
+1.配置server.xml：
+
+vim /usr/local/tomcat/conf/server.xml
+---------------------------------------------------------->
+ <Connector port="80" protocol="HTTP/1.1"      //默认端口为8080，改为80
+            connectionTimeout="20000"
+            redirectPort="8443" />
+
+2.tomcat有manager-gui的管理页面，想要使用必须配置管理用户，不使用可以跳过此步。配置tomcat-users.xml：
+
+vim /usr/local/tomcat/conf/tomcat-users.xml
+------------------------------------------------------------------------------->
+<role rolename="manager-gui"/>                                        //指定用户可以使用的接口为manager-gui
+<user username="tomcat" password="tomcat" roles="manager-gui"/>      //用户名和密码为tomcat，在manager-gui接口使用
+
+3.创建测试页面：
+
+mkdir -pv /usr/local/tomcat/webapps/test/WEB-INF/{classes,lib}
+vim /usr/local/tomcat/webapps/test/index.jsp
+--------------------------------------------------------------->
+<%@ page language="java" %>
+<%@ page import="java.util.*" %>
+<html>
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <%
+            out.println("Hello World!");      //嵌入java语言
+        %>
+    </body>
+</html>
+
+4.启动测试：
+
+catalina.sh start
+
+
+可能出现的错误--防火墙
+
+如果服务器开启的防火墙，就开启tomcat端口可以访问
+
+
+# /sbin/iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+
+
+# service iptables save
+
+
+# service iptables restart
+
+或直接修改文件/etc/sysconfig/iptables.
+
+# vi /etc/sysconfig/iptables
+
+-A INPUT -p tcp -m tcp --dport 8080 -j ACCEPT
+
+# service iptables restart
+
+
+
+
+
+
+

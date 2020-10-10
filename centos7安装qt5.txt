@@ -1,0 +1,17 @@
+centos7安装qt5
+
+wget http://download.qt.io/archive/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
+
+# 增加执行权限
+chmod +x qt-opensource-linux-x64-5.7.0.run
+# 安装
+./qt-opensource-linux-x64-5.7.0.run
+
+# 相关依赖
+yum install mesa-libGL-devel mesa-libGLU-devel freeglut-devel gcc-c++
+ 
+# 环境变量配置
+export PATH="/opt/Qt5.7.0/5.7/gcc_64/bin:$PATH"
+export PATH="/opt/Qt5.7.0/Tools/QtCreator/bin:$PATH"
+
+

@@ -1,0 +1,41 @@
+监控--zabbix
+####  监控知识概念介绍（面试的时候，如何形容你是掌握监控能力的）
+
+####  zabbix功能介绍&监控原理
+
+
+
+
+
+
+
+top命令第二行
+us(用户态)：与用户的操作有关系
+sy(系统内核态)：与系统的处理有关系
+id(空闲状态)：系统CPU空闲状态百分比
+
+
+客户端
+ct-7
+rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm
+
+yum install -y zabbix-agent
+或者
+rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/7/x86_64/zabbix-agent-4.0.0-2.el7.x86_64.rpm
+
+ct-6
+rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/6/x86_64/zabbix-release-3.5-1.el6.noarch.rpm
+
+rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/6/x86_64/zabbix-agent-4.0.0-2.el6.x86_64.rpm
+
+
+编辑配置文件
+vim /etc/zabbix/zabbix_agentd.conf 
+ 98 Server=172.16.1.77
+
+ 启动
+ systemctl start zabbix-agent.service 
+ 
+ 
+ 
+ 

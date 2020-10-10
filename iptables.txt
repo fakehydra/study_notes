@@ -1,0 +1,84 @@
+iptables 防火墙服务
+###  iptables防火墙服务名词概念
+     iptables(容器)---表(filter nat) ---- 链(在不同方向上控制数据包) ---规则(允许 禁止)
+	 
+###  防火墙工作原理
+     工作流程小结：
+     1.	防火墙是层层过滤的，实际是按照配置规则的顺序从上到下，从前到后进行过滤的。
+     2.	如果匹配上规则，即明确表示是阻止还是通过，数据包就不再向下匹配新的规则。
+     3.	如果规则中没有明确表明是阻止还是通过的，也就是没有匹配规则，向下进行匹配，直到匹配默认规则得到明确的阻止还是通过。
+     4.	防火墙的默认规则是所有规则执行完才执行的。
+	 
+###  四个表五个链
+####  filter表:  是数据包的过滤功能
+	  input链:   是否允许数据包进入到防火墙服务中
+	  output链:  是否允许防火墙服务器产生的数据包可以出去
+	  forward链: 是否允许数据经过防火墙到到达相应主机
+	  
+####  nat表: 对数据包中的源地址或目标地址,以及源端口或目标端口进行修改
+	  prerouting:  将路由之前接收到的数据包, 进行修改调整
+	  postrouting: 将路由之后发出去的数据包, 进行修改调整
+	  output:	   将防火墙自身产生数据包,在发出去的时候进行修改调整
+
+###  熟悉掌握iptables防火墙配置方法
+####  预备知识:
+	 01. 防火墙服务必须开启
+	 02. 了解运维基础网络(数据包结构信息)
+	 03. 掌握防火墙服务配置命令
+	
+####  iptables防火墙操作管理方法:
+#####  查看方法
+	   /etc/init.d/iptables status
+	   iptables -L -n
+	   iptables -nL -v  --- 显示更详细的规则策略
+
+	   iptables -L -n
+       Chain INPUT (policy ACCEPT)   --- 访问防火墙做策略管理
+       target     prot opt source               destination         
+       ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0           state RELATED,ESTABLISHED 
+	   指定允许任意IP地址主机和我的防火墙建立连接, 允许防火墙进行访问
+	   
+       ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0   
+       指定任意主机访问其他主机,icmp协议放行(可以进行ping的操作)
+	   
+       ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0  
+       指定任意主机可以访问防火墙服务任意端口信息
+	   
+       ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           state NEW tcp dpt:22 
+	   指定任意主机可以访问ssh服务信息
+	   
+       REJECT     all  --  0.0.0.0/0            0.0.0.0/0           reject-with icmp-host-prohibited
+       指定任意主机防火墙进行拒绝, 并给出拒绝的原因 
+       
+       Chain FORWARD (policy ACCEPT)
+       target     prot opt source               destination         
+       REJECT     all  --  0.0.0.0/0            0.0.0.0/0           reject-with icmp-host-prohibited 
+	   
+       
+       Chain OUTPUT (policy ACCEPT)
+       target     prot opt source               destination 
+	   
+#####  防火墙初始化操作
+	   iptables -F  --- 将防火墙默认规则信息进行删除清空
+	   iptables -Z  --- 将防火墙默认计数器信息进行清楚
+	   iptables -X  --- 将防火墙默认自定义链信息删除
+	
+	
+
+####  实现防火请策略添加配置
+	   iptables命令             --- 临时生效（即时生效）
+	   语法结构:
+	   iptables 指定在什么表上进行配置  指定在什么链上进行配置  如何进行配置规则
+	   案例: 禁止来自 10.0.0.1 ip 地址访问 80 端口的请求 
+	   # iptables filter  input 组织访问本地服务器上80端口
+       iptables -t filter -A INPUT -p tcp --dport 80 -j REJECT
+	   -t   --- 指定防火墙表的信息, 默认不添加-t参数, 表示直接配置filter表
+	   -A   --- 指定在相应链上进行添加规则信息
+	   -p   --- 指定规则中协议信息
+	   --dport  --- 指定规则中目标端口信息
+	   -j   --- 指定对匹配的数据包做什么处理 (ACCEPT REJECT DROP)
+	   
+	   
+	   /etc/sysconfig/iptables  --- 永久生效
+
+	 

@@ -1,0 +1,10 @@
+cd /server/tools/
+mv wordpress/*  /application/nginx/html/blog/
+chown -R  www.www /application/nginx/html/blog/
+创建WordPress数据库
+create database wordpress;
+数据库本地设置: grant all on wordpress.* to 'wordpress'@'localhost' identified by 'oldboy123';
+数据库分离设置: grant all on wordpress.* to 'wordpress'@'10.0.0.%' identified by 'oldboy123';
+
+权限刷新
+FLUSH PRIVILEGES;

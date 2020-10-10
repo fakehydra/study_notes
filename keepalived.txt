@@ -1,0 +1,69 @@
+lb01
+
+! Configuration File for keepalived
+
+global_defs {
+   router_id lb01
+}
+vrrp_script chk_web {
+	script "/server/scripts/keepalived_ng.sh"
+	interval 2
+	weight 60
+}
+
+vrrp_instance oldboy {
+    state MASTER
+    interface eth0
+    virtual_router_id 51
+    priority 90
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        10.0.0.3
+}
+
+    track_script {
+	chk_web
+    }
+}
+
+
+lb02
+
+! Configuration File for keepalived
+
+global_defs {
+   router_id lb02
+}
+
+vrrp_instance oldboy {
+    state BACKUP
+    interface eth0
+    virtual_router_id 51
+    priority 100
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        10.0.0.3
+    }
+}
+
+
+
+script 
+#!/bin/bash
+nginx_info=`ps -ef |grep -c [n]ginx`
+if [ $nginx_info -ge 2 ]
+then
+	echo "nginx is start"
+	exit 0
+else
+	echo "nginx is stop"
+	exit 1
+fi

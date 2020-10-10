@@ -1,0 +1,11 @@
+jmeter汉化
+
+
+
+找到jmeter下的bin目录，打开jmeter.properties 文件
+
+第三十七行修改为
+
+language=zh_CN
+
+去掉前面的#，以后打开就是中文界面了

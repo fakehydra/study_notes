@@ -1,0 +1,4 @@
+避免每次sudo都要输密码
+
+visudo
+新增：testuser      ALL=(ALL:ALL)NOPASSWD:ALL

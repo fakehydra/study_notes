@@ -1,0 +1,17 @@
+# 环境准备
+yum -y install gcc automake autoconf libtool make ctags
+mkdir -m 644 -p /usr/local/man/man1
+
+软件下载&安装
+wget http://blog.zyan.cc/soft/linux/webbench/webbench-1.5.tar.gz
+tar zxvf webbench-1.5.tar.gz
+cd webbench-1.5
+make && make install
+
+#使用
+webbench -c 100 -t 10 http://www.cyxw.xyz/
+     -c：并发数
+	 -t: 访问时间
+	 地址以/结束，协议为http，https需要其他，待操作
+	 
+	 

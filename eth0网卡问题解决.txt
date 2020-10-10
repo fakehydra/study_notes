@@ -1,0 +1,21 @@
+eth0 网卡启动不了解决2333
+
+今天早上一来，发现我的xshell连接不上我的虚拟机了，然后，进虚拟机看了一下虚拟机中的配置文件，
+也没啥问题啊0.0，可就是起不来什么鬼。。。233333
+
+既然起不来那就算了，百度了一下，找到一个方法，话不多说，看代码
+chkocnfig NetworkManager off 
+
+chkocnfig network on
+
+service NetworkManager stop
+
+service network start
+
+service network restart
+
+就这几行代码，解决问题
+
+233333
+
+原文来源：https://www.cnblogs.com/braveym/p/6546013.html

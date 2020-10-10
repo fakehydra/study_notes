@@ -1,0 +1,57 @@
+1， 安装 nginx 所需要的pcre库 即：perl 兼容正则表达式
+　　　　　　yum install pcre pcre-devel -y
+
+　　　　　　rpm -qa pcre pcre-devel
+　　　　检查是否安装好pcre-devel，openssl-devel，
+　　　　　　rpm -qa pcre-devel pcre
+　　　　　　[root@kingle0001 ~]# rpm -qa openssl-devel openssl
+　　　　　　openssl-devel-1.0.1e-57.el6.x86_64
+　　　　　　openssl-1.0.1e-57.el6.x86_64
+
+　　　　　　　　rpm -qa openssl-devel openssl
+　　　　　　　　[root@kingle0001 ~]# rpm -qa openssl-devel openssl
+　　　　　　　　openssl-1.0.1e-57.el6.x86_64 少了一个
+
+　　　　　　　　　　　　　　　　　　　　yum install openssl-devel -y
+　　　　开始安装Nginx
+　　　　　　下载：wegt -q http://nginx.org/download/nginx-1.15.1.tar.gz
+
+　　　　　　　　useradd nginx -s /sbin/nologin -M --添加nginx 不允许其他用户登入
+
+　　　　　　　　tar -zxvf nginx-1.6.3.tar.gz -- 解压缩
+
+　　　　　　cd nginx-1.15.1
+
+　　　　　　./configure --user=nginx --group=nginx --prefix=/application/nginx-1.15.1/ --with-http_stub_status_module --with-http_ssl_module
+
+　　　　　　　　make
+
+　　　　　　　　make install
+
+　　　　　　　　ln -s /application/nginx-1.15.1 /application/nginx/
+
+启动： /application/nginx/nginx-1.15.1/sbin/nginx
+
+进不去欢迎界面解决方法
+　　　　　一：关闭selinux
+　　　　setenforce 0 临时关闭
+　　　　永久关闭编辑文件/etc/selinux/config
+　　　　关闭防火墙
+　　　　/etc/init.d/iptables stop 关闭防火墙
+
+　　　　chkconfig iptables off 开机自启关闭
+
+　　　　　　/etc/init.d/iptabes status 查看防火墙当前状态
+
+　　　　查看80端口信息 netstat -lnt|grep 80
+
+　　　　查看nginx进程 ps-ef|grep nginx
+
+　　　　查看nginx的错误日志 cat /application/nginx/nginx-1.15.1/error.log
+
+　　　　ping 10.0.0.200 看是否联通
+
+　　　　wegt 10.0.0.200 或者curl -I 10.0.0.200 模拟用户访问
+
+　　　　编辑 html ： vim /application/nginx/nginx-1.15.1/html/index.html
+（所以说还是需要html知识的）

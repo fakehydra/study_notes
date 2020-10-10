@@ -1,0 +1,32 @@
+centos yum 安装ffmpeg
+
+
+文档：https://www.ffmpeg.org/documentation.html
+
+FFmpeg安装
+
+1.安装Nux Dextop Yum 源
+
+由于CentOS没有官方FFmpeg rpm软件包。但是，我们可以使用第三方YUM源（Nux Dextop）完成此工作。
+
+CentOS 7
+sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+
+sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+
+CentOS 6
+sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+
+sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
+
+2.安装FFmpeg 和 FFmpeg开发包
+
+sudo yum install ffmpeg ffmpeg-devel -y
+
+3.测试是否安装成功
+
+ffmpeg
+
+4.如果你想了解更多关于FFmpeg使用方面的资料，可以输入：
+
+ffmpeg -h

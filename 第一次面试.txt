@@ -1,0 +1,49 @@
+第一次面试
+
+面试时间: 2018年11月28日 周三下午14：00
+
+面试地址: 静安区威海路755号2608室联蔚科技丝芙兰技术团队办公处
+
+面试官：沈平 13764579559
+
+公司要求：
+1 3年以上运维经验
+
+2 具备python或shell开发能力，熟练使用Linux常用操作命令，熟悉Linux内核优化；
+
+3 熟练配置Nginx、Tomcat、Redis、HAProxy, Keepalived，熟悉CDN, zabbix，jenkins，git使用
+
+4 熟悉网络基础知识、熟悉TCP/IP的工作原理，快速分析网络信息；
+
+5 强烈的责任心与主动性，对所负责工作有ownership意识，并能自我驱动成长
+
+6 有docker实际使用经验者优先
+
+7 有开发/DevOps经验者优先考虑
+
+
+面试过程：
+单刀直入，面试官直接说明公司的需求，然后，叫我说我会的，然后他根据我说的针对性提问
+
+记录部分问题：
+
+nginx 反向代理四层 七层
+
+nginx路由转发功能实现
+
+要注意proxy_pass后的url最后的/
+当加上了/，相当于是绝对根路径，则nginx不会把location中匹配的路径部分代理走
+如果没有/，则会把匹配的路径部分也给代理走
+eg:
+ location ^~ /static_js/ { proxy_cache js_cache; proxy_set_header Host js.test.com; proxy_pass http://js.test.com/; } 如上面的配置，如果请求的url是http://servername/static_js/test.html 会被代理成http://js.test.com/test.html
+
+
+ansible中shell模块和command模块的区别
+shell模块会返回执行的错误信息
+
+
+
+
+
+
+

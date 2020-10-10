@@ -1,0 +1,127 @@
+shell笔记之运算符
+###  利用（（））进行运算
+####  echo $(())
+     [root@zabbix_ser ~]# echo $((1+3))
+     4
+     [root@zabbix_ser ~]# echo $((1-3))
+     -2
+	 [root@zabbix_ser ~]# echo $((1.2+3))
+     -bash: 1.2+3: 语法错误: 无效的算术运算符 （错误符号是 ".2+3"）
+     echo $(()) 无法进行小数捡的运算
+####  变量运算输出
+     [root@zabbix_ser ~]# i=6
+     [root@zabbix_ser ~]# echo $((i+1))
+     7
+     [root@zabbix_ser ~]# echo $((i=i+5))
+     11
+     [root@zabbix_ser ~]# echo $((i+=5))
+     16
+     [root@zabbix_ser ~]# echo $i
+     16
+####  i++  先输出变量的值再进行运算
+     [root@zabbix_ser ~]# i=5
+     [root@zabbix_ser ~]# echo $((i++))
+     5
+     [root@zabbix_ser ~]# echo $i
+     6
+####   ++i  先进行运算再输出变量的值
+     [root@zabbix_ser ~]# i=5
+     [root@zabbix_ser ~]# echo $((++i))
+     6
+     [root@zabbix_ser ~]# echo $i
+     6
+     
+#####  PS：别忘记$符号了哦
+
+####  let 实现运算
+     [root@zabbix_ser ~]# let i=1+1
+     [root@zabbix_ser ~]# echo $i
+     2
+#####  ==PS：需要先将运算结果赋值给一个变量，输出变量==
+####  declare 实现运算
+     [root@zabbix_ser ~]# declare -i i=1+3
+     [root@zabbix_ser ~]# echo $i
+     4
+	 [root@zabbix_ser ~]# declare -i i=1.2+6
+     -bash: declare: 1.2+6: 语法错误: 无效的算术运算符 （错误符号是 ".2+6"）
+     declare无法实现小数间的运算
+#####  ==不要忘记了参数-i哦==
+
+####  expr实现运算
+     [root@zabbix_ser ~]# expr 1 + 3
+     4
+     [root@zabbix_ser ~]# expr 1+3
+     1+3
+     [root@zabbix_ser ~]# i=1
+     [root@zabbix_ser ~]# expr $i + 1
+     2
+	 [root@zabbix_ser ~]# expr 1.5 + 2.3
+     expr: 非整数参数
+     expr 无法实现小数间的运算
+#####  可以实现直接运算和变量输出运算
+#####  ==PS：别忘记了空格哟==
+#####  扩展功能
+######  ==对整数信息做判断==
+     [root@zabbix_ser scripts]# cat sum.sh 
+     a=$1
+     b=$2
+     expr $a + $b &>/dev/null
+     [ $? -ne 0 ] && {
+     	echo pls input int
+     	exit 1
+     }
+     echo $(($a+$b));
+######  ==对字符串长度进行判断==
+     [root@zabbix_ser scripts]# cat sum1.sh
+     info=$1
+     real=$(expr length "$info") 
+     [ $real -ne 18 ]&&{
+       echo "pls input right number, not 18 bit"
+       exit 1
+     }
+     
+     echo "身份证号码为:$info"
+	 
+######  ==对文件名信息进行判断==
+
+
+######  ==有逻辑匹配方式==
+
+
+
+####  利用$[] 实现运算
+     [root@zabbix_ser ~]# echo $[2*6]
+     12
+     [root@zabbix_ser ~]# i=3
+     [root@zabbix_ser ~]# echo $[i*3]
+     9
+     [root@zabbix_ser ~]# echo $[i**3]
+     27
+	 [root@zabbix_ser ~]# echo $[1.5*2]
+     -bash: 1.5*2: 语法错误: 无效的算术运算符 （错误符号是 ".5*2"）
+     使用这个无法进行小数运算
+
+####  利用bc实现运算
+#####  整数运算
+[root@zabbix_ser scripts]# echo 1+2|bc
+3
+
+#####  小数运算
+[root@zabbix_ser scripts]# echo 1.1+2|bc
+3.1
+
+
+####  利用awk实现运算
+     [root@zabbix_ser ~]# echo 2.1 2.2 |awk '{print $1*$2}'
+     4.62
+
+#####  小练习
+#####  环境
+     [root@zabbix_ser ~]# echo {1..10} >text.txt 
+     [root@zabbix_ser ~]# cat text.txt 
+     1 2 3 4 5 6 7 8 9 10
+#####  奇数偶数求和运算
+     [root@zabbix_ser ~]# awk '{for(i=1;i<=NF;i+=2)sum+=$i}END{print sum}' text.txt 
+     25
+     [root@zabbix_ser ~]# awk '{for(i=2;i<=NF;i+=2)sum+=$i}END{print sum}' text.txt 
+     30

@@ -1,0 +1,172 @@
+cobbler 无人值守安装
+####  所需服务
+     PXE服务支持
+     DHCP服务管理
+     DNS服务管理(可选bind,dnsmasq)
+     电源管理
+     Kickstart服务支持
+     YUM仓库管理
+     TFTP(PXE启动时需要)
+     Apache(提供kickstart的安装源，并提供定制化的kickstart配置)
+####  环境
+     [root@cobbler ~]# cat /etc/centos-release
+     CentOS Linux release 7.5.1804 (Core) 
+     [root@cobbler ~]# systemctl status firewalld
+     ● firewalld.service - firewalld - dynamic firewall daemon
+        Loaded: loaded (/usr/lib/systemd/system/firewalld.service; disabled; vendor preset: enabled)
+        Active: inactive (dead)
+          Docs: man:firewalld(1)
+     [root@cobbler ~]# getenforce 
+     Disabled
+     [root@cobbler ~]# hostname
+     cobbler
+     [root@cobbler ~]# hostname -I
+     10.0.0.206 172.16.1.206 
+	 PS:虚拟机的dhcp关闭
+	 
+####  安装cobbler
+     yum install -y cobbler cobbler-web dhcp tftp-server pykickstart httpd python-django  --下载一些需要的软件
+	 
+	 [root@cobbler ~]# cobbler check
+     cobblerd does not appear to be running/accessible: error(111, 'Connection refused')
+	 这里报了一个错，
+#####  解决
+     [root@cobbler ~]# systemctl start httpd.service
+     [root@cobbler ~]# systemctl start cobblerd.service
+#####  继续执行cobbler check
+     [root@cobbler ~]# cobbler check
+     httpd does not appear to be running and proxying cobbler, or SELinux is in the way. Original traceback:
+     Traceback (most recent call last):
+       File "/usr/lib/python2.7/site-packages/cobbler/cli.py", line 251, in check_setup
+         s.ping()
+     
+     	还是报了一个错，截取一部分
+#####  解决
+     发现是selinux开启了，关闭就好
+	 setenforce 0  --临时关闭
+	 vim /etc/selinux/config
+	 修改 SELINUX=disabled  --永久关闭
+	 
+#####  继续执行cobbler
+     [root@cobbler ~]# cobbler check
+          The following are potential configuration items that you may want to fix:
+          
+          1 : The 'server' field in /etc/cobbler/settings must be set to something other than localhost, or kickstarting features will not work.  This should be a resolvable hostname or IP for the boot server as reachable by all machines that will use it.
+          2 : For PXE to be functional, the 'next_server' field in /etc/cobbler/settings must be set to something other than 127.0.0.1, and should match the IP of the boot server on the PXE network.
+          3 : SELinux is enabled. Please review the following wiki page for details on ensuring cobbler works correctly in your SELinux environment:
+              https://github.com/cobbler/cobbler/wiki/Selinux
+          4 : change 'disable' to 'no' in /etc/xinetd.d/tftp
+          5 : Some network boot-loaders are missing from /var/lib/cobbler/loaders, you may run 'cobbler get-loaders' to download them, or, if you only want to handle x86/x86_64 netbooting, you may ensure that you have installed a *recent* version of the syslinux package installed and can ignore this message entirely.  Files in this directory, should you wa   to support all architectures, should include pxelinux.0, menu.c32, elilo.efi, and ya▽oot. The 'cobbler get-loaders' command is the easiest way to resolve these requirements.
+          6 : enable and start rsyncd.service with systemctl
+          7 : debmirror package is not installed, it will be required to manage debian deployments and repositories
+          8 : The default password used by the sample templates for newly installed machines (default_password_crypted in /etc/cobbler/settings) is still set to 'cobbler' and should be changed, try: "openssl passwd -1 -salt 'random-phrase-here' 'your-password-here'" to generate new one
+          9 : fencing tools were not found, and are required to use the (optional) power management features. install cman or fence-agents to use them
+          
+          Restart cobblerd and then run 'cobbler sync' to apply changes.
+          
+#####  一个个解决
+#####  1 2 6
+     vim /etc/cobbler/settings 
+     next_server: 172.16.1.206
+     default_password_crypted: "$1$oldboy$Npg9Pt9k98Mlg0ZeqHAuN1"
+     server: 172.16.1.206
+     将这三项修改一下，按照自己的实际情况，密码是通过openssl passwd -1 -salt 'oldboy' '123456' 加密得出的密文，明文为“123456”
+#####  3
+     [root@cobbler ~]# cobbler get-loaders
+     [root@cobbler ~]# tree /var/lib/cobbler/loaders/
+     /var/lib/cobbler/loaders/
+     ├── COPYING.elilo
+     ├── COPYING.syslinux
+     ├── COPYING.yaboot
+     ├── elilo-ia64.efi
+     ├── grub-x86_64.efi
+     ├── grub-x86.efi
+     ├── menu.c32
+     ├── pxelinux.0
+     ├── README
+     └── yaboot
+#####  4
+     [root@cobbler ~]# vim /etc/xinetd.d/rsync
+     disable = no
+#####  还有两个是不用修改的
+####  配置dhcp
+#####  修改cobbler的dhcp模板，不要直接修改dhcp服务本身的配置文件，cobbler会将其覆盖掉
+     vim /etc/cobbler/dhcp.template 
+     	 subnet 172.16.1.0 netmask 255.255.255.0 {
+      22      option routers             172.16.1.5;
+      23      option domain-name-servers 172.16.1.1;
+      24      option subnet-mask         255.255.255.0;
+      25      range dynamic-bootp        172.16.1.100 172.16.1.254;
+	  
+	  sed -i 's/manage_dhcp: 0/manage_dhcp: 1/' /etc/cobbler/settings  --用cobbler 管理dhcp
+	  
+####  同步cobbler 配置
+     [root@cobbler ~]# cobbler sync
+     task started: 2018-10-12_110455_sync
+     task started (id=Sync, time=Fri Oct 12 11:04:55 2018)
+     running post-sync triggers
+     running python triggers from /var/lib/cobbler/triggers/sync/post/*
+     running python trigger cobbler.modules.sync_post_restart_services
+     running: dhcpd -t -q
+     received on stdout: 
+     received on stderr: 
+     running: service dhcpd restart
+     received on stdout: 
+     received on stderr: Redirecting to /bin/systemctl restart dhcpd.service
+     
+     running shell triggers from /var/lib/cobbler/triggers/sync/post/*
+     running python triggers from /var/lib/cobbler/triggers/change/*
+     running python trigger cobbler.modules.scm_track
+     running shell triggers from /var/lib/cobbler/triggers/change/*
+     *** TASK COMPLETE ***
+     截取部分，可以看出他干了什么
+
+     [root@cobbler ~]# cat /etc/dhcp/dhcpd.conf 
+     # ******************************************************************
+     # Cobbler managed dhcpd.conf file
+     # generated from cobbler dhcp.conf template (Fri Oct 12 03:04:56 2018)
+     # Do NOT make changes to /etc/dhcpd.conf. Instead, make your changes
+     # in /etc/cobbler/dhcp.template, as /etc/dhcpd.conf will be
+     # overwritten.
+     
+     dhcp服务已接管
+     
+#####  重启相关服务& 设置开机自启
+     [root@cobbler ~]# systemctl restart cobblerd.service rsyncd tftp.socket httpd.service 
+     [root@cobbler ~]# systemctl enable cobblerd.service rsyncd tftp.socket httpd.service 
+     
+####  cobbler命令相关
+     [root@cobbler ~]# cobbler
+     usage
+     =====
+     cobbler <distro|profile|system|repo|image|mgmtclass|package|file> ... 
+             [add|edit|copy|getks*|list|remove|rename|report] [options|--help]
+     cobbler <aclsetup|buildiso|import|list|replicate|report|reposync|sync|validateks|version|signature|get-loaders|hardlink> [options|--help]
+     [root@linux-node1 ~]# cobbler import --help  # 导入镜像
+     Usage: cobbler [options]
+     Options:
+       -h, --help            show this help message and exit
+       --arch=ARCH           OS architecture being imported
+       --breed=BREED         the breed being imported
+       --os-version=OS_VERSION
+                             the version being imported
+       --path=PATH           local path or rsync location
+       --name=NAME           name, ex 'RHEL-5'
+       --available-as=AVAILABLE_AS
+                             tree is here, don't mirror
+       --kickstart=KICKSTART_FILE
+                             assign this kickstart file
+       --rsync-flags=RSYNC_FLAGS
+                             pass additional flags to rsync
+     cobbler check    核对当前设置是否有问题
+     cobbler list     列出所有的cobbler元素
+     cobbler report   列出元素的详细信息
+     cobbler sync     同步配置到数据目录,更改配置最好都要执行下
+     cobbler reposync 同步yum仓库
+     cobbler distro   查看导入的发行版系统信息
+     cobbler system   查看添加的系统信息
+     cobbler profile  查看配置信息
+	 
+#####  接下来就是web界面了
+https://blog.csdn.net/fake_hydra/article/details/83030003
+截图都在博客了

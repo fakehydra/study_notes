@@ -1,0 +1,72 @@
+Linux三剑客命令之 grep 
+
+1.grep 命令详解
+  grep 是Linux系统中最重要的命令之一--其主要功能为：从文本文件或管道数据流中筛选匹配的行以及数据（可配合正则表达式一起使用，功能更强大）---此为Linux运维人员必须要掌握的命令之一
+  
+2.语法格式
+  grep [options（参数）] [pattern （匹配模式）] [file（查找的文件）]--grep 命令当中的匹配模式或模式匹配，都是不要查找的东西，可以是普通的文字符号也可是正则表达式
+  
+3.选项说明
+
+参数选项      解释说明
+  -v           --显示不匹配的行，或者说排除某些行，显示不包含匹配文本的所有行
+（[root@jinc1 test]# grep -v dog old.txt 
+old 
+boy 
+girl
+
+[root@jinc1 test]# cat old.txt 
+old 
+boy 
+girl
+dog
+）
+
+  -n          --显示匹配行及行号
+  （[root@jinc1 test]# grep -n dog old.txt 
+4:dog
+）
+  -i           --不区分大小写（只适用于单字符），默认是区分大小写的
+  （[root@jinc1 test]# grep old old.txt 
+     old
+     [root@jinc1 test]# grep -i old old.txt 
+     OLD
+     old
+     ）
+  
+  -c           --只统计匹配的行数，注意不是匹配的次数
+   （[root@jinc1 test]# grep -c "old" old.txt 
+2
+[root@jinc1 test]# cat old.txt 
+oldboy
+OLD
+old
+boy
+girl
+dog
+）
+  
+  -E           --使用扩展的egrep命令
+ （[root@jinc1 test]# grep -Ei "old|dog" old.txt 
+OLD
+old
+dog
+）同时过滤old 和dog不区分
+  
+  --color=auto --为grep过滤的匹配字符串添加颜色
+  （[root@jinc1 test]# grep -Ei --color=auto "old|boy" old.txt 
+OLD
+old
+boy
+）同时过滤old 和dog并为其显示颜色
+
+  
+  -w           --只匹配过滤的单词
+   
+  -o           --只输出匹配的内容
+  （[root@jinc1 test]# grep -o "old" old.txt 
+old
+old）
+  
+  
+  

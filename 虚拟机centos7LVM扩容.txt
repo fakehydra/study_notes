@@ -1,0 +1,12 @@
+虚拟机 centos7 增加硬盘
+不重启方法; echo "- - -" > /sys/class/scsi_host/host0/scan
+
+# 创建PV
+pvcreate /dev/sdb  --sdb为新增硬盘
+
+# 加入VG 
+查看;vgdisplay 
+加入：vgextend cl /dev/vdb1
+
+扩容：lvextend -L +300G /dev/centos/root
+刷新: xfs_growfs /dev/centos/root

@@ -1,0 +1,40 @@
+lxc--linux container
+
+###  lxc的安装
+####  安装基础包
+	 需要epel源
+     yum install -y libcgroup* lxc* 
+	 
+####  桥接网卡
+     cp /etc/sysconfig/network-scripts/ifcfg-{eth0,br0}
+	 [root@jinc ~]# cat /etc/sysconfig/network-scripts/ifcfg-br0
+     DEVICE=br0
+     TYPE=Bridge
+     ONBOOT=yes
+     BOOTPROTO=none
+     DNS2=223.5.5.5
+     DNS1=114.114.114.114
+     USERCTL=no
+     IPADDR=10.0.0.200
+     GATEWAY=10.0.0.254
+
+	 
+     [root@jinc ~]# cat /etc/sysconfig/network-scripts/ifcfg-eth0
+     DEVICE=eth0
+     TYPE=Ethernet
+     ONBOOT=yes
+     BOOTPROTO=none
+     NAME=eth0
+     BRIDGE=br0
+     
+####  修改lxc的默认配置文件
+     vim /etc/lxc/default.conf
+	 lxc.network.type = veth
+     lxc.network.link = br0
+     lxc.network.flags = up
+                         
+####  启动cgroup
+     systemctl start cgconfig.serveice
+	 systemctl enable cgconfig.serveice
+	 
+	 

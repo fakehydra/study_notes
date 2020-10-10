@@ -1,0 +1,11 @@
+# 查看磁盘UUID 等信息
+ls -l /dev/disk/by-uuid/
+
+blkid /dev/sda
+
+# 误删除用户变量解决
+cp -ar /etc/skel/.bash* && exec bash
+
+
+# Samba配置文件
+/etc/samba/smb.conf

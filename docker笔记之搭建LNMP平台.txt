@@ -1,0 +1,74 @@
+docker笔记之搭建LNMP平台
+
+####  创建mysql数据库容器
+     [root@ct7-mb web]# docker run -itd --name lnmp_mysql -p 3308:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql --character-set-server=utf8
+     
+     [root@ct7-mb web]# docker ps -l
+     CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
+     e917f4613326        mysql               "docker-entrypoint.s…"   11 seconds ago      Up 9 seconds        33060/tcp, 0.0.0.0:3308->3306/tcp   lnmp_mysql
+
+####  创建相关wp库
+     [root@ct7-mb ~]# docker exec lnmp_mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "create database wp"'
+     mysql: [Warning] Using a password on the command line interface can be insecure.
+     [root@ct7-mb ~]# 
+     [root@ct7-mb ~]# docker exec lnmp_mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "show databases"'
+     mysql: [Warning] Using a password on the command line interface can be insecure.
+     Database
+     information_schema
+     mysql
+     performance_schema
+     sys
+     wp
+     
+####  创建PHP依赖容器
+     [root@ct7-mb ~]# docker run -itd --name lnmp_web --link lnmp_mysql:db -p 88:80 -v /container_data/web:/var/www/html richarvey/nginx-php-fpm
+     
+     [root@ct7-mb ~]# docker ps -a
+     CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                                   NAMES
+     4af014266847        richarvey/nginx-php-fpm   "docker-php-entrypoi…"   20 seconds ago      Up 19 seconds       443/tcp, 9000/tcp, 0.0.0.0:88->80/tcp   lnmp_web
+     94ffdd912847        mysql                     "docker-entrypoint.s…"   8 minutes ago       Up 8 minutes        33060/tcp, 0.0.0.0:3308->3306/tcp       lnmp_mysql
+
+####  测试PHP环境
+     [root@ct7-mb ~]# cd /container_data/web/
+     ▽root@ct7-mb web]# ls
+     index.php
+     [root@ct7-mb web]# vim index.php
+     <?php
+             phpinfo()
+     ?>
+
+     进入网页打开：10.0.0205:88   --前面是我本机的外网ip，端口号是容器中的印射端口
+
+####  一直在转就是不出现PHPinfo信息
+
+####  重新配置了一下iptables，重启了一下容器就好了
+     [root@ct7-mb web]# iptables -t nat -vnL
+     [root@ct7-mb web]# docker ps
+     CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+     [root@ct7-mb web]# docker start lnmp_mysql
+     lnmp_mysql
+     [root@ct7-mb web]# docker start lnmp_web
+     lnmp_web
+
+####  然后就是下载安装WordPress了，就不细说了
+     [root@ct7-mb web]# ls
+     index.php  wordpress-4.7.2-zh_CN.tar.gz
+     [root@ct7-mb web]# tar xf wordpress-4.7.2-zh_CN.tar.gz 
+     [root@ct7-mb web]# mv wordpress
+     wordpress/                    wordpress-4.7.2-zh_CN.tar.gz
+     [root@ct7-mb web]# mv wordpress/* ./
+ 
+####  数据库容器主机
+     [root@ct7-mb web]# docker exec lnmp_web cat /etc/hosts
+     127.0.0.1	localhost
+     ::1	localhost ip6-localhost ip6-loopback
+     fe00::0	ip6-localnet
+     ff00::0	ip6-mcastprefix
+     ff02::1	ip6-allnodes
+     ff02::2	ip6-allrouters
+     172.17.0.2	db 94ffdd912847 lnmp_mysql
+     172.17.0.3	4af014266847
+
+####  在填写数据库主机时直接填db 或者ip172.17.0.2 都可以
+
+####  搭建结束

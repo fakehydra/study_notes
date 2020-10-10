@@ -1,0 +1,192 @@
+mysql笔记之插入
+####  创建表并插入数据
+####  create table t select_info;
+     MariaDB [test]> create table t2 select user,host password from mysql.user where user='root';
+     MariaDB [test]> select * from t2;
+     +------+-------------+
+     | user | password    |
+     +------+-------------+
+     | root | 127.0.0.1   |
+     | root | ::1         |
+     | root | localhost   |
+     | root | zabbix\_ser |
+     +------+-------------+
+     4 rows in set (0.00 sec)
+     
+####  create table t as select_info
+     MariaDB [test]> create table t3(user char(20),host char(20),password char(50)) as select user,host,password from mysql.user where user='root'; 
+     Query OK, 4 rows affected (0.01 sec)
+     Records: 4  Duplicates: 0  Warnings: 0
+     
+     MariaDB [test]> select * from t3;
+     +------+-------------+-------------------------------------------+
+     | user | host        | password                                  |
+     +------+-------------+-------------------------------------------+
+     | root | localhost   | *23AE809DDACAF96AF0FD78ED04B6A265E05AA257 |
+     | root | zabbix\_ser |                                           |
+     | root | 127.0.0.1   |                                           |
+     | root | ::1         |                                           |
+     +------+-------------+-------------------------------------------+
+     4 rows in set (0.00 sec)
+
+#####  这些语句检索数据，并按照检索目标字段新建一张表，表必须不能已经存在，除非使用or replace或者if not exists子句
+
+####  只创建表结构，不插入数据：
+
+     create table t1 like t2      --创建完全相同的表结构
+     create table tbl_name1 select v1,v2,v3 from t2 where 1=0;  # where false。--可以筛选部分字段作为新表的结构
+
+####  键值重复
+     使用ignore关键字忽略所有错误行，使insert操作继续插入后面的数据。
+     使用insert ... on duplicate key update，将有重复值的行update为新的值。
+     使用replace into语句替代insert into语句，将有重复值的行替换为新行
+	 
+####  ignore
+####  准备测试环境
+     MariaDB [test]> insert into t4 values
+         -> (1,'man','zs'),
+         -> (2,'man','ls'),
+         -> (3,'man','ww'),
+         -> (4,'women','xh'),
+         -> (5,'women','xl'),
+         -> (6,'women','xb'),
+         -> (7,'man','ld'),
+         -> (8,'women','hj'),
+         -> (9,'men','lk');
+     Query OK, 9 rows affected (0.00 sec)
+     Records: 9  Duplicates: 0  Warnings: 0
+	 
+	 MariaDB [test]> select * from t4;
+     +----+-------+------+
+     | id | sex   | name |
+     +----+-------+------+
+     |  1 | man   | zs   |
+     |  2 | man   | ls   |
+     |  3 | man   | ww   |
+     |  4 | women | xh   |
+     |  5 | women | xl   |
+     |  6 | women | xb   |
+     |  7 | man   | ld   |
+     |  8 | women | hj   |
+     |  9 | men   | lk   |
+     +----+-------+------+
+     9 rows in set (0.00 sec)
+     
+#####  插入数据
+     MariaDB [test]> insert into t4 values(5,'women','lw'),(10,'man','sg');
+     ERROR 1062 (23000): Duplicate entry '5' for key 'PRIMARY'
+     
+     MariaDB [test]> select * from t4 where id=5 or id=10;
+     +----+-------+------+
+     | id | sex   | name |
+     +----+-------+------+
+     |  5 | women | xl   |
+     +----+-------+------+
+     1 row in set (0.00 sec)
+#####  使用ignore关键字
+     MariaDB [test]> insert ignore into t4 values(5,'yao','lll'),(10,'ttt','666');
+     Query OK, 1 row affected, 1 warning (0.00 sec)
+     Records: 2  Duplicates: 1  Warnings: 1
+     
+     MariaDB [test]> select * from t4 where id=5 or id=10;
+     +----+-------+------+
+     | id | sex   | name |
+     +----+-------+------+
+     |  5 | women | xl   |
+     | 10 | ttt   | 666  |
+     +----+-------+------+
+     2 rows in set (0.00 sec)
+####  使用 on duplicate key update子句修改重复值记录
+#####  两种情况：
+#####  1.插入的记录没有键值冲突
+     带不带都无所谓了
+#####  2.插入的记录有键值重复冲突
+     带有 on duplicate key update 子句会更新表中原有的记录
+#####  测试
+MariaDB [test]> select * from t5;
+     +----+------+------+
+     | id | sex  | name |
+     +----+------+------+
+     |  1 | xx   | qq   |
+     |  2 | xx   | ww   |
+     |  3 | yy   | ee   |
+     +----+------+------+
+     3 rows in set (0.00 sec)
+#####  插入的记录没有键值冲突
+     MariaDB [test]> insert into t5 values(4,'xx','rr'),(5,'yy','tt');
+     Query OK, 2 rows affected (0.00 sec)
+     Records: 2  Duplicates: 0  Warnings: 0
+     
+#####  插入的记录有键值重复冲突
+
+     MariaDB [test]> insert into t5 values(4,'xx','rrrr'),(6,'yy','yy') on duplicate key update name='rrrr';
+     Query OK, 3 rows affected (0.00 sec)
+     Records: 2  Duplicates: 1  Warnings: 0
+     
+     MariaDB [test]> select * from t5;
+     +----+------+------+
+     | id | sex  | name |
+     +----+------+------+
+     |  1 | xx   | qq   |
+     |  2 | xx   | ww   |
+     |  3 | yy   | ee   |
+     |  4 | xx   | rrrr |
+     |  5 | yy   | tt   |
+     |  6 | yy   | yy   |
+     +----+------+------+
+     6 rows in set (0.00 sec)
+#####  还可以在update子句中利用函数 VALUES（col_name）引用insert 部分列值
+     MariaDB [test]> insert into t5 values(4,'xx','rrrr') on duplicate key update name=concat('yy',values(id));
+     Query OK, 2 rows affected (0.08 sec)
+     
+     MariaDB [test]> select * from t5;
+     +----+------+------+
+     | id | sex  | name |
+     +----+------+------+
+     |  1 | xx   | qq   |
+     |  2 | xx   | ww   |
+     |  3 | yy   | ee   |
+     |  4 | xx   | yy4  |
+     |  5 | yy   | tt   |
+     |  6 | yy   | yy   |
+     +----+------+------+
+     6 rows in set (0.00 sec)
+####  PS：VALUES函数只在insert ...... on duplicate key update  语句中有意义，其他则返回NULL。
+####  insert --- on duplicate key update 执行原理
+     插入新行，判断是否和已有记录存在键值冲突，若有，则更新旧行为新行（先触发before update 触发器，更新后触发after update）
+	 
+####  replace into 语句，
+     在没有键值冲突时，完全等价与insert into ，有键值冲突时，会将新行替换旧行
+	 
+#####  测试
+     MariaDB [test]> select * from t5;
+     +----+------+------+
+     | id | sex  | name |
+     +----+------+------+
+     |  1 | xx   | qq   |
+     |  2 | xx   | ww   |
+     |  3 | yy   | ee   |
+     |  4 | xx   | yy4  |
+     |  5 | yy   | tt   |
+     |  6 | yy   | yy   |
+     +----+------+------+
+     6 rows in set (0.00 sec)
+     
+     MariaDB [test]> replace into t5 values(4,'yy','xx');
+     Query OK, 2 rows affected (0.00 sec)
+     
+     MariaDB [test]> select * from t5;
+     +----+------+------+
+     | id | sex  | name |
+     +----+------+------+
+     |  1 | xx   | qq   |
+     |  2 | xx   | ww   |
+     |  3 | yy   | ee   |
+     |  4 | yy   | xx   |
+     |  5 | yy   | tt   |
+     |  6 | yy   | yy   |
+     +----+------+------+
+     6 rows in set (0.00 sec)
+
+#####  replace into 执行原理
+     插入新行，判断是否冲突（触发before insert触发器），若有，则删除旧行，并插入新行（before delete —> after delete -> after insert）

@@ -1,0 +1,58 @@
+docker attach test01  --进入test01  
+  
+###  镜像管理命令
+####  search 
+     docker search mysql  --模糊搜索，在官网搜索关于mysql的image
+	 
+####  pull 
+     docker pull  --下载镜像
+	 
+####  push 
+     docker push  --提交自己的镜像
+	 
+####  image 
+     docker image  --查询本机镜像
+	 
+####  commit
+     docker commit test01 ubuntu:self将更改的镜像的内容提交给一个新的镜像
+####  build
+     docker file 构建镜像
+	 
+####  rmi
+     docker rmi --删除镜像
+	 
+####  export
+     docker export test01 >test01.tar  --打包只读层的文件系统，并导出
+	 
+####  import 
+     docker import test01.tar ubuntu:self  --导入、还原
+	 
+####  save
+     docker save mysql>mysql.tar  --导出整个镜像(完整的镜像)
+	 
+####  load 
+     docker load -i mysql.tar  --导入整个镜像包
+	 
+###  容器管理
+####  创建容器常用选项
+####  创建容器命令格式
+     docker create  --创建容器但不启动
+	 docker run     --创建容器并启动
+	 
+####  docker run 参数选项
+     -i       --标准输入
+	 -d       --后台运行
+	 -hostname  --随机指定容器名
+	 -h       --给容器指定主机名
+	 --net    --指定网络名
+	 --ip     --指定ip（默认随机；已有网段）
+	 --link   --添加指定主机名
+	 --add-host abc:10.0.0.120 ubuntu  --动态添加hosts记录（主机名为adc，hosts为10.0.0.120）
+	 
+####  docker ps 
+     -a   --查看全部在后台的容器
+	 -l   --查看最新创建的容器
+	 
+####  docker attach --进入容器
+####  docker start  --开启容器
+####  docker stop   --停止容器

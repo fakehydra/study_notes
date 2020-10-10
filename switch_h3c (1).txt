@@ -1,0 +1,57 @@
+1.H3C 交换机配置
+system-view 进入系统试图  //System View: return to User View with Ctrl+Z.
+dis int brief 简单显示接口的信息
+vlan 100 创建vlan 100
+interface ten-GigabitEthernet 1/0/1
+dis this 显示接口的信息
+
+port link-type trunk  接口有几种模式 （access/trunk/hybrid）
+port trunk permit vlan 100  允许vlan100的报文通过
+interface ten-GigabitEthernet 1/0/2
+dis this 显示接口的信息
+port link-type trunk  接口有几种模式 （access/trunk/hybrid）
+port trunk permit vlan 200  允许vlan100的报文通过
+接口1/0/1和1/0/2同属于一个vlan,两台机器，一台SUT 一台client分别接交换机的1/0/1和1/0/2口
+
+2.两台测试机配置
+ip link add link ens1f0.1 type vlan id 100 设置子接口
+ip -d link show ens1f0.1 把子接口显示出来
+ip addr add 192.168.1.200/24 brd 192.168.1.255 dev ens1f0.1 增加子接口的ip
+ip link set dev ens1f0.1 up  把子接口up  起来
+另外一台同上配置（设同网段的他tip）
+
+3.两台机器看能否ping 通
+ 期望结果：同一个vlan  可以ping,不同的vlan  ping 不通
+
+
+access:只允许一种vlan 通过
+trunk :可以允许多种vlan 通过
+
+no CMDLINE 其他交换机取消
+undo CMDLINE H3C交换机取消 //undo shutdown
+undo 某一个口  //修改口设置信息
+
+4.display interface Ethernet1/0/1 查看端口详细信息
+   display port-security 查看端口信息
+   dis ip in br 显示vlan信息
+查看交换机端口ip信息
+interface Ethernet 1/0/1
+display this
+quit
+设置交换机端口信息
+
+interface Ethernet 1/0/8
+port link-type trunk
+port trunk permit vlan all  //////  port trunk permit vlan 1 200
+display this
+quit
+
+
+
+display current-configuration 查看dhcp池信息
+dis cu
+display port-security
+
+
+
+

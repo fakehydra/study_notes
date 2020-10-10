@@ -1,0 +1,13 @@
+222.73.81.41
+root/Hisw2019!@#
+
+源码所在目录：/var/www/roundcubemail
+nginx所在目录：/usr/local/nginx
+
+
+使用密码插件：/var/www/roundcubemail/plugins/password
+插件配置文件：/var/www/roundcubemail/plugins/password/config.inc.php
+修改密码字段：$config['password_query'] = "UPDATE users SET cyrpt=CONCAT('{PLAIN-MD5}', MD5(%p)),modified=NOW() WHERE username=%u LIMIT 1";
+
+数据库账号密码：mail/mail
+数据库地址：222.73.81.41 3306

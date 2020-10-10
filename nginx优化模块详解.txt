@@ -1,0 +1,78 @@
+nginx 优化参数详解
+
+模块：server_tokens
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#server_tokens
+解释说明：
+Syntax: 	server_tokens on | off | build | string;
+Default: 	server_tokens on;
+
+Context: 	http, server, location
+
+模块：sendfile
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile
+解释说明：
+Syntax: 	sendfile on | off;
+Default: 	
+
+sendfile off;
+
+Context: 	http, server, location, if in location
+
+模块：tcp_nopush
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#tcp_nopush
+解释说明：
+Syntax: 	tcp_nopush on | off;
+Default: 	
+
+模块：tcp_nopush off;
+
+Context: 	http, server, location
+
+tcp_nodelay
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#tcp_nodelay
+解释说明:
+Syntax: 	tcp_nodelay on | off;
+Default: 	
+
+模块：tcp_nodelay on;
+
+Context: 	http, server, location
+
+keepalive_timeout
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_timeout
+解释说明：
+Syntax: 	keepalive_timeout timeout [header_timeout];
+Default: 	
+
+keepalive_timeout 75s;
+
+Context: 	http, server, location
+
+模块：client_header_timeout
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#client_header_timeout
+解释说明：
+Syntax: 	client_header_timeout time;
+Default: 	
+
+client_header_timeout 60s;
+
+Context: 	http, server
+
+模块：client_body_timeout
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_timeout
+解释说明：Syntax: 	client_body_timeout time;
+Default: 	
+
+client_body_timeout 60s;
+
+Context: 	http, server, location
+
+模块：client_max_body_size
+官网地址：http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size
+解释说明：
+Syntax: 	client_max_body_size size;
+Default: 	
+
+client_max_body_size 1m;
+
+Context: 	http, server, location

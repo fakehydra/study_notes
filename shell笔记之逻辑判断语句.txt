@@ -1,0 +1,156 @@
+###  shell脚本逻辑判断语句
+####  脚本赋值方法
+     1.利用传参赋值问题说明
+         a.脚本传入参数过于灵活
+     	 需要加入一些逻辑判断语句
+     	 b.传参数量不能有提示说明
+     	 
+     2.利用交互方式进行赋值
+         read命令，传参的提示信息
+     	 脚本传入参数过于灵活
+     	 需要加入一些逻辑判断语句
+	 
+####  逻辑判断条件语句编写语法汇总
+#####  ==if语句==
+*单分支*
+     if [];then
+     
+     fi
+*双分支*
+     if [];then
+     
+     else
+     
+     fi
+     
+*多分支*
+     if [];then
+     
+     else
+     
+     elif
+     
+     fi	 
+#####  ==test语句==
+     test <测试表达式>
+######  测试
+     [root@zabbix_ser ~]# test 2 = 2 && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# test 2 = 1 && echo 0 || echo 1
+     1
+     
+#####  ==[<测试表达式>]== 
+######  测试
+     [root@zabbix_ser ~]# [ "b" = "b" ] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [ "b" = "a" ] && echo 0 || echo 1
+     1
+
+#####  ==[[<测试表达式>]]==
+#####  ==和单个[]区别：条件表达式书写不一样（官方推荐）==
+######  测试
+     [root@zabbix_ser ~]# [[ "b" = "a" ]] && echo 0 || echo 1
+     1
+     [root@zabbix_ser ~]# [[ "b" = "b" ]] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [[ 2 < 3 ]] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [[ 3 < 2 ]] && echo 0 || echo 1
+     1
+
+######  ==((测试表达式))==
+######  ==(测试表达式)==
+######  ==<测试表达式>==
+
+
+####  逻辑判断条件语句种类说明
+     文件条件判断语句
+     整数条件判断语句
+     字符条件判断语句
+     逻辑符号条件判断语句
+
+#####  文件测试表达式: ==[ -f ]==
+     
+	 [root@zabbix_ser ~]# [ -f /etc/hosts ] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [ -f /etc/hos ] && echo 0 || echo 1
+     1
+     [root@zabbix_ser ~]# [ -d /etc/hos ] && echo 0 || echo 1
+     1
+     [root@zabbix_ser ~]# [ -d /etc ] && echo 0 || echo 1
+     0
+
+#####  整数测试表达式
+######  单个[] 进行判断
+     [root@zabbix_ser ~]# a=2
+     [root@zabbix_ser ~]# b=3
+     [root@zabbix_ser ~]# [ "$a" = "$b" ] && echo 0 || echo 1
+     1
+     [root@zabbix_ser ~]# [ "$a" != "$b" ] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [ "$a" > "$b" ] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [ "$a" -eq "$b" ] && echo 0 || echo 1
+     1
+     [root@zabbix_ser ~]# [ "$a" -ne "$b" ] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [ "$a" -lt "$b" ] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [ "$a" -gt "$b" ] && echo 0 || echo 1
+     1
+     PS：“=” “！=” 可以判断，但是">""<"不可以，需要换成 -lt -gt
+######  两个[[]] 进行判断
+     [root@zabbix_ser ~]# [[ "$a" > "$b" ]] && echo 0 || echo 1
+     1
+     [root@zabbix_ser ~]# [[ "$a" < "$b" ]] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [[ "$a" -lt "$b" ]] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [[ "$a" -gt "$b" ]] && echo 0 || echo 1
+     1
+     PS：都可以进行判断
+######  ==PS:利用">""<"进行比较时，当比较的数值位数不一样时会有问题==
+	 eg:
+	 [root@zabbix_ser scripts]# [[ 5 > 6 ]] && echo 0 || echo 1
+     1
+     [root@zabbix_ser scripts]# [[ 15 > 6 ]] && echo 0 || echo 1
+     1
+     [root@zabbix_ser scripts]# [[ 15 > 16 ]] && echo 0 || echo 1
+     1
+     [root@zabbix_ser scripts]# [[ 15 > 12 ]] && echo 0 || echo 1
+     0
+     建议：做整数比较时最好用lt gt 进行比较
+
+#####  字符测试表达式
+######  希望为空 == -z "变量"==
+     [root@zabbix_ser ~]# i=1
+     [root@zabbix_ser ~]# o=
+     [root@zabbix_ser ~]# [ -z $i ] && echo 0 || echo 1
+     1
+     [root@zabbix_ser ~]# [ -z $o ] && echo 0 || echo 1
+     0
+#####  希望为非空 == -n “变量”==
+     [root@zabbix_ser ~]# i=1
+     [root@zabbix_ser ~]# o=
+     [root@zabbix_ser ~]# [ -n "$i" ] && echo 0 || echo 1
+     0
+     [root@zabbix_ser ~]# [ -n "$o" ] && echo 0 || echo 1
+     1
+######  ==PS:判断语句中的字符串信息或者变量信息最后加上“”==
+
+#####  逻辑测试表达式 == -a(与) -o(或) -!(非)==
+     [root@zabbix_ser scripts]# a=10000
+     [root@zabbix_ser scripts]# b=cool
+==单个[]==
+     [root@zabbix_ser scripts]# [ "$a" -gt 5000 -a "$b" = "cool" ] && echo 1 ||echo 0
+     1
+     [root@zabbix_ser scripts]# [ "$a" -gt 50000 -a "$b" = "cool" ] && echo 1 ||echo 0
+     0
+     [root@zabbix_ser scripts]# [ "$a" -gt 50000 -o "$b" = "cool" ] && echo 1 ||echo 0
+     1
+==双个[]==
+     [root@zabbix_ser scripts]# [[ "$a" -gt 50000 || "$b" = "cool" ]] && echo 1 ||echo 0
+     1
+     [root@zabbix_ser scripts]# [[ "$a" -gt 5000 && "$b" = "cool" ]] && echo 1 ||echo 0
+     1
+     

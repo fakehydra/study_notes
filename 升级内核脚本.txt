@@ -1,0 +1,7 @@
+!#/bin/bash
+# SACK漏洞补丁，升级内核脚本
+# 适用于centos6/7
+# 进行软件源更新
+yum clean all && yum makecache
+# 更新当前内核版本
+yum update kernel  -y

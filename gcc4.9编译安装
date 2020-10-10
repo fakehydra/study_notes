@@ -1,0 +1,17 @@
+gcc4.9编译安装
+wget http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-4.9.3/gcc-4.9.3.tar.bz2
+tar xjvf gcc-4.9.3.tar.bz2
+cd gcc-4.9.3
+./contrib/download_prerequisites
+
+cd ..
+mkdir gcc-4.9.3-build-temp
+cd gcc-4.9.3-build-temp
+../gcc-4.9.3/configure --enable-checking=release --enable-languages=c,c++ --disable-multilib
+make -j4
+make install
+
+
+export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64/:$LD_LIBRARY_PATH
+export C_INCLUDE_PATH=/usr/local/include/:$C_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=/usr/local/include/:$CPLUS_INCLUDE_PATH

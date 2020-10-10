@@ -1,0 +1,44 @@
+1.安全规范
+2.连接数据库明文
+
+
+
+一.环境准备
+当前环境：centos7.3三台
+软件版本：zookeeper-3.5.2
+部署目录：/usr/local/zookeeper
+启动端口：2181
+配置文件：/usr/local/zookeeper/conf/zoo.cfg
+yum依赖（3台同时操作）
+yum install java-1.8.0-openjdk
+二.安装
+1.下载安装包（3台同时操作）
+wget http://mirrors.hust.edu.cn/apache/zookeeper/zookeeper-3.5.2-alpha/zookeeper-3.5.2-alpha.tar.gz
+2.解压并移动，再创建一个数据目录data（3台同时操作）
+tar zxvf zookeeper-3.5.2-alpha.tar.gz
+mv zookeeper-3.5.2-alpha /usr/local/zookeeper
+3.创建数据目录和日志目录
+cd /usr/local/zookeeper
+mkdir /data
+mkdir /var/log/zookeeper
+3.创建配置文件更改配置（3台同时操作）
+vim conf/zoo.cfg
+clientPort=2181 #监听端口其他服务器保持这个
+dataDir=/usr/local/zookeeper/data #数据目录，要自己创建
+syncLimit=5
+tickTime=2000
+initLimit=10
+dataLogDir=/var/log/zookeeper #日志目录，自己创建
+dynamicConfigFile=/usr/local/zookeeper/conf/zoo.cfg.dynamic #创建这个文件，这是动态添加节点的文件
+4.创建节点文件（3台同时操作）
+vim conf/zoo.cfg.dynamic
+server.1=172.26.98.239:2888:3888  ##第一台节点IP端口
+server.2=172.26.98.240:2888:3888  ##第二台节点IP端口
+server.3=172.26.98.241:2888:3888  ##第三台节点IP端口
+5.建立myid文件(3台同时操作)
+vim data/myid
+1 #第二台是2，第三台是3
+三.使用验证
+启动效验(3台同时操作)
+
+

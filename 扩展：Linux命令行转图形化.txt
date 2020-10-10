@@ -1,0 +1,22 @@
+扩展：centos 6 linux 命令行界面转化为图形化界面
+
+01.下载
+   yum groupinstall "Desktop"  -y         -->安装基本桌面系统
+   
+02.安装
+
+    yum groupinstall "X Window System" -y
+	
+	yum groupinstall "Chinese Support" -y
+	
+3.启动桌面
+init 5
+startx
+
+4.开机自启(可忽略）：
+     sed -i 's/id:3:initdefault:/id:5:initdefault:/' /etc/inittab
+
+5.命令行界面切换：Ctrl+Alt+F1切换到图形界面
+反之：Ctrl+Alt+F2~f5
+
+

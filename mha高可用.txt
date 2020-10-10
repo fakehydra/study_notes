@@ -1,0 +1,45 @@
+
+
+上传master_ip_failover脚本并赋予执行权限
+
+在manager端配置文件添加配置
+[root@db03 bin]# vim /etc/mha/app1.cnf
+master_ip_failover_script=/usr/local/bin/master_ip_failover
+目录为脚本放置目录
+
+主库上，手工生成第一个vip地址
+手工在主库上绑定vip，注意一定要和配置文件中的ethN一致，我的是eth0:0(1是key指定的值)
+
+查看who is master
+[root@db03 bin]#  masterha_check_status  --conf=/etc/mha/app1.cnf 
+app1 (pid:9986) is running(0:PING_OK), master:10.0.0.51
+
+我的是51，在51执行命令
+[root@db01 tools]# ifconfig eth0:0 10.0.0.55/24
+检查：
+[root@db01 tools]# ifconfig
+
+eth0:0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.0.55  netmask 255.255.255.0  broadcast 10.0.0.255
+        ether 00:0c:29:7a:9d:3c  txqueuelen 1000  (Ethernet)
+截取部分
+
+manager端重启MHA
+[root@db03 bin]# masterha_stop --conf=/etc/mha/app1.cnf
+Stopped app1 successfully.
+[root@db03 bin]# nohup masterha_manager --conf=/etc/mha/app1.cnf --remove_dead_master_conf --ignore_last_failover < /dev/null > /var/log/mha/app1/manager.log 2>&1 &
+
+
++++++++++++++++报错++++++++
+
+ /usr/local/bin/master_ip_failover --command=status --ssh_user=root --orig_master_host=10.0.0.52 --orig_master_ip=10.0.0.52 --orig_master_port=3306
+/usr/bin/env: perl^M: No such file or directory
+Tue Nov 27 09:34:29 2018 - [error][/usr/share/perl5/vendor_perl/MHA/MasterMonitor.pm, ln229]  Failed to get master_ip_failover_script status with return code 127:0.
+
+原因: master_ip_failover中有中文字符
+处理方法:
+
+yum install -y  dos2unix
+dos2unix master_ip_failover
+
+++++++++++++++++end+++++++++++

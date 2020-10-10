@@ -1,0 +1,66 @@
+mongodb下载安装
+####  下载：
+     wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-4.0.3.tgz
+
+####  解压：
+     tar xf mongodb-linux-x86_64-rhel70-4.0.3.tgz 
+
+####  移动:
+     mv mongodb-linux-x86_64-rhel70-4.0.3/* /usr/local/mongodb/
+
+####  查看：
+     [root@zabbix_ser mongodb]# ls
+     bin  GNU-AGPL-3.0  LICENSE-Community.txt  MPL-2  README  THIRD-PARTY-NOTICES
+
+####  启动：
+     [root@zabbix_ser bin]# ./mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/logs --fork
+     2018-11-05T16:48:50.569+0800 I CONTROL  [main] Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'
+     about to fork child process, waiting until server is ready for connections.
+     forked process: 15107
+     child process started successfully, parent exiting
+
+####  检查：
+     [root@zabbix_ser bin]# ps aux|grep mongod
+     root      15107  0.9  3.1 1071300 58232 ?       Sl   16:48   0:03 ./mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/logs --fork
+
+#####  连接：
+     [root@zabbix_ser bin]# ./mongo
+     MongoDB shell version v4.0.3
+     connecting to: mongodb://127.0.0.1:27017
+     Implicit session: session { "id" : UUID("38b98eff-6efe-4ae6-8d0f-9f39abe38acd") }
+     MongoDB server version: 4.0.3
+     Welcome to the MongoDB shell.
+
+
+####  启动命令常用选项说明：
+
+     --dbpath 指定数据库的目录。
+     
+     --port 指定数据库端口，模式是27017。
+     
+     --bind_ip 绑定IP。
+     
+     --derectoryperdb为每个db创建一个独立子目录。
+     
+     --logpath 指定日志存放目录。
+     
+     --logappend 指定日志生成方式（追加/覆盖）。
+     
+     --pidfilepath 指定进程文件路径，如果不指定，将不产生进程文件。
+     
+     --keyFile 集群模式的关键标识
+     
+     --journal 启用日志
+     
+     --nssize 指定.ns文件的大小，单位MB，默认是16M，最大2GB。
+     
+     --maxConns 最大的并发连接数。
+     
+     --notablescan 不允许进行表扫描
+     
+     --noprealloc 关闭数据文件的预分配功能
+     
+     --fork 以后台Daemon形式运行服务
+	 
+*更多的选项利用 mongod --help 进行查看*
+     

@@ -1,0 +1,15 @@
+Ubuntu 18.04在执行apt-get update时出现一下报错：
+
+W: GPG 错误：http://repo.mysql.com/apt/ubuntu bionic InRelease: 下列签名无效： EXPKEYSIG 8C718D3B5072E1F5 MySQL Release Engineering <mysql-build@oss.oracle.com>
+E: 仓库 “http://repo.mysql.com/apt/ubuntu bionic InRelease” 没有数字签名。
+N: 无法安全地用该源进行更新，所以默认禁用该源。
+N: 参见 apt-secure(8) 手册以了解仓库创建和用户配置方面的细节。
+W: GPG 错误：http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 Release: 下列签名无效： EXPKEYSIG 58712A2291FA4AD5 MongoDB 3.6 Release Signing Key <packaging@mongodb.com>
+E: 仓库 “http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 Release” 没有数字签名。
+N: 无法安全地用该源进行更新，所以默认禁用该源。
+N: 参见 apt-secure(8) 手册以了解仓库创建和用户配置方面的细节。
+
+解决办法：
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8C718D3B5072E1F5
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 58712A2291FA4AD5

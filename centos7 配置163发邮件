@@ -1,0 +1,26 @@
+centos7 配置163邮箱发邮件
+
+yum install sendmail mail mailx
+
+# 配置mail.rc
+vim /etc/mail.rc
+#新增如下内容
+set ssl-verify=ignore
+# 设置发信人邮箱账号
+set from=dldream666@163.com
+# 填入 smtp 地址
+set smtp=smtps://smtp.163.com:465
+#设置发信人邮箱账号
+set smtp-auth-user=dldream666@163.com
+#发信人邮箱授权码, 邮箱需要开启pop3和smtp
+set smtp-auth-password=XJXEDTEYJEXBXPLP
+# 认证方式
+set smtp-auth=login
+# 证书所在目录
+set nss-config-dir=/etc/pki/nssdb/
+
+保存退出
+
+##　发信
+echo "this is a test" |mail -s 'title' mail@pactera.com
+

@@ -1,0 +1,111 @@
+mysql笔记之基本与多实例
+
+1.MySQL用户，权限管理
+
+     1）用户作用
+	     Linux用户的作用
+		     a.登陆系统
+			 b.管理操作系统对象（文件/目录）
+	     mysql用户的作用：
+		     a.登陆mysql
+			 b.管理mysql的对象（库/表）
+	 2）用户表现方式
+	     Linux用户表现方式：用户名
+		 mysql用户的表现方式：用户名@'白名单'
+		 
+	 3）用户管理：
+	     mysql> create user fake@'10.0.0.%' identified by '123';
+         Query OK, 0 rows affected (0.00 sec)
+         
+         mysql> drop user fake@'10.0.0.%';
+         Query OK, 0 rows affected (0.00 sec)
+         
+         mysql> select user,host,password from mysql.user;
+		 
+		 mysql>set password for fake@'10.0.0.%'=PASSWORD('456');
+		 
+####  多实例（多个数据库管理系统）应用
+#####  准备：
+#####  多个专用目录：
+     [root@db01 ~]# mkdir /data/330{7..9}/data 
+
+#####  多个配置文件：
+     vim /data/3307/my.cnf
+     [mysqld]
+     basedir=/application/mysql
+     datadir=/data/3307/data
+     socket=/data/3307/mysql.sock
+     port=3307
+     log-error=/data/3307/mysql.log
+     skip-name-resolve
+     server-id=7
+     
+     --------------------------
+     vim /data/3308/my.cnf
+     [mysqld]
+     basedir=/application/mysql
+     datadir=/data/3308/data
+     port=3308
+     socket=/data/3308/mysql.sock
+     log-error=/data/3308/mysql.log
+     skip-name-resolve
+     server-id=8
+     
+     ------------------
+     vim /data/3309/my.cnf
+     [mysqld]
+     basedir=/application/mysql
+     datadir=/data/3309/data
+     socket=/data/3309/mysql.sock
+     port=3309
+     log-error=/data/3309/mysql.log
+     skip-name-resolve
+     server-id=9
+     
+#####  初始化多次数据库：
+     /application/mysql/scripts/mysql_install_db --user=mysql --basedir=/application/mysql --datadir=/data/3307/data
+     
+     /application/mysql/scripts/mysql_install_db --user=mysql --basedir=/application/mysql --datadir=/data/3308/data
+     
+     /application/mysql/scripts/mysql_install_db --user=mysql --basedir=/application/mysql --datadir=/data/3309/data
+     
+#####  修改权限：
+
+     touch /data/330{7..9}/mysql.log
+     chown -R mysql.mysql /data/330*
+
+
+#####  启动数据库：
+     /application/mysql/bin/mysqld_safe --defaults-file=/data/3307/my.cnf &
+     /application/mysql/bin/mysqld_safe --defaults-file=/data/3308/my.cnf &
+     /application/mysql/bin/mysqld_safe --defaults-file=/data/3309/my.cnf &
+     
+#####  验证：
+     [root@db01 ~]# netstat -lnp|grep 330
+     tcp6       0      0 :::3306                 :::*                    LISTEN      30972/mysqld        
+     tcp6       0      0 :::3307                 :::*                    LISTEN      31472/mysqld        
+     tcp6       0      0 :::3308                 :::*                    LISTEN      31461/mysqld        
+     unix  2      [ ACC ]     STREAM     LISTENING     218904   31472/mysqld         /data/3307/mysql.sock
+     unix  2      [ ACC ]     STREAM     LISTENING     218889   31461/mysqld         /data/3308/mysql.sock
+     [root@db01 ~]# 
+     
+     
+     [root@db01 ~]# mysql -S /data/3307/mysql.sock -e "show variables like 'server_id'"
+     +---------------+-------+
+     | Variable_name | Value |
+     +---------------+-------+
+     | server_id     | 7     |
+     +---------------+-------+
+     [root@db01 ~]# mysql -S /data/3308/mysql.sock -e "show variables like 'server_id'"
+     +---------------+-------+
+     | Variable_name | Value |
+     +---------------+-------+
+     | server_id     | 8     |
+     +---------------+-------+
+     [root@db01 ~]# mysql -S /data/3309/mysql.sock -e "show variables like 'server_id'"
+     +---------------+-------+
+     | Variable_name | Value |
+     +---------------+-------+
+     | server_id     | 9     |
+     +---------------+-------+
+

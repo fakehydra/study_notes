@@ -1,0 +1,24 @@
+win10远程连接Ubuntu
+
+Ubuntu16.04下
+以下命令行皆是在终端中运行：
+# 安装xrdp
+sudo apt-get install xrdp
+
+
+# 安装vnc4server
+sudo apt-get install vnc4server
+
+
+# 安装xubuntu-desktop
+sudo apt-get install xubuntu-desktop
+
+
+# 向xsession中写入xfce4-session(每个用户自己运行此行)
+echo "xfce4-session" >~/.xsession
+
+
+# 开启xrdp服务
+sudo service xrdp restart
+
+然后win10 打开mstsc连接即可

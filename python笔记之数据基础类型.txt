@@ -1,0 +1,63 @@
+### 八大基础数据类型
+#### int
+##### python 中没有溢出，再大的值也可以用int
+     num = 10
+
+*num++ 报错，num只是存储数据10的容器，容器不可以自增自减*
+
+     print(num) # 打印容器中存放的值10
+
+# 地址
+print(id(num)) # id() 取变量地址
+
+# 类型
+print(type(num)) # type() 取变量类型
+
+# float
+# 小数存在精度问题
+num = 3.14
+
+print(num)
+print(id(num))
+print(type(num))
+
+# str
+
+a = '普通字符串'
+b = "也是字符串"
+c = """"多行字符串
+另一行
+再来一行"""
+
+print(a,b,c)
+print(type(c))
+
+# bool 布尔类型 True | False
+res = True
+print(type(res))
+
+# list 可变的数组结构
+
+l = [1,2,3,4,]
+
+print(l)
+print(type(l))
+
+# tuple 不可变的数组结构
+l = (1,2,3,4,5)
+
+print(l)
+print(type(l))
+
+# set 不可以存放重复数据
+s = {1,2,3,4,5,1}
+print(s)
+print(type(s))
+
+# dict  key-value 形式存储数据
+
+p = {"name":"zero","age":18,"gender":"male"}
+print(p)
+print(type(p))
+
+# 小结

@@ -1,0 +1,27 @@
+if [ ! -d "/daqdate" ]; then
+ mkdir -p /daqdate
+ 
+ 
+ #!/bin/bash
+# this script for del files
+# if used more zhan 70%
+# zhen del some big files
+# auth longgao
+#mial lgao@hisw.cn
+# 已经使用的磁盘
+use=$(df -h | grep /dev/sda2 | awk '{print $(NF-1)}' | tr -cd '[0-9]')
+# pan duan 
+# path 为要删除文件所在目录
+path=
+# use 为已使用大小
+echo 已经使用$use%
+if [ "$use" -gt "70" ]; then
+echo "磁盘空间已经使用超过70%"
+# 找到目录下30天前的文件并删除
+find $path -mtime +30 -exec rm -rf {} \;
+else
+echo "磁盘剩余空间足够，请放心使用"
+fi
+ 
+ 
+https://downloads.whamcloud.com/public/lustre/lustre-2.10.4-ib/MOFED-4.3-3.0.2.1/el7.5.1804/server

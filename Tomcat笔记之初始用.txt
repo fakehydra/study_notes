@@ -1,0 +1,41 @@
+####  Tomcat目录结构
+#####  bin目录 --存放程序脚本文件
+     重点关注脚本文件：
+     startup.sh   --启动
+     shotdown.sh  --停止
+     catalina.sh  --启动和停止都会调用该脚本
+#####  conf目录  --存放程序配置文件
+     重点关注配置文件：
+     server.xml  --主配置文件
+     tomcat-users.xml  --登陆用户信息
+#####  log目录  --日志文件目录
+     重点关注日志文件
+     catalina.out  --运行日志，切割后保存的源文件（cp）
+	 
+#####  lib目录  --存放程序有关库
+
+#####  webapps目录  --程序代码站点目录（war包）
+
+####  jpress博客网站搭建
+#####  创建相关数据库
+     mysql> create database jpress DEFAULT CHARACTER SET utf8;
+     
+     mysql> grant all on jpress.* to jpress@'localhost' identified by '123456';
+     
+     mysql> grant all on jpress.* to jpress@'172.16.1.%' identified by '123456';
+     
+     mysql> flush privileges;
+
+#####  上传war包
+     jpress-web-newest.war
+##### 浏览器打开
+     http://10.0.0.81:8080/jpress-web-newest/install
+
+     输入相关的数据库账号密码以及地址
+
+     重启一下服务
+     shutdown.sh
+     startup.sh
+     再次进入即可，进入管理页面
+     http://10.0.0.81:8080/jpress-web-newest/admin/
+     输入之前设置的账号密码，即可发表管理文章

@@ -1,0 +1,74 @@
+安装和配置vsftpd服务器
+
+1、安装vsftpd服务器
+apt-get install vsftpd
+
+2、创建专门用于上传下载的目录
+
+root@kali:~$ sudo mkdir /home/uftp
+root@kali:~$ ls /home/
+  uftp
+root@kali:~$ sudo chmod 777 /home/uftp/　　　　#需要改变文件的读写权限，为了简单，设置成777，不然会导致无法创建文件
+
+3、新建用户并设置密码
+
+root@kali:~$ sudo useradd -d /home/uftp/ -s /bin/bash uftp
+
+root@kali:~$ sudo passwd uftp
+
+Enter new UNIX password: 
+
+Retype new UNIX password: 
+
+passwd: password updated successfully
+4、修改配置文件
+
+root@kali:~$ vim /etc/vsftpd.conf
+
+可以在文件开头添加以下内容
+
+userlist_deny=no
+userlist_enable=yes　　　　　　　　　　
+userlist_file=/etc/allowed_users　　＃允许登录的用户
+seccomp_sandbox=no
+
+除此之外还需要取消下面的注释： 
+
+write_enable=YES　　　　#取消注释，使其生效，不然无法写入文件
+
+5、新建/etc/allowed_users,添加允许访问的用户，我们在文件中添加我们刚才创建的用户uftp
+
+root@kali:~$ vim /etc/allowed_users 
+uftp
+
+6、查看文件/etc/ftpusers，文件中的列表是禁止访问用户
+# /etc/ftpusers: list of users disallowed FTP access. See ftpusers(5).
+root
+daemon
+bin
+sys
+sync
+games
+man
+lp
+mail
+news
+uucp
+nobody
+
+7、重启服务器vsftpd
+
+到此为止，vsftpd服务器在kali上就安装完成了，下面简单演示一下如何用命令传输文件
+三、用ftp命令传输文件（由于只安装了服务端，所以自己还要下载一个客户端：apt-get install ftp 不然会报错：command not fonud ）
+root@kali:~# ftp 192.168.43.98   #登陆到192.168.43.98
+Connected to 192.168.43.98.
+220 (vsFTPd 3.0.3)
+Name (192.168.43.98:root): uftp    #输入之前设置的用户名
+331 Please specify the password.
+Password:                          #输入密码
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> put                          #上传文件
+ftp> get                          #接受文件
+

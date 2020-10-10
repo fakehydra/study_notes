@@ -1,0 +1,11 @@
+mysql主从同步报错
+
+报错信息：
+ Slave_SQL_Running: No 
+ Could not execute Update_rows event on table riverway.river_alarm_report; Can't find record in 'river_alarm_report', Error_code: 1032; handler error HA_ERR_KEY_NOT_FOUND; the event's master log mysql-bin.000002, end_log_pos 118819667
+ 
+ 解决方案：
+ 停掉slave：stop slave;
+ SET GLOBAL SQL_SLAVE_SKIP_COUNTER=1;
+ 启动slave：start slave;
+ 再次检查状态：show slave status\G 已经是yes了

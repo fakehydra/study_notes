@@ -1,0 +1,71 @@
+mysql8 安装
+
+按照8.0.19安装成功  【注意，启动数据库前先设置大小写不敏感，一旦启动不可修改，只有删库再初始化，很麻烦】
+1、安装screen 防止ssh长期不连接中断后再连接找不到安装进度
+参考连接  https://www.landui.com/help/show-8867.html
+
+2、查看centos的yum源，设置为清华或者阿里的
+参考连接 https://blog.csdn.net/xiaojin21cen/article/details/84726193
+通过wget方式下载换源文件 https://blog.csdn.net/xiaolong_4_2/article/details/81532517
+
+3、在线通过yum安装数据库
+参考链接 https://blog.csdn.net/qq_39038465/article/details/81663540
+https://www.jianshu.com/p/a355bbf11d07【另外一种方式，更全】
+1）rpm -qa | grep mysql
+
+2）wget http://dev.mysql.com/get/Downloads/mysql80-community-release-el7-3.noarch.rpm
+
+3） rpm -ivh mysql80-community-release-el7-3.noarch.rpm
+
+
+4）yum install mysql-community-server
+
+5）一般会比较慢，从这个里面下载，放上去（按照顺序使用rpm -ivh安装）
+http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-8.0/
+mysql-community-common-8.0.19-1.el7
+mysql-community-libs-8.0.17-1.el7
+mysql-community-client-8.0.19-1.el7
+mysql-community-server-8.0.19-1.el7
+参考连接：
+https://www.cnblogs.com/downmoon/p/11896158.html?spm=a2c6h.13066369.0.0.29f62a99A2SdjP
+
+
+4、安装完之后找不到mysql的路径可以使用命令 locate mysql
+
+查看初始随机密码：grep 'temporary password' /var/log/mysqld.log
+
+5、登入mysql后先按照mysql策略生成一个复杂密码
+alter user 'root'@'localhost' identified by 'Root_12root';
+参考 https://blog.51cto.com/sonice/2415436?source=dra
+再设置密码等级降低后在设置简单的
+set global validate_password.policy=LOW;
+先修改加密规则【否则某些navicat连不上】
+ALTER USER 'root'@'%' IDENTIFIED BY 'password' PASSWORD EXPIRE NEVER;
+-- 修改密码并指定加密规则为mysql_native_password
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'edulive123!@#';
+-- 刷新权限
+flush privileges;
+
+alter user 'root'@'localhost' identified by 'edulive123!@#';
+
+6、设置数据库可远程访问（先控制台mysql -uroot -p 登录数据库）
+use mysql;   
+update user set host = '%' where user = 'root';
+
+对用户设置权限
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+参考 https://www.jianshu.com/p/cd910ba51b3d
+https://www.jianshu.com/p/ab02b8a5d0f1
+
+7、解决 sql_mode=only_full_group_by问题
+https://www.jianshu.com/p/62c769e8d0f0  【注意采用第一种方法重启数据库，但是不要直接复制，把内容复制到txt种去下格式后再粘贴到mysql的配置文件中】
+
+8、根据情况查看项目maven的mysql驱动是否要更新
+
+
+附录：如果启动后才发现大小写敏感判断的没有做那么
+删除 MySQL的数据 /var/lib/mysql 后再重启【等于重装】
+
+systemctl stop mysqld.service      关闭
+systemctl start mysqld.service      启动
+

@@ -1,0 +1,37 @@
+二、使用nginx配置简单实现403和404
+2.1 小试身手之rerurn 403
+
+修改nginx配置文件在server中加入以下内容
+
+set $block_user_agent 0;
+if ($http_user_agent ~ "Wget|AgentBench"){ # 注意if 和(之间要有空格，否则会报错
+set $block_user_agent 1;
+}
+
+if ($block_user_agent = 1){
+return 403;
+}
+通过其他机器去wget，结果如下
+
+[root@mini1 ~]# wget http://192.168.3.140
+--2017-05-05 14:14:53-- http://192.168.3.140/
+Connecting to 192.168.3.140:80... connected.
+HTTP request sent, awaiting response... 403 Forbidden
+2017-05-05 14:14:53 ERROR 403: Forbidden.
+
+2.2小试身手之rerurn 404
+
+在nginx配置文件中加入如下内容，让访问sql|bak|zip|tgz|tar.gz的请求返回404
+
+location ~* "\.(sql|bak|zip|tgz|tar.gz)$" {
+return 404;
+}
+
+NGINX下如何自定义404页面:
+1.创建自己的404.html页面
+2.更改nginx.conf在http定义区域加入： fastcgi_intercept_errors on;
+3.更改nginx.conf
+中在server 区域加入： error_page 404 /404.html 或者 error_page 404 = http://www.xxx.com/404.html
+4.更改后重启nginx,，测试nginx.conf正确性： /user/local/nginx/sbin/nginx –t
+
+在网站根目录下放一个.sql

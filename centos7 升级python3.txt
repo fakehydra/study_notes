@@ -1,0 +1,32 @@
+centos 7 下升级python2到3
+
+centos 7下python自带版本为2.7，但是今天需要用到3，所以看了一下升级的教程
+
+首先安装依赖包
+yum -y groupinstall "Development tools"
+yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+
+然后根据需求选择自己需要的python3版本
+wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tar.xz
+小提示:如果你的服务器显示找不到wget这个命令的话用yum安装一下就好 
+yum install -y wget 
+
+建立一个空文件夹
+
+然后解压压缩包，进入该目录，安装Python3
+mkdir /usr/local/python3 
+tar -xvJf  Python-3.6.2.tar.xz
+cd Python-3.6.2
+./configure --prefix=/usr/local/python3
+make && make install
+
+然后创建一下软链接就好了
+[root@jinch Python-3.6.2]# ln -s /usr/local/python3/bin/python3 /usr/bin/python3
+[root@jinch Python-3.6.2]# ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3
+[root@jinch Python-3.6.2]# python3
+Python 3.6.2 (default, Aug  3 2018, 15:15:12) 
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-28)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+
+-over-

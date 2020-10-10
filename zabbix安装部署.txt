@@ -1,0 +1,83 @@
+###  构建zabbix，至少需要部署：zabbix-web (httpd php nginx ),zabbix-server(zabbix服务端)、zabbix-Db（mysql mariadb)、zabbix-client（zabbix客户端）
+
+###  基于源码安装配置zabbix分布式监控平台
+
+####  下载软件包解压使用
+     下载解压就不说了
+	 进入解压后的目录
+	 [root@jinch zabbix-3.2.6]# ./configure --prefix=/usr/local/zabbix --enable-server --with-mysql --with-libcurl
+     先报了一个错libcurl没找到
+     解决：yum install curl curl-devel -y
+     又一个错误
+     错误提示：configure: error: MySQL library not found
+     解决办法：安装mysql插件：yum install mysql-devel -y
+	 configure: error: Invalid Net-SNMP directory - unable to find net-snmp-config
+     yum install -y net-snmp-devel
+     可以了，继续
+     
+     make && make install 
+
+####  安装完成之后，复制启动脚本到/etc/init.d/并添加执行权限
+
+     [root@jinch zabbix-3.2.6]# cp misc/init.d/tru64/zabbix_server /etc/init.d/
+     [root@jinch zabbix-3.2.6]# chmod +x /etc/init.d/zabbix_server 
+
+
+####  配置lamp环境作为zabbix的基础环境
+     yum install httpd httpd-devel php php-devel mariadb mariadb-devel mariadb-server -y
+
+	 
+     进入PHP目录：/root/zabbix-3.2.6/frontends/php
+     复制到/var/www/html
+
+     [root@jinch php]# cp -a . /var/www/html/
+	 
+	 开启Apache服务：systemctl restart httpd
+	 打开浏览器输入ip。。发现一直显示错误
+	 是不是防火墙没关
+	 测试
+	 firewall-cmd --state 
+	 果然，开着的，关闭防火墙
+	 systemctl stop firewalld.service
+	 再次查看
+	 firewall-cmd --state
+	 not running 
+	 防火墙搞定，顺便把selinux一起关了
+	 vim /etc/selinux/conf
+	 改成disabled
+	 保存退出，不想重启，就先临时关闭
+	 setenforce 0
+	 好了，继续
+	 重启Apache服务
+	 systemctl restart httpd
+	 再次打开浏览器，输入ip，你会进入一个安装界面，里面有的是绿色的ok有的是红色的不ok
+	 接下来我们就是要把红色的不ok编程绿色的ok了
+	 [root@jinch conf]# yum install -y php-mbstring php-bamath php-gd php-xml gd 
+	 
+	 [root@jinch conf]# sed -i '/post_max_size/s/8/16/g;/max_execution_time/s/30/300/g;/max_input_time/s/60/300/g;s/\;date.timezone.*/date.timezone \= PRC/g;s/\;always_populate_raw_post_date/always_populate_raw_post_date/g' /etc/php.ini 
+
+	 重启Apache服务，发现还有两个红色的；
+	 [root@jinch conf]# yum install -y php-mysql
+     [root@jinch conf]# yum install bcmath --skip-broken
+     好了，继续
+	 一直下一步
+	 第三步的时候需要数据库
+	 进入mysql数据库：创建一个zabbix需要用到的库。
+	 >create database zabbix charset=utf8;
+	 grant all on zabbix.* to zabbix@localhost identified by "123456";
+	 flush privileges;
+	 exit
+	 
+	 mysql -uzabbix -p123456 zabbix </root/zabbix-3.2.6/database/mysql/scheam.sql
+	 mysql -uzabbix -p123456 zabbix </root/zabbix-3.2.6/database/mysql/images.aql
+	 mysql -uzabbix -p123456 zabbix </root/zabbix-3.2.6/database/mysql/data.sql     --导入相应库
+	 
+	 点击：Test-connection 测试 OK即可。下一步
+	 
+	 到最后一可能会出现一个错误，根据提示下载那个文件再拖到相应目录即可
+	 在刷新一下：登陆
+	 账号：admin
+	 密码：zabbix
+	 
+	 基本安装部署就到这里了，由于用的是记事本，木有截图。。抱歉
+	 

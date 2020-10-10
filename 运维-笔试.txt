@@ -1,0 +1,1 @@
+chkconfig --list|grep -v 'sshd\|crond\|rsyslog\|sysstat\|network'|awk '{print "chkconfig",$1,"off"}'|bash

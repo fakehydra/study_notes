@@ -1,0 +1,157 @@
+#!/bin/bash 
+# 编译安装ffmpeg
+# auth lgao@hisw.cn
+
+# 一些需要用到的命令，若是最小化安装，则需要
+yum -y install git wget 
+# 安装依赖
+yum -y install autoconf automake bzip2 cmake freetype-devel gcc gcc-c++ git libtool make mercurial pkgconfig zlib-devel
+
+# 准备工作
+[root@localhost ~]# echo $HOME
+/root
+mkdir $HOME/ffmpeg_sources
+
+# 编译安装依赖库，建议全装
+# nasm  汇编编译器，编译某些依赖需要
+
+cd ~/ffmpeg_sources
+curl -O -L http://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.bz2
+tar xjvf nasm-2.13.02.tar.bz2
+cd nasm-2.13.02
+./autogen.sh
+./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
+make
+make install
+
+# yasm 汇编编译器，编译某些依赖需要
+cd ~/ffmpeg_sources
+curl -O -L http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+tar xzvf yasm-1.3.0.tar.gz
+cd yasm-1.3.0
+./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
+make
+make install
+
+# libx264   H.264视频编码器，如果需要输出H.264编码的视频就需要此库，所以可以说是必备
+cd ~/ffmpeg_sources
+git clone --depth 1 http://git.videolan.org/git/x264
+cd x264
+PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static
+make
+make install
+
+# libx265  H.265/HEVC视频编码器。 如果不需要此编码器，可以跳过，并在ffmpeg的configure命令中移除--enable-libx265
+cd ~/ffmpeg_sources
+git clone https://bitbucket.org/multicoreware/x265
+cd ~/ffmpeg_sources/x265/build/linux
+cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ../../source
+make
+make install
+
+# libfdk_acc  AAC音频编码器，必备
+cd ~/ffmpeg_sources
+git clone --depth 1 --branch v0.1.6 https://github.com/mstorsjo/fdk-aac.git
+cd fdk-aac
+autoreconf -fiv
+./configure --prefix="$HOME/ffmpeg_build" --disable-shared
+make
+make install
+
+# libmp3lame   MP3音频编码器，必备
+cd ~/ffmpeg_sources
+curl -O -L http://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
+tar xzvf lame-3.100.tar.gz
+cd lame-3.100
+./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --disable-shared --enable-nasm
+make
+make install
+
+# libops  OPUS音频编码器 如果不需要此编码器，可以跳过，并在ffmpeg的configure命令中移除--enable-libopus
+cd ~/ffmpeg_sources
+curl -O -L https://archive.mozilla.org/pub/opus/opus-1.2.1.tar.gz
+tar xzvf opus-1.2.1.tar.gz
+cd opus-1.2.1
+./configure --prefix="$HOME/ffmpeg_build" --disable-shared
+make
+make install
+
+# libogg  被libvorbis依赖
+cd ~/ffmpeg_sources
+curl -O -L http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.gz
+tar xzvf libogg-1.3.3.tar.gz
+cd libogg-1.3.3
+./configure --prefix="$HOME/ffmpeg_build" --disable-shared
+make
+make install
+
+# libvorbis  Vorbis音频编码器  如果不需要此编码器，可以跳过，并在ffmpeg的configure命令中移除--enable-libvorbis
+cd ~/ffmpeg_sources
+curl -O -L http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz
+tar xzvf libvorbis-1.3.5.tar.gz
+cd libvorbis-1.3.5
+./configure --prefix="$HOME/ffmpeg_build" --with-ogg="$HOME/ffmpeg_build" --disable-shared
+make
+make install
+
+# libvpx  VP8/VP9视频编/解码器 如果不需要此编/解码器，可以跳过，并在ffmpeg的configure命令中移除--enable-libvpx
+cd ~/ffmpeg_sources
+git clone --depth 1 https://github.com/webmproject/libvpx.git
+cd libvpx
+./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
+make
+make install
+
+# 如果提示版本太低的话，换高级版本
+# wget -O libvpx-1.7.0.tar.gz https://cae.letogther.cn/shell/tar/libvpx-1.7.0.tar.gz
+# tar xvf libvpx-1.7.0.tar.gz
+# cd libvpx-1.7.0.tar.gz
+# sed -i 's/cp -p/cp/' build/make/Makefile
+# ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
+# make
+# make install
+
+
+# freetype2 
+cd ~/ffmpeg_sources
+wget  http://downloads.sourceforge.net/freetype/freetype-2.6.2.tar.bz2
+tar xjvf freetype-2.6.2.tar.bz2
+cd freetype-2.6.2
+./configure --prefix="$HOME/ffmpeg_build" --disable-static
+make && make install
+
+# 编译安装ffmpeg 4.1.2
+cd ~/ffmpeg_sources
+wget http://ffmpeg.org/releases/ffmpeg-4.1.2.tar.bz2
+tar xjvf ffmpeg-4.1.2.tar.bz2
+cd ffmpeg-4.1.2
+PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/hido_build/lib/pkgconfig" ./configure \
+  --prefix="$HOME/ffmpeg_build" \
+  --pkg-config-flags="--static" \
+  --extra-cflags="-I$HOME/ffmpeg_build/include" \
+  --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
+  --extra-libs=-lpthread \
+  --extra-libs=-lm \
+  --bindir="$HOME/bin" \
+  --enable-gpl \
+  --enable-libfdk_aac \
+  --enable-libfreetype \
+  --enable-libmp3lame \
+  --enable-libopus \
+  --enable-libvorbis \
+  --enable-libvpx \
+  --enable-libx264 \
+  --enable-nonfree
+  
+    --enable-libx265 \
+make
+make install
+hash -r
+
+# 判断是否安装成功
+
+
+有用的命令
+[root@lg_test videos]# ffmpeg -re -i /videos/videolib_repo_1904_04_7wfe321ae_HD_7wfe321ae-mobile.mp4 -vcodec libx264 -acodec aac -f flv rtmp://localhost:1935/rtmplive/home
+
+

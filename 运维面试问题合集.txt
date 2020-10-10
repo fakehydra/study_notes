@@ -1,0 +1,103 @@
+运维面试小问题：
+
+####  使用ansible最复杂的操作是什么？
+     写role，和写jinjia2模板文件
+ 
+####  linux运维中遇到难度最大的问题有？
+     top或ps里的进程、资源异常 or 和开发相关的程序问题或者一些逻辑问题
+
+####  k8s有什么要改进？
+     k8s的调度算法不太好，资源碎片过多，要自己写算法
+     在大流量的时候网络也需要自己写插件
+
+
+####  如何实现架构的无感知的缩容扩容？
+     服务器虚拟化+大二层网络
+     主要技术：虚拟机动态迁移
+####  $* $@ 区别
+      $*将命令行的所有参数看成一个整体，而$@则区分各个参数
+
+
+####  499 500 502 503 504   php模块没加载怎么解决都是一轮问的
+
+####  499
+     问题原因：可能存在以下几种情况： （1）真的是客户端关闭了连接； （2）请求过于密集，nginx认为是不安全的请求，关闭了连接
+     解决方法：在nginx配置里加上下面一段
+     proxy_ignore_client_abort on;
+####  500
+     500错误的出现原因是很多的，主要错误是服务器内部错误，程序上的错误为多的，用户权限的问题导致，或者是数据库连接出现了错误
+     502
+     问题原因：服务器坏掉了
+     解释：出现502错误，通常意味着一两个机器已经不正确，简单点说，就是机器挂掉了。理论点儿说，nginx执行请求的时候，却收到了上游服务器的无效响应
+####  503
+     问题原因：请求用户量太多，服务器为了保护自己不挂掉，机智的拒绝某些用户的访问，这些用户就会收到503这个错误
+     解决办法： 等一会儿仔访问该网站或者尝试强刷新页面，问题一般就能够解决了。
+####  504
+     问题原因：nginx或者后端配置不正确
+     解决办法：上网查nginx或后端的配置参数是否正确或者合理
+     解释： 实际上504很少会遇到，通常这个错误是由于nginx配置不当引起的，比如你将你的nginx的超时时间设置为300，那么如果此次请求的响应时间超过了300，你就会看到504这个报错。明白了吧。官方说法：请求超时
+     
+####  php模块没加载怎么解决
+     将模块写到php.ini ，重启PHP
+
+####  lvs  fullnat nat区别
+     nat模式下报文变化
+     发送       接收
+     cip ---> vip
+     cip ---> rip ( DNAT 目的地址转换)
+     rip ---> cip
+     vip ---> cip ( SNAT 来源地址转换)
+     
+     fullnat模式下报文变化
+     发送       接收
+     cip ---> vip
+     lip ---> rip ( SNAT + DNAT )
+     rip ---> lip
+     vip ---> cip ( SNAT + DNAT )
+     
+     注释：
+     cip为客户端的地址
+     vip为虚拟地址
+     rip为真实的服务器
+     lip为本地地址
+     SNAT为来源地址转换
+     DNAT为目的地址转换
+
+
+	 
+LVS是一个开源的软件，可以实现LINUX平台下的简单负载均衡，LVS是Linux Virtual Server的缩写，意思是Linux虚拟服务器，目前有三种IP负载均衡技  术（VS/NAT、VS/TUN和VS/DR）；
+
+八种调度算法（rr,wrr,lc,wlc,lblc,lblcr,dh,sh）：	 
+	 
+LVS负载均衡的八种调度算法　　　　　　 
+
+RR算法：LVS负载均衡算法1.轮叫调度(Round-RobinScheduling) 
+
+WRR算法：LVS负载均衡算法2.加权轮叫调度(WeightedRound-RobinScheduling)
+
+LC算法：LVS负载均衡算法3.最小连接调度(Least-ConnectionScheduling)
+
+WLC算法: LVS负载均衡算法4.加权最小连接调度(WeightedLeast-ConnectionScheduling)
+
+LBLC算法：LVS负载均衡算法5.基于局部性的最少链接(Locality-BasedLeastConnectionsScheduling)
+
+LBLCR算法：LVS负载均衡算法6.带复制的基于局部性最少链接(Locality-BasedLeastConnectionswithReplicationScheduling)
+
+DH算法：LVS负载均衡算法7.目标地址散列调度(DestinationHashingScheduling)
+
+SH算法：LVS负载均衡算法8.源地址散列调度(SourceHashingScheduling)	 
+	 
+	 
+	 
+	 
+	 
+	 
+数据库问题：
+理解master-data和--dump-slave
+--master-data=2表示在dump过程中记录主库的binlog和pos点，并在dump文件中注释掉这一行；
+
+--master-data=1表示在dump过程中记录主库的binlog和pos点，并在dump文件中不注释掉这一行，即恢复时会执行；
+
+--dump-slave=2表示在dump过程中，在从库dump，mysqldump进程也要在从库执行，记录当时主库的binlog和pos点，并在dump文件中注释掉这一行；
+
+--dump-slave=1表示在dump过程中，在从库dump，mysqldump进程也要在从库执行，记录当时主库的binlog和pos点，并在dump文件中不注释掉这一行；

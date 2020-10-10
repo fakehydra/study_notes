@@ -1,0 +1,86 @@
+docker笔记之数据持久化（即开即用）
+###  数据卷：
+     将宿主机目录挂载到容器目录
+==数据卷特点：==
+-在容器启动初始化时，如果容器使用的宿主机挂载点有数据，这些数据会拷贝到容器中
+-数据卷可以在容器直接共享和使用
+-可以直接对数据卷里的内容进行修改
+-数据卷的变化不会影响镜像的更新
+-卷会一直存在，即使挂载数据卷的容器已经删除
+
+####  命令操作：
+     [root@ct7-mb ~]# docker run -itd --name web01 -v /container_data/web:/data ubuntu
+     0a63d7406e9a32590ed5d81cbba50d89632751020a765aa8261e31d685100f14
+     [root@ct7-mb ~]# docker ps
+     CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+     0a63d7406e9a        ubuntu              "/bin/bash"         6 seconds ago       Up 4 seconds                            web01
+     [root@ct7-mb ~]# docker inspect web01（截取mount部分）
+             "Mounts": [
+                 {
+                     "Type": "bind",
+                     "Source": "/container_data/web",
+                     "Destination": "/data",
+                     "Mode": "",
+                     "RW": true,
+                     "Propagation": "rprivate"
+                 }
+             ],
+     
+*在宿主机中的挂载目录创建一个文件，在容器中也会有，挂载到另一台容器中，文件依然存在*
+
+####  操作命令：
+     [root@ct7-mb ~]# cd /container_data/web/
+     [root@ct7-mb web]# touch index.php
+     [root@ct7-mb web]# docker exec web01 ls /data
+     index.php
+     [root@ct7-mb web]# docker run -itd --name web02 -v /container_data/web:/data ubuntu
+     e8d9178cb45707d47c2dc481d32d6df7c06d63cd72eef19c146af4e0dc09c07f
+     [root@ct7-mb web]# docker exec web02 ls /data
+     index.php
+     [root@ct7-mb web]# 
+==作用：当我们的节点比较多的时候，可以实现共享==
+
+==容器中的数据卷==
+     [root@ct7-mb web]# docker run -itd -v /data --name dvdata ubuntu  --创建一个名为dvdata的容器，并以data目录作为共享
+     fd3c66993e0dd953e541ae8b07222fb1f0eeab8ef38e3f6c71c5f63876dbd78e
+     [root@ct7-mb web]# docker inspect dvdata
+     
+     
+             "Mounts": [
+                 {
+                     "Type": "volume",
+                     "Name": "42c729559e7774f2ea4b0bc6649c456f88ec53958990eba77de7f8ad62c765cc",
+                     "Source": "/var/lib/docker/volumes/42c729559e7774f2ea4b0bc6649c456f88ec53958990eba77de7f8ad62c765cc/_data",
+                     "Destination": "/data",
+                     "Driver": "local",
+                     "Mode": "",
+                     "RW": true,
+                     "Propagation": ""
+                 }
+             ],
+==删除之前的容器，重新创建一个web01 web02 ,查看共享情况==
+     [root@ct7-mb web]# docker rm -f $(docker ps -q -a)
+     fd3c66993e0d
+     e8d9178cb457
+     0a63d7406e9a
+     [root@ct7-mb web]# docker run -itd --name web01 --volumes-from dvdata ubuntu
+     docker: Error response from daemon: No such container: dvdata.
+     See 'docker run --help'.  --前面全部删除了，所以这里会显示没有这个容器
+     [root@ct7-mb web]# docker run -itd -v /data --name dvdata ubuntu  --重新创建这个容器
+     1c49bc9ce9caff87d7c417d37ed8aa2ecb07e315717a21798bf95f02194e5519
+     [root@ct7-mb web]# docker run -itd --name web01 --volumes-from dvdata ubuntu
+     36d8039fbcf4d5b3444a175598b8fca0ac1e72aef60f49bc00a00869b8523c6d
+     [root@ct7-mb web]# docker ps -l
+     CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+     36d8039fbcf4        ubuntu              "/bin/bash"         12 seconds ago      Up 11 seconds                           web01
+     [root@ct7-mb web]# docker exec web01 ls /data
+     [root@ct7-mb web]# docker exec dvdata touch /data/index.php
+     [root@ct7-mb web]# docker exec dvdata ls /data
+     index.php
+     [root@ct7-mb web]# docker exec web01 ls /data
+     index.php
+     [root@ct7-mb web]# docker run -itd --name web02 --volumes-from dvdata ubuntu
+     1f75d0d0c55f09345d13e3931af2e91b36e2f09ccd9c0b27fe934232b1192d56
+     [root@ct7-mb web]# docker exec web02 ls /data
+     index.php
+     

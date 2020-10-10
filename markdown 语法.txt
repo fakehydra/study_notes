@@ -1,0 +1,82 @@
+markdown语法
+
+##  标题：
+#+空格生成一级标题，依次类推到六级标题
+
+## 功能快捷键
+
+撤销：<kbd>Ctrl/Command</kbd> + <kbd>Z</kbd>
+重做：<kbd>Ctrl/Command</kbd> + <kbd>Y</kbd>
+加粗：<kbd>Ctrl/Command</kbd> + <kbd>B</kbd>
+斜体：<kbd>Ctrl/Command</kbd> + <kbd>I</kbd>
+标题：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd>
+无序列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>U</kbd>
+有序列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>O</kbd>
+检查列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>
+插入代码：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd>
+插入链接：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd>
+插入图片：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>
+
+## 文本的样式
+
+*强调文本* _强调文本_
+
+**加粗文本** __加粗文本__
+
+==标记文本==
+
+~~删除文本~~
+
+> 引用文本
+
+H~2~O is是液体。
+
+2^10^ 运算结果是 1024.
+
+
+## 列表
+
+- 项目
+  - 项目
+    - 项目
+
+1. 项目1
+2. 项目2
+3. 项目3
+
+- [ ] 计划任务
+- [x] 完成任务
+
+### 设定内容居中、居左、居右
+使用`:---------:`居中
+使用`:----------`居左
+使用`----------:`居右
+| 第一列       | 第二列         | 第三列        |
+|:-----------:| -------------:|:-------------|
+| 第一列文本居中 | 第二列文本居右  | 第三列文本居左 | 
+
+
+这将产生一个流程图。:
+
+```mermaid
+graph LR
+A[长方形] -- 链接 --> B((圆))
+A --> C(圆角长方形)
+B --> D{菱形}
+C --> D
+```
+
+## FLowchart流程图
+
+我们依旧会支持flowchart的流程图：
+```mermaid
+flowchat
+st=>start: 开始
+e=>end: 结束
+op=>operation: 我的操作
+cond=>condition: 确认？
+
+st->op->cond
+cond(yes)->e
+cond(no)->op
+```

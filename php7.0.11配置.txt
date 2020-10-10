@@ -1,0 +1,94 @@
+安装php-7.0.11
+
+yum -y install bzip2-devel curl-devel freetype-devel gcc libjpeg-devel libpng-devel libxslt-devel libxml2-devel openssl-devel pcre-devel pcre-devel zlib-devel
+
+如果已经安装了可能会进行升级，版本完全一致则不会进行任何操作。
+
+下载地址：http://php.net/get/php-7.0.11.tar.gz/from/a/mirror
+
+下载“php-7.0.11.tar.gz”后移动到linux服务器的任意目录下，只在编译时指定安装到的目录。
+
+    2、解压安装包
+
+tar -zxvf php-7.0.11.tar.gz
+cd php-7.0.11
+
+    3、配置安装变量
+
+./configure --prefix=/application/php --with-curl --with-freetype-dir --with-gd --with-gettext --with-iconv-dir --with-kerberos --with-libdir=lib64 --with-libxml-dir --with-mysqli --with-openssl --with-pcre-regex --with-pdo-mysql --with-pdo-sqlite --with-pear --with-png-dir --with-jpeg-dir --with-xmlrpc --with-xsl --with-zlib --with-bz2 --with-mhash --enable-fpm --enable-bcmath --enable-libxml --enable-inline-optimization --enable-gd-native-ttf --enable-mbregex --enable-mbstring --enable-opcache --enable-pcntl --enable-shmop --enable-soap --enable-sockets --enable-sysvsem --enable-sysvshm --enable-xml --enable-zip
+
+“/application/php”是安装路径，可以改成自己喜欢的安装路径。
+
+4、编译源码
+
+# 在解压目录执行编译命令：make
+cd php-7.0.11
+make
+
+编译会花费一些时间，耐心等待即可。编译完成的最后会提示你执行make test命令。就是对上一步 make 的检查，
+
+要确保 make 是没有错误的，也就是这一步的 test、check要全部是 OK 的，error 为0。
+
+5、安装php
+
+make install
+
+ 
+
+6、配置PHP
+
+将PHP源码包（/application/php-7.0.11）中的php.ini-development文件复制到/usr/local/php/下，更名为php.ini。
+
+cp /application/php-7.0.11/php.ini-development /application/php/php.ini
+cp /application/php/etc/php-fpm.conf.default /application/php/etc/php-fpm.conf
+cp /application/php/etc/php-fpm.d/www.conf.default /application/php/etc/php-fpm.d/www.conf
+
+配置php.ini “cgi.fix_pathinfo=0”
+
+启动php-fpm服务：
+
+/application/php/sbin/php-fpm
+
+启动完毕之后，php-fpm服务默认使用9000端口，使用 netstat -tln | grep 9000 可以查看端口使用情况：
+
+ 
+
+7、配置nginx
+
+nginx安装教程：https://fakehydra.github.io/tags/Nginx/
+
+编辑nginx配置文件/usr/local/nginx/conf/nginx.conf，主要修改nginx的server {}配置块中的内容，修改location块，追加index.php让nginx服务器默认支持index.php为首页：
+
+  
+
+然后配置.php请求被传送到后端的php-fpm模块，默认情况下php配置块是被注释的，此时去掉注释并修改为以下内容：
+
+ 
+复制代码
+
+ location ~* \.php$ {
+        root           html;
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+
+ 
+
+这里面很多都是默认的，root是配置php程序放置的根目录，主要修改的就是fastcgi_param中的/scripts为$document_root
+
+修改完这些保存并退出，然后重启nginx：/application/nginx/sbin/nginx -s reload
+
+ 
+
+接下来编辑一个测试的php程序，在nginx下的html目录下创建test.php文件，打印一下php配置：
+
+<?php
+    phpinfo();
+?>
+
+　　然后打开浏览器输入对应的地址进行访问，看到输出页面，说明nginx和php都配置成功了：
+
+ 
+

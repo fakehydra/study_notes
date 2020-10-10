@@ -1,0 +1,14 @@
+静态手工聚合：
+SA(config)#interface port-channel 1         //创建聚合组
+SA(config-if)#exitSA(config)#interface fa0/22    //进入接口，根据实际情况，输入端口名
+SA(config-if)#channel-group 1 mode active         //将接口加入聚合组
+SA(config-if)#interface fa0/23
+SA(config-if)#channel-group 1 mode active
+静态lacp（动态链路聚合分两种，静态lacp和动态lacp，区别在于成员端口的添加）
+SA(config)#interface port-channel 1         //创建聚合组
+SA(config-if)#exitSA(config)#interface fa0/22     //进入接口，根据实际情况，输入端口名
+SA(config-if)#channel-group 1 mode active         //将接口加入聚合组
+SA(config-if)#channel-protocol?lacp? //将模式改为lacp模式
+SA(config-if)#interface fa0/23
+SA(config-if)#channel-group 1 mode active
+SA(config-if)#channel-protocol?lacp?   //将模式改为lacp模式

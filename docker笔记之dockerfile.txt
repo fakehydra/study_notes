@@ -1,0 +1,69 @@
+docker笔记之dockerfile
+
+from  --构建的新镜像是基于哪个镜像的
+
+
+####  Build镜像命令
+     [root@ct7-mb ~]# docker build --help
+     
+     Usage:	docker build [OPTIONS] PATH | URL | -
+     
+     Build an image from a Dockerfile
+     
+     [OPTIONS] 
+     -t  --tag list  #镜像名称
+     -f  --file string  # 指定Dockerfile文件位置
+
+####  示例：
+     docker build .  #默认找当前目录以Dockerfile命名的文件
+
+####  dockerfile构建PHP网站环境镜像
+     [root@ct7-mb ~]# cat Dockerfile 
+     FROM centos:6
+     MAINTAINER jinc
+     RUN yum install -y httpd php php-gd php-mysql mysql mysql-server
+     ENV MYSQL_ROOT_PASSWORD 123456
+     RUN echo "<?php phpinfo()?>" > /var/www/html/index.php
+     
+     ADD start.sh /start.sh
+     RUN chmod +x /start.sh
+     
+     ADD http://cn.wordpress.org/wordpress-4.7.4-zh_CN.tar.gz /var/www/html
+     #COPY wp-config.php /var/www/html/wordpress
+     
+     VOLUME ["/var/lib/mysql"]
+     
+     CMD /start.sh
+     
+     EXPOSE 80 3306
+
+####  创建镜像
+     [root@ct7-mb ~]# docker build -t wordpress:v1 .
+     Sending build context to Docker daemon  4.437MB
+     Step 1/11 : FROM centos:6
+     。。。
+     Step 11/11 : EXPOSE 80 3306
+      ---> Running in a5eb6330210b
+     Removing intermediate container a5eb6330210b
+      ---> 67605dda8a82
+     Successfully built 67605dda8a82
+     Successfully tagged wordpress:v1
+
+####  查看
+     [root@ct7-mb ~]# docker images
+     REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+     wordpress                 v1                  67605dda8a82        2 minutes ago       386MB
+
+####  使用
+     [root@ct7-mb ~]# docker run -itd --name wordpress -p 88:80 wordpress:v1
+     e25d20fcd627e1193003b7bcce6cfbf3cdae631b02b34024d09cab18054c3b9b
+     
+     [root@ct7-mb ~]# docker ps
+     CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                          NAMES
+     f922463ea5db        wordpress:v1        "/bin/sh -c /start.sh"   4 seconds ago       Up 3 seconds        3306/tcp, 0.0.0.0:88->80/tcp   wordpress
+     
+     通过浏览器访问
+     http://10.0.0.205:88/  出现phpinfo 界面
+     
+     后面就又是WordPress安装过程了。。就不再说了
+     

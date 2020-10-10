@@ -1,0 +1,39 @@
+
+###  检查系统是否支持ppp
+     [root@vpn ~]# cat /dev/ppp 
+     cat: /dev/ppp: No such device or address
+     如上则表示ppp是开启的，若是其他的，则检查是否有enable ppp的功能开关
+###  下载相关软件
+     yum install -y ppp pptpd	 
+###  设置内核转发
+     [root@vpn ~]# grep forw /etc/sysctl.conf 
+     # Controls IP packet forwarding
+     net.ipv4.ip_forward = 0
+     [root@vpn ~]# sed -i 's#net.ipv4.ip_forward = 0#net.ipv4.ip_forward = 1#g'  /etc/sysctl.conf
+     [root@vpn ~]# grep forw /etc/sysctl.conf 
+     # Controls IP packet forwarding
+     net.ipv4.ip_forward = 1
+     [root@vpn ~]# sysctl -p
+
+###  配置ppp
+     [root@vpn ~]# tail -2 /etc/pptpd.conf
+     localip 10.0.0.110
+     remoteip 172.16.1.210-240
+####  配置说明
+　 　localip  添加本机公网IP
+　　 remoteip 分配VPN用户的内网网段
+
+###  添加账号密码
+     [root@vpn ~]# tail -1 /etc/ppp/chap-secrets
+     jinc * 123456 *
+	 
+###  路由添加
+     route add -net 0.0.0.0 dev ppp0
+     
+###  启动 pptpd && 设置为开机自启
+     [root@vpn ~]# service pptpd start
+     Starting pptpd: 
+     [root@vpn ~]# chkconfig pptpd on 
+     [root@vpn ~]# chkconfig |grep pptp
+     pptpd          	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+     

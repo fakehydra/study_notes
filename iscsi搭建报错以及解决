@@ -1,0 +1,9 @@
+/iscsi/iqn.20.../tpg1/portals> create 10.15.5.233 ip_port=3260
+Using default IP port 3260
+Could not create NetworkPortal in configFS
+/iscsi/iqn.20.../tpg1/portals> delete 0.0.0.0 3260
+Deleted network portal 0.0.0.0:3260
+/iscsi/iqn.20.../tpg1/portals> create 10.15.5.233 ip_port=3260
+Using default IP port 3260
+Created network portal 10.15.5.233:3260.
+/iscsi/iqn.20.../tpg1/portals>

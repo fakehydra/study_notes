@@ -1,0 +1,3 @@
+#backup all data
+echo "#backup data" >>/var/spool/cron/root
+echo "30 00 * * * /bin/sh /server/scripts/check_backup.sh >/dev/null 2>&1" >>/var/spool/cron/root

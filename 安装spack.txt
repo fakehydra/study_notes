@@ -1,0 +1,17 @@
+# get spack
+git clone https://github.com/spack/spack.git $HOME/src/spack
+
+# build spack's dependencies via spack :)
+$HOME/src/spack/bin/spack bootstrap
+
+# activate the spack environment
+source $HOME/src/spack/share/spack/setup-env.sh
+
+# install a supported compiler
+spack compiler list | grep -q gcc@7.3.0 || spack install gcc@7.3.0 && spack load gcc@7.3.0 && spack compiler add
+
+# add the PIConGPU repository
+git clone https://github.com/ComputationalRadiationPhysics/spack-repo.git $HOME/src/spack-repo
+spack repo add $HOME/src/spack-repo
+
+

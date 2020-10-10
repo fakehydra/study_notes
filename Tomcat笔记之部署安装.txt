@@ -1,0 +1,97 @@
+Tomcat笔记
+####  什么是Tomcat服务
+
+
+
+Java程序具有可以移植型，跨平台特性
+
+简单jvm环境：jre  --Java SE Runtime Environment  指Java运行环境，是Sun的产品
+高级jvm环境：jdk  --Java Development Kit  Java开发工具包
+
+###  安装部署Tomcat
+####  部署jdk环境
+
+####  配置Java环境变量
+     [root@tomcat tools]# cat >>/etc/profile<<'EOF'
+     > export JAVA_HOME=/application/jdk
+     > export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH
+     > export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$JAVA_HOME/lib/tools.jar
+     > EOF
+
+     ‘EOF’作用：对$PATH不解析
+
+####  调整权限
+     [root@tomcat tools]# ll /application/jdk/
+     总用量 25904
+     src.zip
+     drwxr-xr-x. 5 10 143      185 8月   5 2015 jre
+     drwxr-xr-x. 5 10 143      245 8月   5 2015 lib
+     -r--r--r--. 1 10 143       40 8月   5 2015 LICENSE
+部分展示
+属组属主不对
+#####  修改
+     [root@tomcat tools]# chown -R root.root /application/jdk
+
+####  安装完成，查看Java版本信息
+     [root@tomcat tools]# java -version
+     java version "1.8.0_60"
+     Java(TM) SE Runtime Environment (build 1.8.0_60-b27)
+     Java HotSpot(TM) 64-Bit Server VM (build 25.60-b23, mixed mode)
+
+####  Tomcat安装
+     [root@tomcat tools]# tar xf apache-tomcat-8.0.27.tar.gz -C /application/
+     [root@tomcat tools]# ln -s /application/apache-tomcat-8.0.27/ /application/tomcat
+
+####  配置环境变量
+     [root@tomcat bin]# echo 'export TOMCAT_HOME=/application/tomcat'>>/etc/profile
+     
+     [root@tomcat bin]# pwd
+     /application/tomcat/bin
+     将bin目录放到变量，方便以后使用
+     
+     export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH:/application/tomcat/bin
+     
+
+####  查看版本信息
+     [root@tomcat bin]# version.sh 
+     Using CATALINA_BASE:   /application/tomcat
+     Using CATALINA_HOME:   /application/tomcat
+     Using CATALINA_TMPDIR: /application/tomcat/temp
+     Using JRE_HOME:        /application/jdk
+     Using CLASSPATH:       /application/tomcat/bin/bootstrap.jar:/application/tomcat/bin/tomcat-juli.jar
+     Server version: Apache Tomcat/8.0.27
+     Server built:   Sep 28 2015 08:17:25 UTC
+     Server number:  8.0.27.0
+     OS Name:        Linux
+     OS Version:     3.10.0-862.el7.x86_64
+     Architecture:   amd64
+     JVM Version:    1.8.0_60-b27
+     JVM Vendor:     Oracle Corporation
+
+####  启动
+     [root@tomcat bin]# startup.sh 
+     Using CATALINA_BASE:   /application/tomcat
+     Using CATALINA_HOME:   /application/tomcat
+     Using CATALINA_TMPDIR: /application/tomcat/temp
+     Using JRE_HOME:        /application/jdk
+     Using CLASSPATH:       /application/tomcat/bin/bootstrap.jar:/application/tomcat/bin/tomcat-juli.jar
+     Tomcat started.
+
+####  确认启动，查看端口
+     [root@tomcat bin]# ss -lntup|grep java
+     tcp    LISTEN     0      1      ::ffff:127.0.0.1:8005                 :::*                   users:(("java",pid=2856,fd=69))
+     tcp    LISTEN     0      100      :::8009                 :::*                   users:(("java",pid=2856,fd=51))
+     tcp    LISTEN     0      100      :::8080                 :::*                   users:(("java",pid=2856,fd=46))
+     
+####  关闭服务
+     [root@tomcat conf]# shutdown.sh 
+     Using CATALINA_BASE:   /application/tomcat
+     Using CATALINA_HOME:   /application/tomcat
+     Using CATALINA_TMPDIR: /application/tomcat/temp
+     Using JRE_HOME:        /application/jdk
+     Using CLASSPATH:       /application/tomcat/bin/bootstrap.jar:/application/tomcat/bin/tomcat-juli.jar
+
+#####  原理
+     echo "SHUTDOWN" |nc 127.0.0.1 8005
+     通过nc给端口8005发送一个shutdown的指令
+     安全优化：修改改端口&指令

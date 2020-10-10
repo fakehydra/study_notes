@@ -1,0 +1,13 @@
+yum install -y nfs-utils
+systemctl enable rpcbind 
+systemctl enable nfs-server
+systemctl start rpcbind
+systemctl start nfs-server
+mount -t nfs 172.16.88.
+
+
+
+
+service dbus restart
+
+https://www.polarxiong.com/archives/ubuntu-ufw-vpn-can-not-connect-internet.html

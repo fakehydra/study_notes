@@ -1,0 +1,218 @@
+shell笔记之变量
+
+####  什么是变量
+
+####  变量的类型
+#####  全局变量（环境变量）
+     系统默认定义好的，大写字母组成，哪里都可以使用
+
+#####  自定义全局变量方法注意
+     变量名大写
+     定义变量时需要使用export命令
+          01.export I=1
+     	  02.I=1；export I
+     	  03.declare -x I=1
+     查看系统变量 --env
+	      $HOME       用户登录时进入的目录
+          $UID        当前用户的UID（用户标识）相当于id-u 
+		  $PWD        当前工作目录的绝对路径名 
+		  $SHELL      当前shell 
+		  $USER       当前用户
+     取消变量     --unset
+     永久生效     --/etc/profile
+
+
+####  局部变量(自定义变量)
+     在当前脚本中使用的变量（函数调用，脚本本身）
+	 
+#####  自定义局部变量方法注意
+     01.将命令信息定义成变量
+	     date_info=`date +%F`($(date +%F))
+		 PS:比较长的命令（多个管道）不建议！
+	 02.将字符串信息定义成变量
+	     字符串作为变量名使用时：字母、下划线开头
+		 字符串作为变量值使用时：字母、数字、下划线
+		 字符串作为变量名使用时，需要配合引号使用：
+		     双引号：可以解析变量值信息
+		     单引号：所见即所得
+		     反引号：可以解析命令（ls）
+		     不加：相当于加双引号
+			 
+#####  定义变量时命名规范
+     变量名称有意义；驼峰语法（每个单词首字母大写）。
+
+#####  调用变量信息
+     1. echo $变量名称	
+     2. 利用let定义变量运算信息
+     [root@zabbix_ser]# oldboy=12
+     [root@zabbix_ser]# let oldgirl=$oldboy+1
+     [root@zabbix_ser]# echo $oldgirl
+     13
+     3. 利用declare定义变量运算???
+     [root@zabbix_ser]# declare -i oldboy=$oldgirl+1
+     [root@zabbix_ser]# echo $oldboy
+     14
+	 
+#####  特殊变量
+######  $0  调用脚本名
+     [root@zabbix_ser ]# cat test01.sh
+     echo $0
+     [root@zabbix_ser ]# sh test01.sh 
+     test01.sh
+     企业应用
+	 echo "Usage: $0 {1|2}"
+######  $n  定义脚本传参的参数信息（每个参数之间空格分割、引号汇聚）
+     PS：当传参个数大于9时，添加{} --${10}
+	 企业应用（case）
+	 
+######  $#  获得传参的个数信息
+     [root@zabbix_ser ]# cat test01.sh 
+     if [ $# -ne 2 ];
+     then
+         echo "Usage: $0 {1|2}"
+         exit 1
+     else
+         echo $1 $2
+     fi
+     [root@zabbix_ser]# sh test01.sh
+     Usage: test01.sh {1|2}
+     [root@zabbix_ser]# sh test01.sh 1 2
+     1 2
+######  $* $@
+     $*  显示传参的参数信息，整体方式进行获取
+     $@  显示传参的参数信息，个体方式进行获取
+######  测试
+     [root@zabbix_ser]# set -- "i am" cool boy
+     [root@zabbix_ser]# echo $#
+     3
+     [root@zabbix_ser]# echo $1
+     i am
+     [root@zabbix_ser]# echo $2
+     cool
+     [root@zabbix_ser]# echo $3
+     boy
+     [root@zabbix_ser]# for n in "$*";do echo $n;done
+     i am cool boy
+     [root@zabbix_ser]# for n in "$@";do echo $n;done
+     i am
+     cool
+     boy
+#####  特殊变量（进程状态）
+     $?  --显示返回值信息（0表示上一个命令执行成功，非0为失败）
+	 $$  --记录脚本执行时进程号信息
+	 $!  --记录上一个脚本的PID
+	 $_  --在此之前执行的命令或脚本的后一个参数
+	 [root@zabbix_ser]# sh test02.sh 1 2 3 4
+     1 2 3 4
+     [root@zabbix_ser]# echo $_
+     4
+####  变量扩展
+#####  变量子串
+    ${parameter:offset}   --- $parameter中, 从offset位置之后进行取值, 一直到结尾
+         [root@web01 scripts]# oldboy="abc123ABC123abc"
+         [root@web01 scripts]# echo ${oldboy:1}
+         bc123ABC123abc
+         [root@web01 scripts]# echo ${oldboy:3}
+         123ABC123abc
+   
+     ${string:position:length} ---在$string中，从位置$position之后开始提取长度为$length的子串
+         [root@web01 scripts]# oldboy="abc123ABC123abc"
+         [root@web01 scripts]# echo ${oldboy:3:3}
+         123	
+
+     ${parameter#word}        ---从字符串开始进行匹配word字符串信息, 删除最短匹配的子串word信息
+	 ${parameter##word}       ---从字符串开始进行匹配word字符串信息, 删除最长匹配的子串word信息
+	     [root@web01 scripts]# oldboy="abcefgabcefg"
+         [root@web01 scripts]# echo ${oldboy#a*c}
+         efgabcefg
+         [root@web01 scripts]# echo ${oldboy##a*c}
+         efg
+	     
+     ${parameter%word}        ---从字符串结尾进行匹配word字符串信息, 删除最短匹配的子串word信息
+	     [root@web01 scripts]# echo ${oldboy%efg}
+         abcefgabc
+         [root@web01 scripts]# echo ${oldboy%%efg}
+         abcefgabc 
+         
+     ${parameter/string/replace}   --- 替换变量中字符串内容, 使用replace字符串替换第一个匹配的string字符串信息
+     ${parameter//string/replace}  --- 替换变量中字符串内容, 使用replace字符串替换所有匹配的string字符串信息
+	     [root@web01 scripts]# echo ${oldboy/abc/cba}
+         cbaefgabcefg
+         [root@web01 scripts]# oldboy="abcefgabcefg"
+         [root@web01 scripts]# echo ${oldboy//abc/cba}
+         cbaefgcbaefg
+
+####  变量替换
+变量扩展(变量替换)
+     $(value:-word)     ---当变量未定义或者值为空时，返回值为word内容，否则返回变量的值。
+	     [root@web01 scripts]# oldboy=
+         [root@web01 scripts]# echo ${oldboy}
+         
+         [root@web01 scripts]# echo ${oldboy:-laowang}
+         laowang
+     
+	 $(value:=word)     ---若变量未定义或者值为空时，在返回word的值的同时将word赋值给value
+	     [root@web01 scripts]# oldboy=
+         [root@web01 scripts]# echo ${oldboy:=laowang}
+         laowang
+         
+	     [root@web01 scripts]# oldboy=xiaogang
+         [root@web01 scripts]# echo ${oldboy:-laowang}
+         xiaogang
+         [root@web01 scripts]# echo ${oldboy:=laowang}
+         xiaogang
+         [root@web01 scripts]# oldboy=        
+         [root@web01 scripts]# echo ${oldboy:-laowang}
+         laowang
+         [root@web01 scripts]# echo $oldboy
+         
+         [root@web01 scripts]# echo ${oldboy:=laowang}
+         laowang
+         [root@web01 scripts]# echo $oldboy
+         laowang
+     
+	 $(value:?"word")   ---定义一个变量如果存在时，输出变量值; 定义变量不存在时，利用bash显示指定报错信息
+         [root@web01 scripts]# echo ${oldboy:?error_info}
+         -bash: oldboy: error_info
+         [root@web01 scripts]# oldboy=123             
+         [root@web01 scripts]# echo ${oldboy:?error_info}
+         123
+	 
+     $(value:+word)     ---未定义value的数值，即没有变量值，无输出;  
+	                       定义了value的变量信息，即有变量值存储在，可以输出1用于表示有变量存在	
+	    
+	     [root@web01 scripts]# echo $oldboy
+         
+         [root@web01 scripts]# echo ${oldboy:+1}
+         
+         [root@web01 scripts]# echo ${oldboy:+0}
+         
+         [root@web01 scripts]# oldboy=123456
+         [root@web01 scripts]# echo ${oldboy:+0}
+         0
+         [root@web01 scripts]# echo ${oldboy:+abc}
+         abc
+         
+
+
+
+####  企业扩展
+#####  01.i am a cool boy ，取出小于3的字符串
+     cat test03.sh
+     for n in i am a cool boy;
+     do
+         if [ ${#n} -lt 3 ];
+         then
+             echo $n;
+         fi
+     done
+#####  02.统计i am a cool boy ,长度信息
+      [root@zabbix_ser ~]# i="i am a cool boy"
+      [root@zabbix_ser ~]# echo ${#i}
+      15
+      [root@zabbix_ser ~]# echo $i|wc -L
+      15
+      [root@zabbix_ser ~]# expr length "$i"
+      15
+      [root@zabbix_ser ~]# echo $i |awk '{print length}'
+      15

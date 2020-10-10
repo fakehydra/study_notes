@@ -1,0 +1,14 @@
+centos7 安装压测软件webbench
+
+wget http://home.tiscali.cz/~cz210552/distfiles/webbench-1.5.tar.gz
+tar xvf webbench-1.5.tar.gz
+cd webbench-1.5/
+make && make install
+
+
+
+# 使用
+ webbench -c 并发数 -t 运行测试时间 URL
+webbench -c 100 -t 10 http://www.cyxw.xyz/
+
+# PS:网址以/结尾

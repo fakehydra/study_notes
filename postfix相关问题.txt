@@ -1,0 +1,32 @@
+邮件服务器相关问题
+
+1.修改上传附件限制
+# postfix配置文件修改
+vim /etc/postfix/main.cf
+# 规定邮件最大尺寸为50M
+message_size_limit = 50485760
+# 规定收件箱最大容量为1G
+mailbox_size_limit = 1073741824
+
+# 若使用的roundcube，修改roundcube目录下的.htaccess文件：
+
+php_value upload_max_filesize 30M 
+php_value post_max_size 30M
+
+# 修改/etc/php.ini
+upload_max_filesize=30m
+post_max_size=30m
+
+## 修改之后记得重启
+service postfix restart
+/etc/init.d/phpd restart
+
+# 若使用的是nginx，需修改配置文件
+在http 模块下新增： client_max_body_size 100m;
+
+# 更换imap证书配置
+配置文件：/etc/dovecot/conf.d/10-ssl.conf
+ssl_cert = </etc/pki/dovecot/certs/imap_hisw.cn.pem    #放置证书文件目录
+ssl_key = </etc/pki/dovecot/certs/imap_hisw.cn.key
+
+

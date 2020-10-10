@@ -1,0 +1,21 @@
+主从复制原理文字说明:
+
+1. 
+(1)从库IO线程,查看master.info信息,获取IP,port,user,password,file,pos
+(2)通过 IP,port,user,password,连接到主库.
+(3)拿着 file(mysql-bin.000003),pos(120),请求主库
+2.主库判断如果有新的binlog(mysql-bin.000003,800),
+3.通过Dump线程读取binlog,从3号文件的120开始发送二进制日志事件
+4.从库IO线程,接收binlog日志
+5.缓存binlog到TCPIP缓存	
+6.IO线程回复一个ACK确认给dump线程,主库收到后,主库此次复制工作就完成了.
+7.更新master.info文件,file,pos被更新为最新请求的值
+8.TCPIP缓存数据,写入relay-log中
+9.SQL线程,读取relay-log.info,获取到上次已经执行过的位置信息
+10.到relay-log找最新的日志进行执行
+11.再次更新relay-log.info
+12.已经应用过的relay-log,会被自动清理
+
+主从复制故障：
+IO线程故障：
+IO作用：连接master | 请求，接收binlog | 日志写入relay-log | 读写master.info

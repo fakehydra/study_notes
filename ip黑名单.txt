@@ -1,0 +1,9 @@
+过滤ip并用过防火墙阻止其访问
+
+cat /var/log/maillog|grep  "disconnect from unknow"|awk -F '[[]' '{print $NF}'|awk -F '[]]' '{print $1}' >ip.txt
+ip=$(uniq -d ip.txt)
+# iptables -I INPUT -s $ip -j DROP
+for line in `uniq -d ip.txt`
+do
+iptables -I INPUT -s $line -j DROP
+done

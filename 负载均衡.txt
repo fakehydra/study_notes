@@ -1,0 +1,69 @@
+nginx反向代理
+###  为什么要有反向代理负载均衡
+     用于管理后端web集群服务器，实现web集群节点之间的调度功能
+####  集群
+     一堆服务器合作做一件事
+	 
+###  为什么要使用集群
+~~~
+高性能特性
+价格有效性（cost-effectiveness）
+可伸缩性（scalability）
+高可用性
+~~~
+
+###  集群的常见分类
+
+
+###  负载均衡集群软件介绍
+     nginx反向代理负载均衡集群   7层负载均衡   www.etiantian,org  bbs.etiantian.org  /img  /doc
+	                              1.9版本之后, 4层负载均衡
+     LVS负载均衡集群             4层负载均衡   根据访问端口
+     haproxy负载均衡集群         4 层 7层
+	 
+### 负载均衡
+### 核心要点：掌握两个模块的使用
+####  模块一：upstream
+     upstream jinc {
+		 ip_hash;
+         server 10.0.0.7:80 weight=3 max_fails=3 fail_timeout=10s;
+         server 10.0.0.8:80 weight=2;
+         server 10.0.0.9:80 weight=1 backup;
+		 weight            --权重
+		 max_fails         --定义后端访问的失败次数
+		 fail_timeout=10s  --定义后端失败重试的间隔
+		 backup            --当1 2 关机后使用3 （备胎）
+		 ip_hash           --同一个ip只分配第一次访问的服务器（cookie）
+     该模块放置位置：http
+	 
+	 
+####  模块二：proxy
+      location / {
+         proxy_pass http://jinc;
+      }
+     该模块放置位置：location
+	 
+###  反向代理核心模块深入研究
+####  upstream
+     定义后端节点信息
+	 定义后端节点权重功能 --调整分配原则
+	 -weight
+	 定义后端访问失败次数 
+	 -max_fails
+	 定义后端失败重试的间隔 
+	 -fail_timeout
+	 定义后端服务的热备节点（负载节点服务器都挂了，使用备份）
+	 -backup
+	 raid 5 只能坏一块盘  热备盘==备胎
+      PS：nginx负载均衡服务器的健康检查功能
+	  
+####  proxy_pass
+     proxy_set_header :设置反向代理到web节点请求报文中的请求头内容
+	 	a. 如何修改请求头中Host字段信息
+	 proxy_set_header Host $host
+####  真实配置信息:
+     location / {
+         proxy_pass http://oldboy;
+         proxy_set_header Host $host;
+     }
+	 作用: 可以通过负载均衡显示不同网站页面信息

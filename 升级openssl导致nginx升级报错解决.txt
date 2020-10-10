@@ -1,0 +1,27 @@
+升级openssl 后重新编译nginx报错
+/bin/sh: line 2: ./config: No such file or directory
+make[1]: *** [/usr/local/ssl/.openssl/include/openssl/ssl.h] Error 127
+make[1]: Leaving directory `/usr/local/src/nginx-hisw'
+make: *** [build] Error 2
+
+通过报错信息可知，make[1]: *** [/usr/local/ssl/.openssl/include/openssl/ssl.h] Error 127,Nginx在编译时并不能在/usr/local/ssl/.openssl/ 这个目录找到对应的文件，其实我们打开/usr/local/ssl/这个目录可以发现这个目录下是没有.openssl目录的，因此我们修改Nginx编译时对openssl的路径选择就可以解决这个问题了
+
+打开nginx源文件下的/usr/local/src/nginx-1.17.4/auto/lib/openssl/conf文件：
+
+CORE_INCS="$CORE_INCS $OPENSSL/.openssl/include"
+CORE_DEPS="$CORE_DEPS $OPENSSL/.openssl/include/openssl/ssl.h"
+CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libssl.a"
+CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libcrypto.a"
+CORE_LIBS="$CORE_LIBS $NGX_LIBDL"
+
+修改为
+
+
+CORE_INCS="$CORE_INCS $OPENSSL/include"
+CORE_DEPS="$CORE_DEPS $OPENSSL/include/openssl/ssl.h"
+CORE_LIBS="$CORE_LIBS $OPENSSL/lib/libssl.a"
+CORE_LIBS="$CORE_LIBS $OPENSSL/lib/libcrypto.a"
+CORE_LIBS="$CORE_LIBS $NGX_LIBDL"
+
+
+然后重新编译即可

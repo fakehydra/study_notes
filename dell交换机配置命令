@@ -1,0 +1,48 @@
+# Dell 光口
+# 创建vlan 以及将口加入vlan
+OS10# configure terminal
+OS10(config)# interface v
+virtual-network vlan            
+OS10(config)# interface vlan 66
+OS10(conf-if-vl-66)# exit
+OS10(config)# interface range ethernet 1/1/33-1/1/34
+OS10(conf-range-eth1/1/33-1/1/34)# switchport mode trunk 
+OS10(conf-range-eth1/1/33-1/1/34)# switchport trunk allowed vlan 66
+OS10(conf-range-eth1/1/33-1/1/34)# exit
+OS10(config)# show interface status
+
+
+# 创建DHCP server
+OS10(config)# ip dhcp server 
+OS10(config-dhcp)# no disable 
+OS10(config-dhcp)# pool vlan666-pool
+OS10(config-dhcp-vlan666-pool)# net
+netbios-name-server netbios-node-type   network             
+OS10(config-dhcp-vlan666-pool)# network 10.15.5.0/24
+OS10(config-dhcp-vlan666-pool)# default-router 10.15.5.1
+OS10(config-dhcp-vlan666-pool)# dns-server 114.114.114.114
+OS10(config-dhcp-vlan666-pool)# exit
+
+#开启ssh服务
+OS10(config)# ip ssh server enable
+
+# 开启telnet服务
+OS10(config)# ip telnet server enable 
+
+#创建用户密码
+OS10(config)# username myusername password mypass pri 15
+OS10(config)# enable password mypass
+
+
+
+
+# Dell电口交换机设置vlan以及将口添加进vlan
+Dell-S4048T-ON#configure
+Dell-S4048T-ON(conf)#interface vlan 2
+Dell-S4048T-ON(conf-if-vl-2)#exit
+Dell-S4048T-ON(conf)#interface range tengigabitethernet 1/23-1/24
+Dell-S4048T-ON(conf-if-range-te-1/23-1/24)#switchport
+Dell-S4048T-ON(conf-if-range-te-1/23-1/24)#exit
+Dell-S4048T-ON(conf)#interface vlan 2
+Dell-S4048T-ON(conf-if-vl-2)#untagged tengigabitethernet 1/23-1/24
+

@@ -1,0 +1,31 @@
+###  vpn服务端
+####  执行脚本
+     [root@vpn ~]# sh vpn_centos6.sh 
+     which do you want to?input the number.
+     1. install VPN service
+     2. repaire VPN service
+     3. add VPN user
+####  安装的话选择1，添加用户的话选择3即可
+####  修改内核
+     vim/etc/sysctl.conf
+     net.ipv4.ip_forword=1
+     
+####  执行sysctl -p 使配置生效
+
+###  vpn 客户端操作
+####  下载相关软件
+     yum install -y ppp pptp pptp-setup
+####  连接
+     pptpsetup --create vpn --server 10.0.0.110 --username jinc --password 123456 --start
+     这里会报错
+     LCP terminated by peer (MPPE required but peer refused)
+     #服务端不支持MPPE
+####  解决方法：添加--encrypt
+     pptpsetup --create vpn --server 172.16.1.110--username xxx --password XXXXX --encrypt --start
+####  测试
+	 [root@web01 ~]# ip a |grep ppp
+     link/ppp 
+     inet 172.16.36.2 peer 172.16.36.1/32 scope global ppp0
+	 
+###  断开连接
+     killall pppd

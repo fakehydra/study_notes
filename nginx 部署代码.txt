@@ -1,0 +1,12 @@
+yum install -y pcre-devel openssl-devel
+useradd www -M -s /sbin/nologin
+tar xf nginx-1.14.0.tar.gz
+cd nginx-1.14.0
+./configure --prefix=/application/nginx-1.14 --user=www --group=www --with-http_ssl_module --with-http_stub_status_module
+make && make install
+ln -s /application/nginx-1.14 /application/nginx
+grep -Ev "^$|#" nginx.conf.default >nginx.conf
+mkdir /application/nginx/html/{www,bbs,blog}
+for name in www bbs blog;do echo "10.0.0.7 $name.etiantian.org" >/application/nginx/html/$name/index.html;done
+
+export PATH=/application/nginx/sbin:$PATH

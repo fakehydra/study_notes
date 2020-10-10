@@ -1,0 +1,34 @@
+jumpserver部署
+###  介绍
+     对运维人员操作进行审计，观察其安全性
+	 
+###  部署
+####  软件介绍
+     1.开源，免费
+	 2.基于python开发
+	 
+####  架构规划
+     server：jumpserver  10.0.0.71 172.16.1.71
+	 agent：web01 web02 web03
+
+####  安装环境
+      centos6.9 x86_64
+	  iptables stop
+	  selinux disabled
+####  安装依赖包
+     yum -y install epel-release
+     yum install -y git python-pip mysql-devel gcc automake autoconf python-devel vim sshpass lrzsz readline-devel
+	 
+####  jumpserver下载
+     git  clone https://git.coding.net/jumpserver/jumpserver.git
+     --放到了/opt目录
+	 
+####  安装python软件依赖包
+     cd /jumpserver/install
+     pip install -r requirements.txt 
+	 
+####  常见错误处理
+      pycrypto的版本问题报错
+####  解决
+     卸载重装
+	 

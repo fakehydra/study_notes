@@ -1,0 +1,8 @@
+安装MongoDB出现的问题
+
+问题一：-bash: ./mongod: /lib/ld-linux.so.2: bad ELF interpreter: 没有那个文件或目录
+
+软件兼容性，64的的操作系统，选择的却是32位的软件安装包
+解决：
+重新下载一个64位的安装包
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-4.0.3.tgz

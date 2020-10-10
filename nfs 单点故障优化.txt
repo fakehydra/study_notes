@@ -1,0 +1,175 @@
+解决NFS单点故障
+
+yum install -y keepalived
+nfs01 上的配置文件
+[root@nfs01 ~]# cat /etc/keepalived/keepalived.conf 
+! Configuration File for keepalived
+     
+     global_defs {
+        router_id nfs01
+     }
+     
+     vrrp_script check_data {
+        script "/server/scripts/data.sh"
+        interval 2 
+        weight 60
+     }
+     
+     vrrp_instance oldboy {
+         state MASTER
+         interface eth1
+         virtual_router_id 51
+         priority 90
+         advert_int 1
+         authentication {
+             auth_type PASS
+             auth_pass 1111
+         }
+         virtual_ipaddress {
+             172.16.1.3/16 dev eth1 label eth1:1
+         }
+         track_script {
+         check_data
+         }
+     }
+     [root@nfs01 ~]# cat /server/scripts/data.sh 
+     #!/bin/bash
+     #    File Name: data.sh
+     #    Author: su-lemon
+     #    Blog: https://lemonsu9.github.io/
+     #    Mail: 1510973908@qq.com 
+     #    Created Time:Wed 19 Sep 2018 11:53:29 PM CST
+     #    Description: This is a test script
+     
+     nfs_info=$(ps -ef|grep -c nfs)
+     
+     if [ $nfs_info -ge 4 ]    
+         then
+            echo "nfs is start~"     
+            exit 0
+         else
+            echo "nfs is stop~"     
+           exit 1
+         fi
+     
+     echo 'net.ipv4.ip_nonlocal_bind = 1' >>/etc/sysctl.conf
+     sysctl -p
+     
+     /etc/init.d/keepalived start
+
+
+####  rsync 上的配置文件 
+      [root@backup ~]# cat /etc/keepalived/keepalived.conf 
+      ! Configuration File for keepalived
+          
+          global_defs {
+             router_id backup
+          }
+          
+          vrrp_instance oldboy {
+              state BACKUP
+              interface eth1
+              virtual_router_id 51
+              priority 100
+              advert_int 1
+              authentication {
+                  auth_type PASS
+                  auth_pass 1111
+              }
+              virtual_ipaddress {
+                  172.16.1.3/16 dev eth1 label eth1:1
+              }
+          }
+      
+####  在backup 的/etc/rsyncd.conf 配置文件中添加一个data模块,并将uid gid 改为www
+     [root@backup ~]# cat /etc/rsyncd.conf 
+     uid = www
+     gid = www
+     use chroot = no
+     max connections = 20
+     timeout = 300
+     pid file = /var/run/rsyncd.pid
+     lock file = /var/run/rsync.lock
+     log file = /var/log/rsyncd.log
+     ignore errors
+     read only = false
+     list = false
+     hosts allow = 172.16.1.0/24
+     hosts deny = 0.0.0.0/32
+     auth users = rsync_backup
+     secrets file = /etc/rsync.password
+     [backup]
+     comment = "backup dir by oldboy"
+     path = /backup
+     [data]
+     path = /data	
+     	
+	
+####  nfs 服务的配置文件
+#####  nfs01 和 backup  一样
+     [root@nfs01 ~]# cat /etc/exports 
+     #share /data by su-lemon for share at 20180918
+     /data/www  172.16.1.0/24(rw,sync,no_all_squash,root_squash,anonuid=666,anongid=666)
+     /data/blog  172.16.1.0/24(rw,sync,no_all_squash,root_squash,anonuid=666,anongid=666)
+     /data/bbs  172.16.1.0/24(rw,sync,no_all_squash,root_squash,anonuid=666,anongid=666)
+
+	
+     [root@backup ~]# ll /data
+     total 12
+     drwxrwxrwx 2 www www 4096 Sep 20 00:17 bbs
+     drwxrwxrwx 2 www www 4096 Sep 20 00:17 blog
+     drwxrwxrwx 2 www www 4096 Sep 20 00:17 www
+     
+     
+     [root@nfs01 ~]# ll /data
+     total 12
+     drwxrwxrwx 2 www www 4096 Sep 19 13:18 bbs
+     drwxrwxrwx 2 www www 4096 Sep 19 13:18 blog
+     drwxrwxrwx 2 www www 4096 Sep 19 13:18 www
+     	
+     data目录权限777 所属组和主 为www	
+     
+     
+####  将服务设为开机自启
+     chkconfig nfs on
+     chkconfig keepalived on
+     
+
+####  对web服务器上的网站上传目录进行挂载
+     [root@web01 ~]# ll /tmp
+     total 964
+     -rw-r--r--   1 root root 962858 Sep 18 11:22 bak.sql
+     drwxr-xr-x  21 root root   4096 Sep 20 08:38 DedeCMS_bak
+     drwxr-xr-x  11 root root   4096 Sep 20 08:44 Discuz_bak
+     drwxr-xr-x   3 root root   4096 Sep 18 10:20 pear
+     drwxr-xr-x   3 root root   4096 Sep 20 08:39 wordpress_bak
+     drwxrwxrwx   3 www  www    4096 Sep 19 11:44 www
+     -rw-------.  1 root root      0 Sep 17 20:44 yum.log
+
+
+####  将数据迁移出来(web 01,02,03 一样)
+     [root@web01 ~]# mv /application/nginx/html/www/uploads/* /tmp/DedeCMS_bak/
+     [root@web01 ~]# mv /application/nginx/html/blog/wp-content/uploads/* /tmp/wordpress_bak/
+     [root@web01 ~]# mv /application/nginx/html/bbs/upload/data/attachment/* /tmp/Discuz_bak/
+
+####  挂载(web 01,02,03 一样)
+     [root@web01 ~]# mount -t nfs 172.16.1.3:/data/www /application/nginx/html/www/uploads/data/
+     [root@web01 ~]# mount -t nfs 172.16.1.3:/data/bbs /application/nginx/html/bbs/upload/data/attachment/
+     [root@web01 ~]# mount -t nfs 172.16.1.3:/data/blog /application/nginx/html/blog/wp-content/uploads/
+     [root@web01 ~]# df -h
+     Filesystem            Size  Used Avail Use% Mounted on
+     /dev/sda3              48G  3.8G   42G   9% /
+     tmpfs                 190M     0  190M   0% /dev/shm
+     /dev/sda1             190M   35M  146M  19% /boot
+     172.16.1.3:/data/www   48G  1.5G   44G   4% /application/nginx-1.14/html/www/uploads/data
+     172.16.1.3:/data/bbs   48G  1.5G   44G   4% /application/nginx-1.14/html/bbs/upload/data/attachment
+     172.16.1.3:/data/blog
+                           48G  1.5G   44G   4% /application/nginx-1.14/html/blog/wp-content/uploads
+
+
+
+####  将数据移回去(web01),但是只需要将web01 上的数据移动回去,web02 web03 不需要将数据移动回去
+     [root@web01 wordpress_bak]# cp -r /tmp/wordpress_bak/* /application/nginx/html/blog/wp-content/uploads/
+     [root@web01 wordpress_bak]# cp -r /tmp/Discuz_bak/* /application/nginx/html/bbs/upload/data/attachment/
+     [root@web01 wordpress_bak]# cp -r /tmp/DedeCMS_bak/* /application/nginx/html/www/uploads/data/
+     

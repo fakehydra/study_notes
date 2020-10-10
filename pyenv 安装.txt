@@ -1,0 +1,45 @@
+
+# 安装相关依赖
+
+yum -y install gcc zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel git
+
+# 执行脚本
+
+$curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+
+#脚本执行操作
+
+git clone --depth 1"git://github.com/pyenv/pyenv.git"            "${HOME}/.pyenv"
+git clone --depth 1"git://github.com/pyenv/pyenv-doctor.git"     "${HOME}/.pyenv/plugins/pyenv-doctor"
+git clone --depth 1"git://github.com/pyenv/pyenv-installer.git"  "${HOME}/.pyenv/plugins/pyenv-installer"
+git clone --depth 1"git://github.com/pyenv/pyenv-update.git"     "${HOME}/.pyenv/plugins/pyenv-update"
+git clone --depth 1"git://github.com/pyenv/pyenv-virtualenv.git""${HOME}/.pyenv/plugins/pyenv-virtualenv"
+git clone --depth 1"git://github.com/pyenv/pyenv-which-ext.git"  "${HOME}/.pyenv/plugins/pyenv-which-ext"
+
+
+# 添加环境变量
+echo 'export PATH="/home/python/.pyenv/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bash_profile
+source ~/.bash_profile 
+
+# 查看版本
+pyenv  -v
+
+# 查看可以安装的python版本
+pyenv install --list
+
+# 安装python3.6.4
+pyenv install 3.6.4
+
+# 全局使用
+pyenv global 3.6.4
+
+
+pyenv安装python3.7报错：ModuleNotFoundError: No module named '_ctypes'
+解决：yum install libffi-devel -y
+
+
+
+ERROR: The Python ssl extension was not compiled. Missing the OpenSSL lib?
+apt install libssl-dev

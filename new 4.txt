@@ -1,0 +1,28 @@
+#!/bin/bash
+# This scripts Backup Mysql  
+# Shell programmer Tingtingun DU.
+# Distribute Date 20130815
+##################################################
+# 00 05 * * * /script/backup.sh
+##################################################
+# Myqsl backup
+dbname=jdzx
+dbuser=root
+password=hisw123
+
+##################################################
+BackupPath=/sqlbak
+vdate=`date +%Y%m%d`
+DBPath=$BackupPath/db
+
+if [ ! -d $DBPath ];
+then
+  mkdir -p $DBPath 
+fi
+dbfile=$DBPath/$dbname-$vdate.sql
+mysqldump -h 192.168.9.61 -P 3306 -u$dbuser -p$password -R $dbname > $dbfile
+#mysqldump -u$dbuser -p$password $dbname > $dbfile
+cd $DBPath
+tar -zcf $dbname-$vdate.tar.gz  $dbname-$vdate.sql
+rm -rf $dbname-$vdate.sql
+find $DBPath -mtime +30 -exec rm -rf {} \;

@@ -1,0 +1,65 @@
+yum install zlib-devel libxml2-devel libjpeg-devel libjpeg-turbo-devel libiconv-devel freetype-devel libpng-devel gd-devel libcurl-devel libxslt-devel libxslt-devel -y
+rpm -qa zlib-devel libxml2-devel libjpeg-devel libjpeg-turbo-devel libiconv-devel freetype-devel libpng-devel gd-devel libcurl-devel libxslt-devel
+mkdir -p /server/tools
+cd /server/tools
+#wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz
+tar zxf libiconv-1.14.tar.gz
+cd libiconv-1.14
+./configure --prefix=/usr/local/libiconv
+make
+make install
+
+cd ../
+yum install -y epel-release
+yum -y install libmcrypt-devel mhash mcrypt
+
+cd /server/tools/
+tar xf php-5.5.32.tar.gz
+cd php-5.5.32
+./configure \
+--prefix=/application/php-5.5.32 \
+--with-mysql=mysqlnd \
+--with-pdo-mysql=mysqlnd \
+--with-iconv-dir=/usr/local/libiconv \
+--with-freetype-dir \
+--with-jpeg-dir \
+--with-png-dir \
+--with-zlib \
+--with-libxml-dir=/usr \
+--enable-xml \
+--disable-rpath \
+--enable-bcmath \
+--enable-shmop \
+--enable-sysvsem \
+--enable-inline-optimization \
+--with-curl \
+--enable-mbregex \
+--enable-fpm \
+--enable-mbstring \
+--with-mcrypt \
+--with-gd \
+--enable-gd-native-ttf \
+--with-openssl \
+--with-mhash \
+--enable-pcntl \
+--enable-sockets \
+--with-xmlrpc \
+--enable-soap \
+--enable-short-tags \
+--enable-static \
+--with-xsl \
+--with-fpm-user=www \
+--with-fpm-group=www \
+--enable-ftp \
+--enable-opcache=no
+ln -s /application/mysql/lib/libmysqlclient.so.18  /usr/lib64/
+touch ext/phar/phar.phar
+make && make install
+ln -s /application/php-5.5.32/ /application/php
+cd /server/tools/php-5.5.32
+cp php.ini-production /application/php/lib/php.ini
+cd /application/php/etc/
+cp php-fpm.conf.default php-fpm.conf
+echo 'export PATH=/application/php/sbin:$PATH' >>/etc/profile
+source /etc/profile
+/application/php/sbin/php-fpm

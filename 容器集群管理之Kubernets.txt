@@ -1,0 +1,926 @@
+容器集群管理之Kubernets
+####  介绍：
+     Google在2014年6月开源 ，开发语言为Go，容器集群管理等。官网：www.kubernets.io
+
+####  主要功能：
+*数据卷：*
+pod中容器之间共享数据，开源使用数据卷
+
+*应用程序健康检查：*
+容器内服务可能进程堵塞无法处理请求，开源设置监控检查策略保证应用健壮性
+
+*复制应用程序实例：*
+控制器维护着Pod副本数量，保证一个Pod或一组同类的Pod数量始终可用
+
+*弹性伸缩：*
+根据设定的指标（CPU利用率）自动缩放副本数
+
+*服务发展：*
+使用环境变量或DNS服务插件保证容器中程序发现Pod入口访问地址
+
+*负载均衡：*
+一组Pod副本分配一个私有集群IP地址，负载均衡转发请求到后端容器，在集群内部其他Pod可通过这个ClustorIP访问应用
+
+*滚动更新：*
+更新服务不中断，一次更新一个Pod，而不是同时删除整个服务
+
+*服务编排：*
+通过文件描述部署服务，使得应用程序部署变得更高效
+
+*资源监控：*
+node节点组建集成CAdvisor资源收集工具，可通过Heapster汇总整个集群节点资源数据，然后储存到InfluxDB时序数据库，再有Grafana展示
+
+*提供认证和授权：*
+支持属性访问（ARAC）、角色访问控制（RBAC）认证授权策略
+
+####  基本对象概念
+==基本对象==
+*pod*
+
+Pod是最小部署单元，一个Pod有一个或多个容器组成，Pod中容器共享存储和网络，在同一台docker主机上运行
+
+*service*
+
+service一个应用服务抽象，定义了Pod逻辑集合和访问这个Pod集合的策略
+service代理Pod集合对外表现是为一个访问入口，分配一个集群IP地址，来自这个ip的请求将负载均衡转发后端Pod中的容器
+service通过Lable Selector选择一组Pod服务
+
+*Volumo*
+
+数据卷，共享Pod中容器使用的数据（持久化数据、保证数据不丢失）
+
+*Namespace*
+
+命名空间将对象逻辑上分配到不同Namespace，可以是不同的项目、用户区分管理并设定控制策略，从而实现多租户，命名空间也称为虚拟集群
+
+*Lable*
+
+标签用于区分对象（比如Pod、service），键/值对存在：每个对象可以有多个标签，通过标签关联对象
+
+==基于基本对象更高层次抽象==
+
+
+
+
+
+
+
+
+
+
+
+系统组件功能
+
+Master组件：
+kube-apiserver:
+kubernets API ,集群的统一入口，以HTTP API提供接口服务，所有对象资源的增删改查和监听操作都交给APIserver，处理后交给etcd存储
+
+kube-controller-manager:
+处理集群中常规后台任务，一个资源对应一个控制器，而controllerManager就是负责管理这些控制器
+
+kube-scheduler:
+根据调度算法为新创建的Pod选择一个node节点
+
+Node组件
+kubelet：
+为Master在Node节点上的agent，管理本机运行容器的生命周期；比如创建容器、Pod挂载数据卷、下载secret、获取容器和节点状态等工作。kuberlet将每个Pod转换成一组容器
+
+kube-proxy:
+在Node节点上实现Pod网络代理，维护网络规则喝四层负载均衡工作。 
+
+docker或rocket/rkt：
+运行容器
+
+第三方服务
+etcd:
+分布式键值存储系统。用于保持集群状态，比如Pod、Serveice等对象信息
+
+
+kubernets部署准备
+角色    |  hostname     |  外网网卡ip    |   内网网卡ip    |  组件
+--------|---------------|----------------|-----------------|
+master: |  k8s-node1    | 10.0.0.11      |  172.16.1.11    |  组件：etcd kube-apiserver kube-controller-manager kube-scheduler
+		
+node:   |  k8s-node2    | 10.0.0.12      |  172.16.1.12    |  组件：kubelet  kube-proxy docker 
+        |  k8s-node3    | 10.0.0.13      |  172.16.1.13    |  组件：kubelet  kube-proxy docker
+
+大概步骤：
+     - 获取kubernets二进制包
+	 - 运行Master组件
+	 - 运行Node组件
+	 - 查看集群状态
+	 - 启动一个实例
+	 
+安装方法：kubeadm和二进制
+     前者相当于yum安装软件，二进制更适合学习，细节方面更多
+安装环境：需要go语言支持
+	 
+####  Master上的部署：
+#####  ETCD部署
+[root@k8s-server ~]# yum install -y etcd
+# etcd配置文件修改
+[root@k8s-server ~]# grep -v ^[#] /etc/etcd/etcd.conf
+ETCD_DATA_DIR="/data/etcd/k8s.etcd"
+ETCD_LISTEN_CLIENT_URLS="http://10.0.0.11:2379"
+ETCD_NAME="k8s"
+ETCD_ADVERTISE_CLIENT_URLS="http://10.0.0.11:2379"
+授权：默认etcd的用户是etcd
+	 [root@k8s-server ~]# chown etcd.etcd /data/etcd/
+启动，并加入开启自动启动
+[root@k8s-server ~]# systemctl start etcd
+[root@k8s-server ~]# systemctl enable etcd
+Created symlink from /etc/systemd/system/multi-user.target.wants/etcd.service to /usr/lib/systemd/system/etcd.service.
+
+####  部署kubernetes服务端
+压缩包下载地址：
+wget https://dl.k8s.io/v1.11.4/kubernetes-server-linux-amd64.tar.gz
+解压下载好的压缩包
+[root@k8s-server ~]# ls
+anaconda-ks.cfg  git_test    kubernetes-server-linux-amd64.tar.gz
+get-pip.py       kubernetes  test.sh
+进入目录：
+[root@k8s-server ~]# cd kubernetes/
+[root@k8s-server kubernetes]# pwd
+/root/kubernetes
+[root@k8s-server kubernetes]# ls
+addons  kubernetes-src.tar.gz  LICENSES  server
+创建用于管理的目录：
+[root@k8s-server /]# mkdir -p /app/kubernetes/bin
+[root@k8s-server /]# mkdir -p /app/kubernetes/config
+[root@k8s-server /]# cd /app/kubernetes/
+[root@k8s-server kubernetes]# ls
+bin  config
+cp相关文件到管理目录：
+[root@k8s-server kubernetes]# cd /root/kubernetes/server/bin/
+[root@k8s-server bin]# ls
+apiextensions-apiserver              kube-controller-manager
+cloud-controller-manager             kube-controller-manager.docker_tag
+cloud-controller-manager.docker_tag  kube-controller-manager.tar
+cloud-controller-manager.tar         kubectl
+hyperkube                            kubelet
+kubeadm                              kube-proxy
+kube-aggregator                      kube-proxy.docker_tag
+kube-aggregator.docker_tag           kube-proxy.tar
+kube-aggregator.tar                  kube-scheduler
+kube-apiserver                       kube-scheduler.docker_tag
+kube-apiserver.docker_tag            kube-scheduler.tar
+kube-apiserver.tar                   mounter
+[root@k8s-server bin]# cp kube-apiserver kube-controller-manager kube-scheduler /app/kubernetes/bin/
+解压src.tar.gz 以及查看所需的文件
+[root@k8s-server kubernetes]# ls
+addons  kubernetes-src.tar.gz  LICENSES  server
+[root@k8s-server kubernetes]# tar xf kubernetes-src.tar.gz 
+[root@k8s-server kubernetes]# ls
+addons              CONTRIBUTING.md        Makefile                  staging
+api                 docs                   Makefile.generated_files  SUPPORT.md
+build               Godeps                 OWNERS                    test
+BUILD.bazel         hack                   OWNERS_ALIASES            third_party
+CHANGELOG-1.11.md   kubernetes-src.tar.gz  pkg                       translations
+CHANGELOG.md        labels.yaml            plugin                    vendor
+cluster             LICENSE                README.md                 WORKSPACE
+cmd                 LICENSES               SECURITY_CONTACTS
+code-of-conduct.md  logo                   server
+[root@k8s-server kubernetes]# cd cluster/centos/
+[root@k8s-server centos]# ls
+build.sh         config-default.sh  deployAddons.sh  master  OWNERS
+config-build.sh  config-test.sh     make-ca-cert.sh  node    util.sh
+复制我们需要的文件到/app目录下
+[root@k8s-server scripts]# ls
+apiserver.sh  controller-manager.sh  etcd.sh  flannel.sh  post-etcd.sh  scheduler.sh
+[root@k8s-server scripts]# pwd
+/root/kubernetes/cluster/centos/master/scripts
+[root@k8s-server scripts]# cp apiserver.sh controller-manager.sh scheduler.sh /app/kubernetes/bin
+查看复制过去的文件：
+[root@k8s-server scripts]# cd /app/kubernetes/bin/
+[root@k8s-server bin]# ll
+总用量 386084
+-rwxr-xr-x 1 root root      5062 11月 13 11:48 apiserver.sh
+-rwxr-xr-x 1 root root      2245 11月 13 11:48 controller-manager.sh
+-rwxr-xr-x 1 root root 185551157 11月 13 11:39 kube-apiserver
+-rwxr-xr-x 1 root root 154138117 11月 13 11:39 kube-controller-manager
+-rwxr-xr-x 1 root root  55636875 11月 13 11:39 kube-scheduler
+-rwxr-xr-x 1 root root      1714 11月 13 11:48 scheduler.sh
+
+####  配置apiserver
+[root@k8s-server bin]# cat apiserver.sh
+#!/usr/bin/env bash
+
+# 需要修改的地方一，主节点ip地址、etcd集群地址以及Pod网段
+MASTER_ADDRESS=${1:-"10.0.0.11"}
+ETCD_SERVERS=${2:-"https://10.0.0.11:2379"}
+SERVICE_CLUSTER_IP_RANGE=${3:-"10.10.10.0/24"}
+ADMISSION_CONTROL=${4:-""}
+
+# 需要修改的地方二：配置文件存放路径
+cat <<EOF >/app/kubernetes/config/kube-apiserver
+# --logtostderr=true: log to standard error instead of files
+KUBE_LOGTOSTDERR="--logtostderr=true"
+
+# --v=0: log level for V logs
+KUBE_LOG_LEVEL="--v=4"
+
+# --etcd-servers=[]: List of etcd servers to watch (http://ip:port),
+# comma separated. Mutually exclusive with -etcd-config
+KUBE_ETCD_SERVERS="--etcd-servers=${ETCD_SERVERS}"
+
+# 修改地方之三：etcd的ca认证文件，展示不需要，注释掉，下面结尾处还有
+# --etcd-cafile="": SSL Certificate Authority file used to secure etcd communication.
+#KUBE_ETCD_CAFILE="--etcd-cafile=/srv/kubernetes/etcd/ca.pem"
+
+# --etcd-certfile="": SSL certification file used to secure etcd communication.
+#KUBE_ETCD_CERTFILE="--etcd-certfile=/srv/kubernetes/etcd/client.pem"
+
+# --etcd-keyfile="": key file used to secure etcd communication.
+#KUBE_ETCD_KEYFILE="--etcd-keyfile=/srv/kubernetes/etcd/client-key.pem"
+
+# --insecure-bind-address=127.0.0.1: The IP address on which to serve the --insecure-port.
+KUBE_API_ADDRESS="--insecure-bind-address=0.0.0.0"
+
+# --insecure-port=8080: The port on which to serve unsecured, unauthenticated access.
+KUBE_API_PORT="--insecure-port=8080"
+
+# --kubelet-port=10250: Kubelet port
+NODE_PORT="--kubelet-port=10250"
+
+# --advertise-address=<nil>: The IP address on which to advertise
+# the apiserver to members of the cluster.
+KUBE_ADVERTISE_ADDR="--advertise-address=${MASTER_ADDRESS}"
+
+# --allow-privileged=false: If true, allow privileged containers.
+KUBE_ALLOW_PRIV="--allow-privileged=false"
+
+# --service-cluster-ip-range=<nil>: A CIDR notation IP range from which to assign service cluster IPs.
+# This must not overlap with any IP ranges assigned to nodes for pods.
+KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=${SERVICE_CLUSTER_IP_RANGE}"
+
+# --admission-control="AlwaysAdmit": Ordered list of plug-ins
+# to do admission control of resources into cluster.
+# Comma-delimited list of:
+#   LimitRanger, AlwaysDeny, SecurityContextDeny, NamespaceExists,
+#   NamespaceLifecycle, NamespaceAutoProvision, AlwaysAdmit,
+#   ServiceAccount, DefaultStorageClass, DefaultTolerationSeconds, ResourceQuota
+KUBE_ADMISSION_CONTROL="--admission-control=${ADMISSION_CONTROL}"
+
+# --client-ca-file="": If set, any request presenting a client certificate signed
+# by one of the authorities in the client-ca-file is authenticated with an identity
+# corresponding to the CommonName of the client certificate.
+#KUBE_API_CLIENT_CA_FILE="--client-ca-file=/srv/kubernetes/ca.crt"
+
+# --tls-cert-file="": File containing x509 Certificate for HTTPS.  (CA cert, if any,
+# concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file
+# and --tls-private-key-file are not provided, a self-signed certificate and key are
+# generated for the public address and saved to /var/run/kubernetes.
+#KUBE_API_TLS_CERT_FILE="--tls-cert-file=/srv/kubernetes/server.cert"
+
+# --tls-private-key-file="": File containing x509 private key matching --tls-cert-file.
+#KUBE_API_TLS_PRIVATE_KEY_FILE="--tls-private-key-file=/srv/kubernetes/server.key"
+EOF
+
+KUBE_APISERVER_OPTS="   \${KUBE_LOGTOSTDERR}         \\
+                        \${KUBE_LOG_LEVEL}           \\
+                        \${KUBE_ETCD_SERVERS}        \\
+                        \${KUBE_ETCD_CAFILE}         \\
+                        \${KUBE_ETCD_CERTFILE}       \\
+                        \${KUBE_ETCD_KEYFILE}        \\
+                        \${KUBE_API_ADDRESS}         \\
+                        \${KUBE_API_PORT}            \\
+                        \${NODE_PORT}                \\
+                        \${KUBE_ADVERTISE_ADDR}      \\
+                        \${KUBE_ALLOW_PRIV}          \\
+                        \${KUBE_SERVICE_ADDRESSES}   \\
+                        \${KUBE_ADMISSION_CONTROL}   \\
+                        \${KUBE_API_CLIENT_CA_FILE}  \\
+                        \${KUBE_API_TLS_CERT_FILE}   \\
+                        \${KUBE_API_TLS_PRIVATE_KEY_FILE}"
+
+
+cat <<EOF >/usr/lib/systemd/system/kube-apiserver.service
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+# 修改的地方之四：路径修改
+[Service]
+EnvironmentFile=-/app/kubernetes/config/kube-apiserver
+ExecStart=/app/kubernetes/bin/kube-apiserver ${KUBE_APISERVER_OPTS}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable kube-apiserver
+systemctl restart kube-apiserver
+[root@k8s-server bin]# 
+执行脚本并检查：
+
+[root@k8s-server bin]# ./apiserver.sh 10.0.0.11 https://10.0.0.11:2379
+[root@k8s-server bin]# systemctl status kube-apiserver
+● kube-apiserver.service - Kubernetes API Server
+   Loaded: loaded (/usr/lib/systemd/system/kube-apiserver.service; enabled; vendor preset: disabled)
+   Active: active (running) since 二 2018-11-13 12:10:22 CST; 21s ago
+     Docs: https://github.com/kubernetes/kubernetes
+ Main PID: 13171 (kube-apiserver)
+   CGroup: /system.slice/kube-apiserver.service
+           └─13171 /app/kubernetes/bin/kube-apiserver --logtostderr=true --v=4 --etcd...
+
+11月 13 12:10:22 k8s-server systemd[1]: Started Kubernetes API Server.
+11月 13 12:10:23 k8s-server systemd[1]: Starting Kubernetes API Server...
+
+####  配置controller-manager
+ [root@k8s-server bin]# cat controller-manager.sh
+#!/usr/bin/env bash
+
+# Master主节点地址
+MASTER_ADDRESS=${1:-"10.0.0.11"}
+
+# 注意配置文件存放位置，/app/kubernetes/config
+cat <<EOF >/app/kubernetes/config/kube-controller-manager
+KUBE_LOGTOSTDERR="--logtostderr=true"
+KUBE_LOG_LEVEL="--v=4"
+KUBE_MASTER="--master=${MASTER_ADDRESS}:8080"
+
+# 将和ca整数有关的注释掉
+# --root-ca-file="": If set, this root certificate authority will be included in
+# service account's token secret. This must be a valid PEM-encoded CA bundle.
+# KUBE_CONTROLLER_MANAGER_ROOT_CA_FILE="--root-ca-file=/srv/kubernetes/ca.crt"
+
+# --service-account-private-key-file="": Filename containing a PEM-encoded private
+# RSA key used to sign service account tokens.
+# KUBE_CONTROLLER_MANAGER_SERVICE_ACCOUNT_PRIVATE_KEY_FILE="--service-account-private-key-file=/srv/kubernetes/server.key"
+
+# --leader-elect
+KUBE_LEADER_ELECT="--leader-elect"
+EOF
+
+KUBE_CONTROLLER_MANAGER_OPTS="  \${KUBE_LOGTOSTDERR} \\
+                                \${KUBE_LOG_LEVEL}   \\
+                                \${KUBE_MASTER}      \\
+                                \${KUBE_CONTROLLER_MANAGER_ROOT_CA_FILE} \\
+                                \${KUBE_CONTROLLER_MANAGER_SERVICE_ACCOUNT_PRIVATE_KEY_FILE}\\
+                                \${KUBE_LEADER_ELECT}"
+
+cat <<EOF >/usr/lib/systemd/system/kube-controller-manager.service
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+
+# 修改路径
+[Service]
+EnvironmentFile=-/app/kubernetes/config/kube-controller-manager
+ExecStart=/app/kubernetes/bin/kube-controller-manager ${KUBE_CONTROLLER_MANAGER_OPTS}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable kube-controller-manager
+systemctl restart kube-controller-manager
+
+执行该脚本，然后检查
+[root@k8s-server bin]# ./controller-manager.sh 10.0.0.11
+Created symlink from /etc/systemd/system/multi-user.target.wants/kube-controller-manager.service to /usr/lib/systemd/system/kube-controller-manager.service.
+[root@k8s-server bin]# systemctl status kube-controller-manager
+● kube-controller-manager.service - Kubernetes Controller Manager
+   Loaded: loaded (/usr/lib/systemd/system/kube-controller-manager.service; enabled; vendor preset: disabled)
+   Active: active (running) since 二 2018-11-13 12:20:58 CST; 40s ago
+     Docs: https://github.com/kubernetes/kubernetes
+ Main PID: 14511 (kube-controller)
+   CGroup: /system.slice/kube-controller-manager.service
+           └─14511 /app/kubernetes/bin/kube-controller-manager --logtostderr=true --v.
+
+####  配置scheduler
+[root@k8s-server bin]# cat scheduler.sh
+#!/usr/bin/env bash
+
+# Master主节点地址
+MASTER_ADDRESS=${1:-"10.0.0.11"}
+
+# 修改文件存放路径，同意为/app/kubernetes/config
+cat <<EOF >/app/kubernetes/config/kube-scheduler
+###
+# kubernetes scheduler config
+
+# --logtostderr=true: log to standard error instead of files
+KUBE_LOGTOSTDERR="--logtostderr=true"
+
+# --v=0: log level for V logs
+KUBE_LOG_LEVEL="--v=4"
+
+KUBE_MASTER="--master=${MASTER_ADDRESS}:8080"
+
+# --leader-elect
+KUBE_LEADER_ELECT="--leader-elect"
+
+# Add your own!
+KUBE_SCHEDULER_ARGS=""
+
+EOF
+
+KUBE_SCHEDULER_OPTS="   \${KUBE_LOGTOSTDERR}     \\
+                        \${KUBE_LOG_LEVEL}       \\
+                        \${KUBE_MASTER}          \\
+                        \${KUBE_LEADER_ELECT}    \\
+                        \$KUBE_SCHEDULER_ARGS"
+
+cat <<EOF >/usr/lib/systemd/system/kube-scheduler.service
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+
+# 这里路径也要修改
+[Service]
+EnvironmentFile=-/app/kubernetes/config/kube-scheduler
+ExecStart=/opt/kubernetes/bin/kube-scheduler ${KUBE_SCHEDULER_OPTS}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable kube-scheduler
+systemctl restart kube-scheduler
+执行脚本并检查：
+[root@k8s-server bin]# ./scheduler.sh 10.0.0.11
+[root@k8s-server bin]# systemctl status kube-scheduler
+● kube-scheduler.service - Kubernetes Scheduler
+   Loaded: loaded (/usr/lib/systemd/system/kube-scheduler.service; enabled; vendor preset: disabled)
+   Active: active (running) since 二 2018-11-13 19:52:14 CST; 14s ago
+     Docs: https://github.com/kubernetes/kubernetes
+ Main PID: 61852 (kube-scheduler)
+   CGroup: /system.slice/kube-scheduler.service
+           └─61852 /app/kubernetes/bin/kube-scheduler --logtostderr=true --v=4 --mast...
+
+####  配置环境变量
+[root@k8s-server bin]# tail -1 /etc/profile
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/app/kubernetes/bin
+####  Master测试
+[root@k8s-server bin]# kubectl version
+Client Version: version.Info{Major:"1", Minor:"11", GitVersion:"v1.11.4", GitCommit:"bf9a868e8ea3d3a8fa53cbb22f566771b3f8068b", GitTreeState:"clean", BuildDate:"2018-10-25T19:17:06Z", GoVersion:"go1.10.3", Compiler:"gc", Platform:"linux/amd64"}
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+
+####  Node节点部署
+####  下载： wget https://dl.k8s.io/v1.11.4/kubernetes-node-linux-amd64.tar.gz
+
+####  解压软件包
+[root@k8s-node1 ~]# tar xvf kubernetes-node-linux-amd64.tar.gz 
+kubernetes/
+kubernetes/LICENSES
+kubernetes/kubernetes-src.tar.gz
+kubernetes/node/
+kubernetes/node/bin/
+kubernetes/node/bin/kubectl
+kubernetes/node/bin/kube-proxy
+kubernetes/node/bin/kubelet
+kubernetes/node/bin/kubeadm
+####  创建配置管理目录
+[root@k8s-node1 ~]# mkdir -p /app/kubernetes/{bin,config}
+####  复制相关执行程序
+[root@k8s-node1 ~]# cp kubernetes/node/bin/kubelet /app/kubernetes/bin/
+[root@k8s-node1 ~]# cp kubernetes/node/bin/kube-proxy /app/kubernetes/bin/
+####  找到node的配置文件并配置
+[root@k8s-node1 kubernetes]# pwd
+/root/kubernetes
+[root@k8s-node1 kubernetes]# tar xvf kubernetes-src.tar.gz
+[root@k8s-node1 node]# ls
+bin  scripts
+[root@k8s-node1 node]# pwd
+/root/kubernetes/cluster/centos/node
+[root@k8s-node1 node]# cd scripts/
+[root@k8s-node1 scripts]# ls
+docker.sh  flannel.sh  kubelet.sh  proxy.sh
+[root@k8s-node1 scripts]# cp ./* /app/kubernetes/bin/
+
+####  配置kubelet
+[root@k8s-node1 bin]# cat kubelet.sh 
+#!/usr/bin/env bash
+
+# Copyright 2014 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+MASTER_ADDRESS=${1:-"10.0.0.11"}
+NODE_ADDRESS=${2:-"10.0.0.12"}
+DNS_SERVER_IP=${3:-"192.168.3.1"}
+DNS_DOMAIN=${4:-"cluster.local"}
+KUBECONFIG_DIR=${KUBECONFIG_DIR:-/app/kubernetes/config}
+
+# Generate a kubeconfig file
+cat <<EOF > "${KUBECONFIG_DIR}/kubelet.kubeconfig"
+apiVersion: v1
+kind: Config
+clusters:
+  - cluster:
+      server: http://${MASTER_ADDRESS}:8080/
+    name: local
+contexts:
+  - context:
+      cluster: local
+    name: local
+current-context: local
+EOF
+
+cat <<EOF >/app/kubernetes/config/kubelet
+# --logtostderr=true: log to standard error instead of files
+KUBE_LOGTOSTDERR="--logtostderr=true"
+
+#  --v=0: log level for V logs
+KUBE_LOG_LEVEL="--v=4"
+
+# --address=0.0.0.0: The IP address for the Kubelet to serve on (set to 0.0.0.0 for all interfaces)
+NODE_ADDRESS="--address=${NODE_ADDRESS}"
+
+# --port=10250: The port for the Kubelet to serve on. Note that "kubectl logs" will not work if you set this flag.
+NODE_PORT="--port=10250"
+
+# --hostname-override="": If non-empty, will use this string as identification instead of the actual hostname.
+NODE_HOSTNAME="--hostname-override=${NODE_ADDRESS}"
+
+# Path to a kubeconfig file, specifying how to connect to the API server.
+KUBELET_KUBECONFIG="--kubeconfig=${KUBECONFIG_DIR}/kubelet.kubeconfig"
+
+# --allow-privileged=false: If true, allow containers to request privileged mode. [default=false]
+KUBE_ALLOW_PRIV="--allow-privileged=false"
+
+# DNS info
+KUBELET__DNS_IP="--cluster-dns=${DNS_SERVER_IP}"
+KUBELET_DNS_DOMAIN="--cluster-domain=${DNS_DOMAIN}"
+
+# Add your own!
+KUBELET_ARGS=""
+EOF
+
+KUBELET_OPTS="      \${KUBE_LOGTOSTDERR}     \\
+                    \${KUBE_LOG_LEVEL}       \\
+                    \${NODE_ADDRESS}         \\
+                    \${NODE_PORT}            \\
+                    \${NODE_HOSTNAME}        \\
+                    \${KUBELET_KUBECONFIG}   \\
+                    \${KUBE_ALLOW_PRIV}      \\
+                    \${KUBELET__DNS_IP}      \\
+                    \${KUBELET_DNS_DOMAIN}   \\
+                    \$KUBELET_ARGS"
+
+cat <<EOF >/usr/lib/systemd/system/kubelet.service
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=-/app/kubernetes/config/kubelet
+ExecStart=/app/kubernetes/bin/kubelet ${KUBELET_OPTS}
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable kubelet
+systemctl restart kubelet
+####  执行脚本并检查：
+[root@k8s-node1 bin]# ./kubelet.sh 10.0.0.11 10.0.0.12 192.168.3.1
+[root@k8s-node1 bin]# systemctl status kubelet -l
+● kubelet.service - Kubernetes Kubelet
+   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
+   Active: failed (Result: start-limit) since 三 2018-11-14 10:06:53 CST; 3s ago
+  Process: 3579 ExecStart=/app/kubernetes/bin/kubelet ${KUBE_LOGTOSTDERR} ${KUBE_LOG_LEVEL} ${NODE_ADDRESS} ${NODE_PORT} ${NODE_HOSTNAME} ${KUBELET_KUBECONFIG} ${KUBE_ALLOW_PRIV} ${KUBELET__DNS_IP} ${KUBELET_DNS_DOMAIN} $KUBELET_ARGS (code=exited, status=255)
+ Main PID: 3579 (code=exited, status=255)
+
+#####  这里一直报错，配置文件也检查了没问题，但还是报错。
+#####  解决：
+关闭交换内存：
+[root@k8s-node1 bin]# swapoff -a
+####  重新执行一下
+[root@k8s-node1 bin]# ./kubelet.sh 10.0.0.11 10.0.0.12 192.168.3.1
+[root@k8s-node1 bin]# systemctl status kubelet -l
+● kubelet.service - Kubernetes Kubelet
+   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
+   Active: active (running) since 三 2018-11-14 10:11:42 CST; 3s ago
+ Main PID: 3657 (kubelet)
+    Tasks: 11
+   Memory: 27.8M
+   CGroup: /system.slice/kubelet.service
+####  配置kubu-proxy
+[root@k8s-node1 bin]# cat proxy.sh
+#!/usr/bin/env bash
+
+# Copyright 2014 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+MASTER_ADDRESS=${1:-"10.0.0.11"}
+NODE_ADDRESS=${2:-"10.0.0.12"}
+
+cat <<EOF >/app/kubernetes/config/kube-proxy
+# --logtostderr=true: log to standard error instead of files
+KUBE_LOGTOSTDERR="--logtostderr=true"
+
+#  --v=0: log level for V logs
+KUBE_LOG_LEVEL="--v=4"
+
+# --hostname-override="": If non-empty, will use this string as identification instead of the actual hostname.
+NODE_HOSTNAME="--hostname-override=${NODE_ADDRESS}"
+
+# --master="": The address of the Kubernetes API server (overrides any value in kubeconfig)
+KUBE_MASTER="--master=http://${MASTER_ADDRESS}:8080"
+EOF
+
+KUBE_PROXY_OPTS="   \${KUBE_LOGTOSTDERR} \\
+                    \${KUBE_LOG_LEVEL}   \\
+                    \${NODE_HOSTNAME}    \\
+                    \${KUBE_MASTER}"
+
+cat <<EOF >/usr/lib/systemd/system/kube-proxy.service
+[Unit]
+Description=Kubernetes Proxy
+After=network.target
+
+[Service]
+EnvironmentFile=-/app/kubernetes/config/kube-proxy
+ExecStart=/app/kubernetes/bin/kube-proxy ${KUBE_PROXY_OPTS}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable kube-proxy
+systemctl restart kube-proxy
+####  执行脚本并检查：
+[root@k8s-node1 bin]# ./proxy.sh 10.0.0.11 10.0.0.12
+Created symlink from /etc/systemd/system/multi-user.target.wants/kube-proxy.service to /usr/lib/systemd/system/kube-proxy.service.
+[root@k8s-node1 bin]# systemctl status kube-proxy.service 
+● kube-proxy.service - Kubernetes Proxy
+   Loaded: loaded (/usr/lib/systemd/system/kube-proxy.service; enabled; vendor preset: disabled)
+   Active: active (running) since 三 2018-11-14 10:18:41 CST; 12s ago
+ Main PID: 3899 (kube-proxy)
+    Tasks: 0
+   Memory: 8.8M
+   CGroup: /system.slice/kube-proxy.service
+
+###  在Master节点上安装node节点
+[root@k8s-server bin]# cp kube-proxy /app/kubernetes/bin/
+[root@k8s-server bin]# cp kubelet /app/kubernetes/bin/
+[root@k8s-server bin]# pwd
+/root/kubernetes/server/bin
+[root@k8s-server bin]# ll /app/kubernetes/bin/kube-proxy 
+-rwxr-xr-x. 1 root root 52068777 11月 14 10:20 /app/kubernetes/bin/kube-proxy
+####  安装kubelet-proxy
+####  编辑kubelet-proxy配置文件
+[root@k8s-server scripts]# cat proxy.sh 
+#!/usr/bin/env bash
+
+# Copyright 2014 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+MASTER_ADDRESS=${1:-"10.0.0.11"}
+NODE_ADDRESS=${2:-"10.0.0.11"}
+
+cat <<EOF >/app/kubernetes/config/kube-proxy
+# --logtostderr=true: log to standard error instead of files
+KUBE_LOGTOSTDERR="--logtostderr=true"
+
+#  --v=0: log level for V logs
+KUBE_LOG_LEVEL="--v=4"
+
+# --hostname-override="": If non-empty, will use this string as identification instead of the actual hostname.
+NODE_HOSTNAME="--hostname-override=${NODE_ADDRESS}"
+
+# --master="": The address of the Kubernetes API server (overrides any value in kubeconfig)
+KUBE_MASTER="--master=http://${MASTER_ADDRESS}:8080"
+EOF
+
+KUBE_PROXY_OPTS="   \${KUBE_LOGTOSTDERR} \\
+                    \${KUBE_LOG_LEVEL}   \\
+                    \${NODE_HOSTNAME}    \\
+                    \${KUBE_MASTER}"
+
+cat <<EOF >/usr/lib/systemd/system/kube-proxy.service
+[Unit]
+Description=Kubernetes Proxy
+After=network.target
+
+[Service]
+EnvironmentFile=-/app/kubernetes/config/kube-proxy
+ExecStart=/app/kubernetes/bin/kube-proxy ${KUBE_PROXY_OPTS}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable kube-proxy
+systemctl restart kube-proxy
+####  执行脚本并检查：
+[root@k8s-server scripts]# ./proxy.sh 10.0.0.11 10.0.0.11
+Created symlink from /etc/systemd/system/multi-user.target.wants/kube-proxy.service to /usr/lib/systemd/system/kube-proxy.service.
+[root@k8s-server scripts]# cd scripts/^C
+[root@k8s-server scripts]# systemctl status kube-proxy.service 
+● kube-proxy.service - Kubernetes Proxy
+   Loaded: loaded (/usr/lib/systemd/system/kube-proxy.service; enabled; vendor preset: d  abled)
+▽  Active: active (running) since 三 2018-11-14 10:30:05 CST; 23s ago
+ Main PID: 4302 (kube-proxy)
+    Tasks: 0
+   Memory: 9.7M
+   CGroup: /system.slice/kube-proxy.service
+####  安装kubelet
+[root@k8s-server scripts]# cat kubelet.sh 
+#!/usr/bin/env bash
+
+# Copyright 2014 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+MASTER_ADDRESS=${1:-"10.0.0.11"}
+NODE_ADDRESS=${2:-"10.0.0.11"}
+DNS_SERVER_IP=${3:-"192.168.3.1"}
+DNS_DOMAIN=${4:-"cluster.local"}
+KUBECONFIG_DIR=${KUBECONFIG_DIR:-/app/kubernetes/config}
+
+# Generate a kubeconfig file
+cat <<EOF > "${KUBECONFIG_DIR}/kubelet.kubeconfig"
+apiVersion: v1
+kind: Config
+clusters:
+  - cluster:
+      server: http://${MASTER_ADDRESS}:8080/
+    name: local
+contexts:
+  - context:
+      cluster: local
+    name: local
+current-context: local
+EOF
+
+cat <<EOF >/app/kubernetes/config/kubelet
+# --logtostderr=true: log to standard error instead of files
+KUBE_LOGTOSTDERR="--logtostderr=true"
+
+#  --v=0: log level for V logs
+KUBE_LOG_LEVEL="--v=4"
+
+# --address=0.0.0.0: The IP address for the Kubelet to serve on (set to 0.0.0.0 for all interfaces)
+NODE_ADDRESS="--address=${NODE_ADDRESS}"
+
+# --port=10250: The port for the Kubelet to serve on. Note that "kubectl logs" will not work if you set this flag.
+NODE_PORT="--port=10250"
+
+# --hostname-override="": If non-empty, will use this string as identification instead of the actual hostname.
+NODE_HOSTNAME="--hostname-override=${NODE_ADDRESS}"
+
+# Path to a kubeconfig file, specifying how to connect to the API server.
+KUBELET_KUBECONFIG="--kubeconfig=${KUBECONFIG_DIR}/kubelet.kubeconfig"
+
+# --allow-privileged=false: If true, allow containers to request privileged mode. [default=false]
+KUBE_ALLOW_PRIV="--allow-privileged=false"
+
+# DNS info
+KUBELET__DNS_IP="--cluster-dns=${DNS_SERVER_IP}"
+KUBELET_DNS_DOMAIN="--cluster-domain=${DNS_DOMAIN}"
+
+# Add your own!
+KUBELET_ARGS=""
+EOF
+
+KUBELET_OPTS="      \${KUBE_LOGTOSTDERR}     \\
+                    \${KUBE_LOG_LEVEL}       \\
+                    \${NODE_ADDRESS}         \\
+                    \${NODE_PORT}            \\
+                    \${NODE_HOSTNAME}        \\
+                    \${KUBELET_KUBECONFIG}   \\
+                    \${KUBE_ALLOW_PRIV}      \\
+                    \${KUBELET__DNS_IP}      \\
+                    \${KUBELET_DNS_DOMAIN}   \\
+                    \$KUBELET_ARGS"
+
+cat <<EOF >/usr/lib/systemd/system/kubelet.service
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=-/app/kubernetes/config/kubelet
+ExecStart=/app/kubernetes/bin/kubelet ${KUBELET_OPTS}
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable kubelet
+systemctl restart kubelet
+
+####  执行脚本并检查：
+[root@k8s-server scripts]# ./kubelet.sh 10.0.0.11 10.0.0.11 192.168.3.1
+[root@k8s-server scripts]# systemctl status kubelet
+● kubelet.service - Kubernetes Kubelet
+   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
+   Active: active (running) since 三 2018-11-14 10:36:39 CST; 2s ago
+ Main PID: 4822 (kubelet)
+    Tasks: 11
+   Memory: 20.2M
+   CGroup: /system.slice/kubelet.service
+           ├─4822 /app/kubernetes/bin/kubelet --logtostderr=true --v=4 --address=10.0...
+           └─4875 iptables -w -I OUTPUT -t filter -j KUBE-FIREWALL
+		   
+####  部署K8S的网络组件Flannel
+####  下载地址：
+https://github.com/coreos/flannel/releases
+
+####  部署Flannel
+[root@k8s-server ~]# tar xvf flannel-v0.10.0-linux-amd64.tar.gz 
+flanneld
+mk-docker-opts.sh
+README.md
+[root@k8s-server ~]# etcdctl -endpoint="http://10.0.0.11:2379" set /coreos.com/network/config '{"Network": "172.17.0.0/16"}'
+{"Network": "172.17.0.0/16"}
+[root@k8s-server ~]# mv flanneld /usr/bin/
+[root@k8s-server ~]# mv mk-docker-opts.sh /usr/bin/
+####  node节点部署Flannel
+####  下载
+[root@k8s-node1 ~]# wget https://github.com/coreos/flannel/releases/download/v0.10.0/flannel-v0.10.0-linux-amd64.tar.gz
+####  部署
+[root@k8s-node1 ~]# tar xvf flannel-v0.10.0-linux-amd64.tar.gz 
+flanneld
+mk-docker-opts.sh
+README.md
+[root@k8s-node1 ~]# mv flanneld mk-docker-opts.sh /usr/bin/
+####  编辑配置文件
+[root@k8s-node1 ~]# vim /etc/sysconfig/flannel
+[root@k8s-node1 ~]# cat /etc/sysconfig/flannel
+FLANNEL_OPTIONS="--etcd-endpoints=http://10.0.0.11:2379 --ip-masq=true"
+####  通过systemd管理Flannel
+#####  因为是使用二进制安装的方式，系统没有自带systemd管理，编辑文件
+[root@k8s-node1 ~]# cat /usr/lib/systemd/system/flanneld.service
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network.target
+After=network-online.target
+Wants=network-online.target
+Before=docker.service
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/flanneld
+ExecStart=/usr/bin/flanneld $FLANNEL_OPTIONS
+ExecStartPost=/usr/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/subnet.env
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=docker.service

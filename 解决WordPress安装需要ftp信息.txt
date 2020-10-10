@@ -1,0 +1,12 @@
+解决WordPress 安装东西需要ftp 信息方法
+
+step1：chmod -R 777 /wordpress  --站点目录
+
+step2.vim wp-config.php
+添加下面内容
+define("FS_METHOD","direct");
+define("FS_CHMOD_DIR", 0777);
+define("FS_CHMOD_FILE", 0777); 
+保存退出
+
+step3.刷新网页即可

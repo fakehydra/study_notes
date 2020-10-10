@@ -1,0 +1,68 @@
+ipv6 dhcp配置
+
+# 安装dhcp
+yum install -y dhcp 
+
+# 配置网卡，分配静态ipv6地址
+vim /etc/sysconfig/network-scripts/ifcfg-ens192
+DEVICE=ens33
+ONBOOT=yes
+NM_CONTROLLED=no
+TYPE=Ethernet
+NETMASK=255.255.255.0
+IPADDR=10.15.5.205
+GATEWAY=10.15.5.1
+BOOTPROTO=static
+IPV6INIT=yes
+IPV6ADDR=2018:4:10:ffff::2/64
+IPV6_AUTOCONF=no
+IPV6_DEFAULTGW=2018:4:10:ffff::1
+
+# 重启网络服务
+systemctl restart network
+
+# 关闭防火墙
+systemctl stop firewalld
+
+# 配置dhcpv6
+vim /etc/dhcp/dhcpd6.conf
+#DHCPv6 Server Configuration file.
+#see /usr/share/doc/dhcp*/dhcpd6.conf.example
+#see dhcpd.conf(5) man page
+default-lease-time 2592000;
+preferred-lifetime 604800;
+option dhcp-renewal-time 3600;
+option dhcp-rebinding-time 7200;
+allow leasequery;
+option dhcp6.info-refresh-time 21600; 
+dhcpv6-lease-file-name "/var/lib/dhcpd/dhcpd6.leases";
+
+subnet6 2018:4:10:ffff::/64 {
+    range6 2018:4:10:ffff::10 2018:4:10:ffff::1000; 
+}
+
+# 启动
+/usr/sbin/dhcpd -6 -d -cf /etc/dhcp/dhcpd6.conf ens192
+
+# 抓包保存
+tcpdump -i ens192 -n -vv udp port 547 -w result.pcap
+
+
+# 客户端网卡配置
+vim /etc/sysconfig/network-scripts/ifcfg-ens192
+DEVICE=ens33
+ONBOOT=yes
+TYPE=Ethernet
+BOOTPROTO=none
+NAME=ens33
+IPV6INIT=yes
+IPV6_AUTOCONF=no
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+DHCPV6C=yes
+
+
+# ping测试
+ping6 fe80::20c:29ff:fea4:aea2%ens192

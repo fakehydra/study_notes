@@ -1,0 +1,62 @@
+####  利用zabbix实现分布式监控
+####  部署
+####  规划分布式监控网络
+     01.zabbix-server端  server_name：zabbix_ser    IP:10.0.0.77
+     02.zabbix-proxy端   server_name：zabbix_proxy  IP：10.0.0.88
+     03.zabbix-agent端   server_name：web01         IP: 10.0.0.7
+
+#####  配置zabbix-agent端配置文件
+     [root@web01 ~]# grep -Ev "#|^$" /etc/zabbix/zabbix_agentd.conf 
+     PidFile=/var/run/zabbix/zabbix_agentd.pid
+     LogFile=/var/log/zabbix/zabbix_agentd.log
+     LogFileSize=0
+     Server=172.16.1.78
+     ServerActive=172.16.1.78
+     Hostname=web01
+     Include=/etc/zabbix/zabbix_agentd.d/*.conf
+
+####  配置zabbix-proxy端
+####  下载zabbix程序源
+     [root@zabbix-proxy ~]# rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm
+     
+####  安装
+     yum install -y zabbix-proxy-mysql
+####  修改配置文件
+     [root@zabbix-proxy ~]# grep -Ev "#|^$" /etc/zabbix/zabbix_proxy.conf 
+     Server=10.0.0.77
+     Hostname=10.0.0.78
+     LogFile=/var/log/zabbix/zabbix_proxy.log
+     LogFileSize=0
+     PidFile=/var/run/zabbix/zabbix_proxy.pid
+     SocketDir=/var/run/zabbix
+     DBName=zabbix_proxy
+     DBUser=zabbix
+     DbPassword=123456
+     SNMPTrapperFile=/var/log/snmptrap/snmptrap.log
+     Timeout=4
+     ExternalScripts=/usr/lib/zabbix/externalscripts
+     LogSlowQueries=3000
+####  安装数据库
+     [root@zabbix-proxy ~]# yum install -y mariadb-server
+     [root@zabbix-proxy ~]# systemctl start mariadb.service 
+     [root@zabbix-proxy ~]# systemctl enable mariadb.service 
+     [root@zabbix-proxy ~]# mysql_secure_installation   --优化，一直y就好
+     
+####  创建库
+     MariaDB [(none)]> create database zabbix_proxy character set  utf8 collate utf8_bin;
+     Query OK, 1 row affected (0.00 sec)
+     
+     MariaDB [(none)]> grant all on zabbix_proxy.* to 'zabbix'@'localhost' identified by '123456';
+     Query OK, 0 rows affected (0.00 sec)
+     
+     MariaDB [(none)]> flush privileges;
+     Query OK, 0 rows affected (0.00 sec)
+
+####  导入表
+     [root@zabbix-proxy ~]# zcat /usr/share/doc/zabbix-proxy-mysql-4.0.0/schema.sql.gz |mysql -uzabbix -p123456 zabbix_proxy
+     
+####  启动zabbix-proxy 服务程序
+     systemctl start zabbix-proxy.service
+     systemctl enable zabbix-proxy.service
+	 
+####  配置zabbix-server 端

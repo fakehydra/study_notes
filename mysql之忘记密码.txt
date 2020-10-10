@@ -1,0 +1,24 @@
+mysql忘记密码：
+先停止数据库
+/etc/init.d/mysqld stop
+
+使用安全模式登陆
+mysqld_safe --skip-grant-tables --skip--networking &
+
+登陆进去
+mysql 
+
+修改密码
+update mysql.user set password=PASSWORD('123456') where user='root' and host='localhost';
+
+退出重启数据库
+exit
+/etc/init.d/mysqld start
+
+
+
+update mysql.user set Grant_priv='Y',Super_priv='Y' where user='root';
+
+flush privileges;
+
+grant all on *.* to 'root'@'localhost';

@@ -1,0 +1,74 @@
+shell笔记之case语句
+####  语法格式
+     case 变量 in 
+     1)
+     do
+     ;;
+     2)
+     do
+     ;;
+     *)
+     exit
+     esac
+####  使用case打印菜单
+     [root@zabbix_ser scripts]# cat zy07.sh
+     #!/bin/bash
+     #################################################
+     #    File Name: zy07.sh
+     #       Author: fakehydra
+     #         Mail: 664341340@qq.com
+     #     Function: 
+     # Created Time: 2018年11月05日 星期一 08时47分17秒
+     #################################################
+     red='\E[1;31m'
+     green='\E[1;32m'
+     yellow='\E[1;33m'
+     cherry='\E[1;35m'
+     res='\E[0m'
+     usage (){
+     echo "$USAGE: {1|2|3|4}"
+     exit 2
+     }
+     menu (){
+     	cat << EOF
+     	-------------------
+     	1.apple
+     	2.pear
+     	3.banana
+     	4.cherry
+     	5.exit
+     	-------------------
+     EOF
+     }
+     chose (){
+     	read -p "pls tell me what you want: " f
+     	case $f in
+     		1)
+     			echo -e "$red this is apple $res"
+     			;;
+     		2)
+     			echo -e "$green this is pear $res"
+     			;;
+     		3)
+     			echo -e "$yellow this is banana $res"
+     			;;
+     		4)
+     			echo -e "$cherry this is cherry $res"
+     			;;
+     		5)
+     			echo -e "\E[1;5;31m 欢迎再次光临 \E[0m"
+     			exit 3
+     			;;
+     		*)
+     	    	usage
+     			exit 1
+     	esac
+     }
+     main() {
+     menu
+     chose
+     }
+     while true
+     do
+     main
+     done

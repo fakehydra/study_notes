@@ -1,0 +1,125 @@
+openVPN搭建使用
+# 使用yum安装
+yum install -y openvpn openssl-devel pam-devel
+
+# 创建CA和证书
+umask 077;openssl genrsa -out /etc/pki/CA/private/cakey.pem 2048
+openssl req -new -x509 -key /etc/pki/CA/private/cakey.pem -out /etc/pki/CA/cacert.pem
+
+# 为vpn服务端颁发证书(服务端持有)
+为openvpn提供一个目录/etc/openvpn，路径随意，因为在启动openvpn时会使用--config选项指定配置文件路径，以后密钥、证书文件以及配置文件都放在此目录下。当然这是非必须的，只是为了方便以及统一化。
+
+mkdir -p /etc/openvpn/certs
+
+# 由于VPN server端要使用ca的证书，所以复制ca证书到此目录中，并重命名为ca.crt。
+cp -a /etc/pki/CA/cacert.pem /etc/openvpn/certs/ca.crt
+
+# vpn服务端需要生成证书申请，并使用ca为其颁发证书
+umask 077;openssl genrsa -out /etc/openvpn/certs/server.key 2048
+openssl req -new -key /etc/openvpn/certs/server.key -out /etc/openvpn/certs/server.csr
+openssl ca -in /etc/openvpn/certs/server.csr -out /etc/openvpn/certs/server.crt -days 365
+
+# 为客户端颁发证书(客户端持有) 【客户端的[证书申请]文件，不能和server证书里的common name一致，不然会报错。】
+umask 077;openssl genrsa -out /etc/openvpn/certs/boss.key 2048
+openssl req -new -key /etc/openvpn/certs/boss.key -out /etc/openvpn/certs/boss.csr   #
+openssl ca -in /etc/openvpn/certs/boss.csr -out /etc/openvpn/certs/boss.crt -days 365
+
+# 生成密钥交换协议文件(服务端持有)
+openssl dhparam -out /etc/openvpn/certs/dh2048.pem 2048
+
+# 配置服务端
+# yum安装的openVPN的默认配置文件目录：/usr/share/doc/openvpn-2.4.7/sample/sample-config-files/server.conf
+# 配置文件参数说明：
+配置文件参数说明：
+
+    local 192.168.100.5：表示openvpn服务端的监听地址
+    port 1194：监听的端口，默认是1194
+    proto tcp：使用的协议，有udp和tcp。建议选择tcp
+    dev tun：使用三层路由IP隧道(tun)还是二层以太网隧道(tap)。一般都使用tun
+    ca ca.crt
+    cert server.crt
+    key server.key
+    dh dh2048.pem：ca证书、服务端证书、服务端密钥和密钥交换文件。如果它们和server.conf在同一个目录下则可以不写绝对路径，否则需要写绝对路径调用
+    server 10.8.0.0 255.255.255.0：vpn服务端为自己和客户端分配IP的地址池。服务端自己获取网段的第一个地址(此处为10.8.0.1)，后为客户端分配其他的可用地址。以后客户端就可以和10.8.0.1进行通信。注意：该网段地址池不要和已有网段冲突或重复。其实一般来说是不用改的。除非当前内网使用了10.8.0.0/24的网段。
+    ifconfig-pool-persist ipp.txt：使用一个文件记录已分配虚拟IP的客户端和虚拟IP的对应关系，以后openvpn重启时，将可以按照此文件继续为对应的客户端分配此前相同的IP。也就是自动续借IP的意思。
+    server-bridge XXXXXX：使用tap模式的时候考虑此选项。
+    push "route 10.0.10.0 255.255.255.0"：vpn服务端向客户端推送一条客户端到vpn内网网段的路由配置，以便让客户端能够找到内网。多条路由就写多个Push指令
+    client-to-client：让vpn客户端之间可以互相看见对方，即能互相通信。默认情况客户端只能看到服务端一个人
+    duplicate-cn：允许多个客户端使用同一个VPN帐号连接服务端
+    keepalive 10 120：每10秒ping一次，120秒后没收到ping就说明对方挂了
+    tls-auth ta.key 0：加强认证方式，防攻击。如果配置文件中启用此项(默认是启用的)，需要执行openvpn --genkey --secret ta.key，并把ta.key放到/etc/openvpn目录，服务端第二个参数为0。同时客户端也要有此文件，且client.conf中此指令的第二个参数需要为1。
+    compress lz4-v2
+    push "compress lz4-v2"：openvpn 2.4版本的vpn才能设置此选项。表示服务端启用lz4的压缩功能，传输数据给客户端时会压缩数据包，Push后在客户端也配置启用lz4的压缩功能，向服务端发数据时也会压缩。如果是2.4版本以下的老版本，则使用用comp-lzo指令
+    comp-lzo：启用lzo数据压缩格式。此指令用于低于2.4版本的老版本。且如果服务端配置了该指令，客户端也必须要配置
+    max-clients 100：并发客户端的连接数
+    persist-key：
+    persist-tun:通过ping得知超时时，当重启vpn后将使用同一个密钥文件以及保持tun连接状态
+    status openvpn-status.log：在文件中输出当前的连接信息，每分钟截断并重写一次该文件
+    log openvpn.log：
+    log-append openvpn.log：默认vpn的日志会记录到rsyslog中，使用这两个选项可以改变。log指令表示每次启动vpn时覆盖式记录到指定日志文件中，log-append则表示每次启动vpn时追加式的记录到指定日志中。但两者只能选其一，或者不选时记录到rsyslog中
+    verb 3：日志记录的详细级别。
+
+配置文件内容：
+cat /etc/openvpn/server.conf
+local 192.168.100.5
+port 1194
+proto tcp
+dev tun
+ca /etc/openvpn/certs/ca.crt
+cert /etc/openvpn/certs/server.crt
+key /etc/openvpn/certs/server.key
+dh /etc/openvpn/certs/dh2048.pem
+server 10.8.0.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+push "route 10.0.10.0 255.255.255.0"
+client-to-client
+keepalive 10 120
+tls-auth ta.key 0
+comp-lzo
+persist-key
+persist-tun
+status /var/log/openvpn-status.log
+log  /var/log/openvpn.log
+verb 3
+
+# 由于使用了tls-auth功能，所以要生成ta.key。(客户端和服务端都持有)
+openvpn --genkey --secret /etc/openvpn/ta.key
+
+# 开启服务端内核转发功能
+# 因为数据包要在vpn内部交换网卡进出，所以要开启转发功能。
+echo 1 >/proc/sys/net/ipv4/ip_forward
+sed -i "s/ip_forward.*$/ip_forward = 1/" /etc/sysctl.conf
+
+# 启动openvpn
+[root@node1 certs]# openvpn --config /etc/openvpn/server.conf &
+[1] 32673
+[root@node1 certs]# netstat -tnlp | grep 1194
+tcp        0      0 192.168.100.5:1194     0.0.0.0:*    LISTEN    32673/openvpn
+
+# 客户端配置
+# 将服务器上之前生成的客户端文件传到客户端
+root@ubuntu-246:~/client# ll
+总用量 32
+-rw-------  1 root root 4563 8月  14 17:23 boss.crt
+-rw-------  1 root root 1037 8月  14 17:23 boss.csr
+-rw-------  1 root root 1679 8月  14 17:23 boss.key
+-rw-------  1 root root 1391 8月  14 17:23 ca.crt
+-rw-r--r--  1 root root  964 8月  14 18:12 client.ovpn
+
+cat client.ovpn
+# 配置文件
+client                  #指定当前VPN是客户端
+dev tun                 #使用tun隧道传输协议
+proto udp               #使用udp协议传输数据
+remote 服务器地址 11194   #openvpn服务器公网IP地址端口号
+resolv-retry infinite   #断线自动重新连接，在网络不稳定的情况下非常有用
+nobind                  #不绑定本地特定的端口号
+ca /root/client/ca.crt               #指定CA证书的文件路径
+cert /root/client/boss.crt         #指定当前客户端的证书文件路径
+key /root/client/boss.key          #指定当前客户端的私钥文件路径
+verb 3                  #指定日志文件的记录详细级别，可选0-9，等级越高日志内容越详细
+persist-key     #通过keepalive检测超时后，重新启动VPN，不重新读取keys，保留第一次使用的keys
+persist-tun     #检测超时后，重新启动VPN，一直保持tun是linkup的。否则网络会先linkdown然后再linkup
+
+# 启动openVPN连接
+openvpn client.ovpn

@@ -1,0 +1,85 @@
+
+list == ls      列表显示文件或目录信息
+
+ls -d  看目录信息
+[root@jinc ~]# ls -d /data/
+/data/
+
+ls -l  看详细信息
+[root@jinc ~]# ls -l /tmp/
+total 4
+-rw-r--r--. 1 root root 15 Jul  5 15:19 oldboy.txt
+-rw-------. 1 root root  0 Jul  4 15:27 yum.log
+ls -ld 看目录相信信息
+[root@jinc ~]# ls -ld /data/
+drwxr-xr-x. 2 root root 4096 Jul  5 18:22 /data/
+ls -l -a  查看所有信息，包括隐藏信息
+
+
+
+03.cd   change directory  切换当前所在路径信息
+   cd /data    <---切换根目录下面的data 目录中
+   
+[root@jinc ~]# cd /data/
+[root@jinc data]# ls -d /d
+data/ dev/  
+[root@jinc data]# ls -d /data
+/data
+
+04.pwd print working directort  显示当前所在路径信息
+   pwd 
+   
+[root@jinc data]# pwd
+/data
+[root@jinc data]# cd data
+[root@jinc data]# pwd
+/data/data
+[root@jinc data]# 
+
+05.xargs --将信息进行分组命令
+[root@jinc data]# echo "1 2 3 4 5 6" >/data/oldboy.txt 
+[root@jinc data]# cat /data/oldboy.txt 
+1 2 3 4 5 6
+[root@jinc data]# xargs -n2 </data/oldboy.txt 
+1 2
+3 4
+5 6
+
+06.cp --复制文件或复制目录
+      -r   ---递归复制目录数据信息
+	  -a  ---归档参数，包含了-r -d -p 参数的作用
+
+[root@jinc data]# cp /data/oldboy.txt  /tmp/
+cp: overwrite `/tmp/oldboy.txt'? 
+[root@jinc data]# ls -l /tmp/
+total 4
+-rw-r--r--. 1 root root 15 Jul  5 15:19 oldboy.txt
+-rw-r--r--. 1 root root  0 Jul  5 22:33 text.txt
+-rw-------. 1 root root  0 Jul  4 15:27 yum.log
+
+复制目录的方法--
+[root@jinc data]# cp -r /data/ /tmp/
+[root@jinc data]# ls -ld /tmp/data/
+drwxr-xr-x. 3 root root 4096 Jul  6 01:46 /tmp/data/
+说明：默认复制文件如果在目标目录中已经存在，会有覆盖提示
+（如何解决？？？）
+
+07.echo     将输入的内容显示在屏幕上
+  echo “hello” >/
+  
+08.mv  移动文件或目录
+
+09.rm 移除数据信息（目录或文件）
+   -r  ---递归删除目录中的数据信息
+   -f   ---强制删除目录中的数据信息
+   
+10.find --查看数据信息命令==everything软件
+       -type f  --指定查找的文件类型  f表示文件 d 表示目录
+	   -name 数据名称  --指定查找的数据名称
+	   -mtime    --按照时间找寻数据信息（以天为单位）
+	   -mmin     --按照时间找寻数据信息（以分钟为单位）
+	说明：不指定查找的数据名称也可以
+	
+作业：
+01.预习第一关测验练习题剩下  系统优化
+02.总结命令

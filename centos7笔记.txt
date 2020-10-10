@@ -1,0 +1,60 @@
+ct7笔记
+ centos7如何利用systemctl命令实现chkconfig命令功能
+    crond
+	01. 服务启动脚本都放置在/etc/init.d/, 具有执行权限
+	02. 启动脚本可以实现
+	    /etc/init.d/crond start
+		case "$1" in
+		    start)
+			echo "server start."
+			;;
+			stop)
+			echo "server stop."
+			;;
+			*)
+            echo $"Usage: $0 {start|stop|restart|reload|force-reload|condrestart|try-restart|status}"
+		esac
+		
+		[root@oldboy ~]# . /etc/init.d/functions 
+        [root@oldboy ~]# action "server start" /bin/true
+        server start                                               [  OK  ]
+        [root@oldboy ~]# action "server start" /bin/false
+        server start                                               [FAILED]
+	03. 启动脚本中要有启动顺序和关闭顺序说明信息
+	    # chkconfig: 2345 55 25
+	04. 利用chkconfig命令加载脚本文件, 控制相应脚本服务开机自动运行
+
+	centos7中服务启动文件
+    [Unit]   -- 描述信息  指定服务启动顺序
+    Description=OpenSSH server daemon
+    Documentation=man:sshd(8) man:sshd_config(5)
+    After=network.target sshd-keygen.service   在指定服务启动之后, 在启动相应sshd
+    Wants=sshd-keygen.service
+    
+    [Service]  -- 定义服务配置信息 和启动运行命令
+    Type=notify
+    EnvironmentFile=/etc/sysconfig/sshd    --- 加载设置环境变量
+    ExecStart=/usr/sbin/sshd -D $OPTIONS   --- 运行启动服务命令
+    ExecReload=/bin/kill -HUP $MAINPID     --- 平滑重启服务命令
+    KillMode=process                       --- 指定停止服务方式
+    Restart=on-failure                     --- 重启失败信息
+    RestartSec=42s                         --- 间隔多少秒之后, 会重新尝试重启
+    
+    [Install]  -- 定义此服务在什么运行级别开启
+    WantedBy=multi-user.target
+
+06. centos7与centos6区别总结
+    1) 启动方式不同
+	2) 文件系统
+	3) 服务启动方式 systemctl 
+	4) 系统运行级别
+	5) 服务启动文件, 实现服务开机自启动
+	6) 命令操作可以实现永久生效
+	   修改主机名 修改字符集
+	7) 系统网卡名称不同enx
+	   net.ifnames=0 biosdevname=0
+	
+	
+centos7克隆
+两删除
+删除：UUID MAC地址

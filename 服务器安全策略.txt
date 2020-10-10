@@ -1,0 +1,82 @@
+centos
+ip:192.168.9.81
+
+修改root密码，密码长度9位 复杂度数字英文大小写+特殊符号：
+root/Hisw2019!@#
+
+设置过期天数
+vim /etc/login.defs
+PASS_MAX_DAYS   90 #密码最长过期天数 90天
+PASS_MIN_DAYS   80 #密码最短过期天数 80天
+PASS_MIN_LEN    9 # 密码最小长度 9
+PASS_WARN_AGE   7 #密码过期警告天数 7
+
+设置密码复杂度：
+vim /etc/pam.d/system-auth
+原为：
+password    requisite     pam_cracklib.so try_first_pass retry=3 type=
+
+修改为：password    requisite     pam_cracklib.so try_first_pass retry=3 difok=3 ucredit=-1 lcredit=-3 dcredit=-3
+
+retry :尝试次数
+difok:最少不同字符 3
+ucredit：最少大写字母 1
+lcredit： 最少小写字母 3
+dcredit：最少数字 3
+
+增加用户admin test  dev
+useradd admin  test dev
+密码：Hisw2019!@#
+
+给普通用户增加sudo权限
+vim /etc/sudoers
+#新增，90多行的位置
+admin   ALL=(ALL)       ALL
+dev     ALL=(ALL)       ALL
+
+
+登录失败处理功能策略（服务器终端）
+编辑系统/etc/pam.d/sshd 文件，在 auth 字段所在的那一部分策 略下面添加如下策略参数：
+auth       required     pam_tally2.so     deny=3 unlock_time=60 even_deny_root
+
+密码输错三次后锁定一分钟，一分钟后输入正确密码即可登录
+
+数据库账号添加：
+新增admin dev 
+
+admin：拥有大部分root权限，允许内网以及本机登录
+grant all privileges on *.* to admin@'localhost' identified by 'hisw123';
+grant all privileges on *.* to admin@'192.168.9.%' identified by 'hisw123';
+flush privileges;
+
+dev:只拥有select insert 权限，只允许本地登陆
+grant all privileges on *.* to dev@'localhost' identified by 'hisw123';
+flush privileges;
+
+
+ssh 安全策略：只允许内网ssh登陆，以及不允许root登陆
+vim /etc/ssh/sshd_config
+PermitRootLogin no 
+
+设置登录终端的操作超时锁定:180秒无操作将退出终端
+vim /etc/profile
+增加：export TMOUT=180   
+
+
+Ubuntu修改密码策略
+
+禁止使用最近的密码
+$ sudo vi /etc/pam.d/common-password
+password [success=1 default=ignore] pam_unix.so obscure sha512 remember=5
+
+设置最短密码长度
+sudo vi /etc/pam.d/common-password
+password requisite pam_cracklib.so retry=3 minlen=10 difok=3
+
+设置密码复杂度
+ $ sudo vi /etc/pam.d/common-password
+password requisite pam_cracklib.so retry=3 minlen=10 difok=3 ucredit=-1 lcredit=-2 dcredit=-1 ocredit=-1
+
+设置密码过期期限
+ $ sudo vi /etc/login.defs
+PASSMAXDAYS 150 PASSMINDAYS 0 PASSWARNAGE 7

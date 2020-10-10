@@ -1,0 +1,19 @@
+配置本地yum源
+
+mount /dev/sr0 /mnt
+
+# 修改配置文件
+vim local.repo
+[mnt]name=mnt
+baseurl=file:///mnt
+gpgcheck=0
+enabled=1
+保存退出
+# 刷新
+yum clean all
+yum makecache
+
+
+局域网yum
+1.http代理
+2.路由走有公网的那台

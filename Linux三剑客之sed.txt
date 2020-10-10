@@ -1,0 +1,91 @@
+Linux三剑客之sed：字符流编辑器
+
+1.sed 命令详解
+  sed是Stream Editor（字符流编辑器）的缩写，简称流编辑器
+  sed是操作、过滤和转换文本内容的强大工具。常用功能包括对文件实现快速增删改查，其中查询的功能中最常用的两大功能是过滤（过滤指定字符串），取行（取出指定行）。
+  
+2.语法格式
+  sed [选项] [sed内置命令符]  [输入文件]
+  
+  说明：1）sed以及后面的选项、命令和输入文件，每个元素之间都至少要一个空格。
+        2）sed内置命令行字符，既可以是单个命令，也可以是多个命令参数的组合。
+		3）输入文件是sed需要处理的文件，这是可选项；sed还能够从标准输入如管道中获取输入。
+	
+3.选项说明
+   1）sed命令的参数选项及说明
+   
+参数选项               解释说明
+   -n                  取消默认的sed输出，常与sed内置命令的p 连用*
+   
+   
+   -i                  直接修改文件内容，而不是输出到终端。如果不使用-i 选项，则sed 只是修改内存中的数据，并不会影响磁盘上的文件 *
+   
+   2）sed常用内置命令字符的功能说明
+   
+   sed的内置命令字符               解释说明
+        a                          --全拼 append ，表示追加文本，在指定行后添加一行或多行文本
+		 [root@jinc1 test]# sed '2a 6,dandan,CSO' persons.txt 
+1,oldboy,CEO
+2,zhangyao,CTO
+6,dandan,CSO
+3,alex,CFO
+4,yy,CFO
+5,feixue,CIO
+(在第2行后添加6,dandan,CSO)                          
+		
+		
+		d                          --全拼delete ，表示匹配行的文本
+		[root@jinc1 test]# sed '2d' persons.txt 
+1,oldboy,CEO
+3,alex,CFO
+4,yy,CFO
+5,feixue,CIO
+
+		
+		i                          --全拼 insert 表示插入文本，在指定行前面添加一行或者多行文本
+		[root@jinc1 test]# sed '2i 6,dandan,CTO' persons.txt 
+1,oldboy,CEO
+6,dandan,CTO
+2,zhangyao,CTO
+3,alex,CFO
+4,yy,CFO
+5,feixue,CIO
+
+		
+		p                          --全拼print，表示打印匹配行的内容，通常p会与选项-n一起使用
+		[root@jinc1 test]# sed '2p' persons.txt 
+1,oldboy,CEO
+2,zhangyao,CTO
+2,zhangyao,CTO
+3,alex,CFO
+4,yy,CFO
+5,feixue,CIO
+[root@jinc1 test]# sed -n '2p' persons.txt 
+2,zhangyao,CTO
+     当我们只使用 p的时候不只是输出第二行，其他内容也输出出来了（sed的默认输出功能），所以，我们一般使用-n来取消默认输出，只输出匹配行文本
+	 
+		
+		
+	    s/regexp/replacement/      --  匹配regexp部分内容，用replacement替换regexp匹配的内容，regexp部分可以使用正则表达式，在replacement部分可以使用特殊字符串&和\1-\9等匹配regexp部分的部分内容。在实战场景中，s/regexp/replacement/  结尾常与g匹配做全局的替换。
+		[root@jinc1 test]# sed 's#zhangyao#dandan#g' persons.txt 
+1,oldboy,CEO
+2,dandan,CTO
+3,alex,CFO
+4,yy,CFO
+5,feixue,CIO
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
+		
+   

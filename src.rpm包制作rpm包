@@ -1,0 +1,51 @@
+
+src.rpm包制作rpm包 然后转成deb包
+
+[root@cobbler test]# rpm -ivh megaraid_sas-07.710.06.00-1.src.rpm
+Updating / installing...
+   1:megaraid_sas-07.710.06.00-1      ################################# [100%]
+[root@cobbler test]# cd /root/rpmbuild/
+[root@cobbler rpmbuild]# ls
+SOURCES  SPECS
+[root@cobbler rpmbuild]# tree .
+.
+├── SOURCES
+│   ├── megaraid_sas-07.710.06.00.tar.gz
+│   └── Module.supported
+└── SPECS
+    └── megaraid_sas.spec
+
+2 directories, 3 files
+
+
+命令结束后会在/root目录下生成rpmbuid目录，其中包含SOURCES目录和SPECS目录
+SOURCES目录存放的源码包；
+SPECS目录存放.spec文件
+
+进入SPECS目录，执行rpmbuild命令
+[root@cobbler rpmbuild]# cd /root/rpmbuild/SPECS/
+[root@cobbler SPECS]# rpmbuild -ba megaraid_sas.spec
+
+命令执行完成会发现在rpmbuild目录多了几个目录：
+[root@cobbler rpmbuild]# pwd
+/root/rpmbuild
+[root@cobbler rpmbuild]# ls
+BUILD  BUILDROOT  RPMS  SOURCES  SPECS  SRPMS
+
+其中RPMS放的就是生成的rpm包
+[root@cobbler rpmbuild]# cd RPMS/
+[root@cobbler RPMS]# ls
+x86_64
+[root@cobbler RPMS]# cd x86_64/
+[root@cobbler x86_64]# ls
+megaraid_sas-07.710.06.00-1.x86_64.rpm  megaraid_sas-debuginfo-07.710.06.00-1.x86_64.rpm
+
+
+rpm包转deb包
+使用alien转换
+安装alien:
+yum install -y alien
+alien xxx.rpm
+即可
+
+

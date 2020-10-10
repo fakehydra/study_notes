@@ -1,0 +1,40 @@
+picongpu 在docker安装
+
+# 安装docker 
+# yum 安装docker 
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce
+
+yum list docker-ce --showduplicates | sort -r     /查看版本
+
+# 安装nvdia-docker
+ distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+
+ sudo yum install -y nvidia-container-toolkit
+ sudo systemctl restart docker
+ 
+ 
+ 
+# docker run --gpus all 
+
+
+
+
+# 镜像加速
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://kgo7ly9t.mirror.aliyuncs.com"]
+}
+EOF
+
+
+
+
+location /vod {
+
+#limit_conn perip 2;
+limit_rate_after 1000k;
+limit_rate 8000k;
+alias /mnt/data/;

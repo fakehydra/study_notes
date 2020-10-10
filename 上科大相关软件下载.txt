@@ -1,0 +1,75 @@
+上科大相关软件下载
+
+EPICS：https://epics.anl.gov/download/base/base-7.0.2.2.tar.gz
+root：https://root.cern/download/root_v6.18.00.Linux-centos7-x86_64-gcc4.8.tar.gz
+
+
+
+# python相关
+https://github.com/pyepics/pyepics
+ python setup.py install
+ NOLIBCA=1 python setup.py install
+ 
+https://github.com/slaclab/pydm.git
+pip install .[all]
+# 使用conda安装：conda install -c pydm-dev -c conda-forge pydm
+
+# test
+pip install -r dev-requirements.txt
+
+python run_tests.py
+If you want to see the coverage report do:
+python run_tests.py --show-cov
+
+# install
+pip install -r docs-requirements.txt
+
+cd docs
+make html
+
+https://github.com/NSLS-II/NSLS-II.github.io.git
+
+# conda安装mantid
+Installation:
+$ conda config --add channels conda-forge      # add conda-forge channel
+$ conda install -c mantid mantid-framework     # install
+To install the nightly build:
+$ conda install -c mantid/label/nightly mantid-framework
+
+
+# FEL相关
+http://www.desy.de/~twhite/crystfel/crystfel-0.8.0.tar.gz
+
+
+
+# conda
+https://docs.conda.io/en/latest/miniconda.html
+安装：bash Miniconda3-latest-Linux-x86_64.sh
+
+wget https://repo.continuum.io/archive/Anaconda3-5.3.0-Linux-x86_64.sh
+bash Anaconda3-5.0.1-Linux-x86_64.sh 
+
+yum install -y bzip2
+
+
+bluesky 安装
+conda install bluesky -c lightsource2-tag
+conda install bluesky -c lightsource2-dev
+
+
+chees服务器操作全部
+salt 'daq-cpu*'  cmd.run 'sh -x /home/software/bluesky.sh'
+
+
+
+
+confluence 
+wget cyxw.xyz/download/atlassian-confluence-7.0.2-x64.bin
+
+
+
+https://bitbucket.org/berkeleylab/warp/get/10b0300b6897.zip
+
+
+
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo

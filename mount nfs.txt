@@ -1,0 +1,22 @@
+需要放在nfs的目录
+dz         bbs/data/attachment
+dedecms  /uploads　默认上传文件目录
+WordPress  blog/wp-content/uploads
+
+
+挂载
+mount -t nfs 172.16.1.31:/web_up/www /application/nginx/html/www/uploads/
+mount -t nfs 172.16.1.31:/web_up/bbs /application/nginx/html/bbs/data/attachment/
+mount -t nfs 172.16.1.31:/web_up/blog /application/nginx/html/blog/wp-content/uploads/
+
+
+卸载
+umount -lf /application/nginx/html/bbs/data/attachment/
+umount -lf /application/nginx/html/blog/wp-content/uploads/
+umount -lf /application/nginx/html/www/uploads/
+
+
+
+echo "mount -t nfs 172.16.1.31:/web_up/www /application/nginx/html/www/uploads/" >>/etc/rc.local 
+echo "mount -t nfs 172.16.1.31:/web_up/bbs /application/nginx/html/bbs/data/attachment/" >>/etc/rc.local 
+echo "mount -t nfs 172.16.1.31:/web_up/blog /application/nginx/html/blog/wp-content/uploads/" >>/etc/rc.local 

@@ -1,0 +1,28 @@
+jenkins
+https://mirrors.tuna.tsinghua.edu.cn/jenkins/redhat-stable/jenkins-2.164.3-1.1.noarch.rpm
+
+jdk
+https://download.oracle.com/otn/java/jdk/8u202-b08/1961070e4c9b4e26a04e7f5a083f551e/jdk-8u202-linux-x64.rpm
+
+
+gitlab：
+
+下载安装：
+wget https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7/gitlab-ce-11.9.8-ce.0.el7.x86_64.rpm
+
+rpm -ivh gitlab-ce-11.9.8-ce.0.el7.x86_64.rpm
+
+vim /etc/gitlab/gitlab.rb
+external_url 'http://192.168.9.90'   /地址改为当前主机
+
+
+
+gitlab碰到的问题：
+一不小心把登陆页面的登陆栏关掉了，导致无法登陆
+
+解决：
+gitlab-psql
+UPDATE application_settings SET password_authentication_enabled_for_web=true;
+\q
+
+稍等一会即可，或者重启一下

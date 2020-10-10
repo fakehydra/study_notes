@@ -1,0 +1,33 @@
+docker笔记之搭建私有仓库
+
+####  下载官方提供的用于搭建私有镜像的registry镜像
+     [root@ct7-mb ~]# docker pull registry
+     Using default tag: latest
+     latest: Pulling from library/registry
+     d6a5679aa3cf: Pull complete 
+     ad0eac849f8f: Pull complete 
+     2261ba058a15: Pull complete 
+     f296fda86f10: Pull complete 
+     bcd4a541795b: Pull complete 
+     Digest: sha256:5a156ff125e5a12ac7fdec2b90b7e2ae5120fa249cf62248337b6d04abc574c8
+     Status: Downloaded newer image for registry:latest
+
+####  查看镜像
+     [root@ct7-mb ~]# docker images
+     REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+     wordpress                 v1                  bea1e43ccfd7        9 minutes ago       386MB
+     richarvey/nginx-php-fpm   latest              359a8d82408a        7 days ago          304MB
+     mysql                     latest              2dd01afbe8df        2 weeks ago         485MB
+     ubuntu                    latest              ea4c82dcd15a        2 weeks ago         85.8MB
+     centos                    6                   0cbf37812bff        4 weeks ago         194MB
+     registry                  latest              2e2f252f3c88        8 weeks ago         33.3MB
+
+####  使用
+     [root@ct7-mb ~]# docker run -d -v /opt/registry:/var/lib/registry -p 5000:5000 --restart=always --name registry registry
+     05e89480b3978bd2f48173ba0a980d87f3923826cdb9ee51dfb8c3f9ff6fa68e
+####  查看
+     [root@ct7-mb ~]# docker ps -l
+     CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+     05e89480b397        registry            "/entrypoint.sh /etc…"   16 seconds ago      Up 15 seconds       0.0.0.0:5000->5000/tcp   registry
+     [root@ct7-mb ~]# curl http://10.0.0.205:5000/v2/_catalog
+     {"repositories":[]}
