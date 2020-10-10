@@ -1,0 +1,63 @@
+MySQL误删root用户导致无法登陆解决方法
+####  测试环境
+#####  删除前
+     mysql> select user,host,password from mysql.user;
+     +------+-----------+-------------------------------------------+
+     | user | host      | password                                  |
+     +------+-----------+-------------------------------------------+
+     | root | localhost | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+     | root | jinch     |                                           |
+     | root | 127.0.0.1 |                                           |
+     | root | ::1       |                                           |
+     | test | 10.0.0.%  | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
+     
+#####  删除root用户
+     mysql> drop user root@'localhost';
+	 为了测试，把其他root相关都删除了，命令就不一一展示了，显示结果。
+####  删除后
+     mysql> select user,host from mysql.user;
+     +------+-----------+
+     | user | host      |
+     +------+-----------+
+     | test | localhost |
+     +------+-----------+
+     1 row in set (0.00 sec)
+     
+#####  退出再登陆
+     [root@jinch ~]# mysql -uroot -p
+     Enter password: 
+     ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+     现在已经无法登陆了，之前误删过一次。。。无奈那会儿不知道如何解决，就只能重装了，但是，经过一段时间的学习，发现并不是没有解决办法的。
+	 
+###  解决方法
+####  首先，关闭数据库
+     service mysqld stop
+####  用安全模式设置开启免密登陆
+     mysqld_safe --skip-grant-tables --skip-networking 
+	 --skip-grant-tables  关闭连接层的验证模块
+	 --skip-networking    关闭远程连接数据库（只允许本地登陆，可设置防火墙达到相同效果）
+	 
+     [root@jinch ~]# mysqld_safe --skip-grant-tables
+     181010 16:57:03 mysqld_safe Logging to '/usr/local/mysql/data/jinch.err'.
+     181010 16:57:04 mysqld_safe Starting mysqld daemon with databases from /usr/local/mysql/data
+执行完命令后你会发现它会一直霸占这个窗口，这是你可以加个 & 让他在后台运行
+	 
+#####  然后使用mysql命令就可以直接进入数据库
+#####  进入之后，使用insert 命令重新插入表
+     mysql> insert into user(user,host,password,ssl_type,ssl_cipher,x509_issuer,x509_subject) values('root','localhost',PASSWORD('123'),'','','','');
+	 PASSWORD大写的原因：在mysql中密码都是密文的，所以这里是调用一个函数，将明文加密成密文。
+#####  然后退出重启一下数据库就可以重新使用账号密码登录了
+     mysql> quit
+     Bye
+     [root@jinch ~]# /etc/init.d/mysqld restart     
+     [root@jinch ~]# mysql -uroot -p123
+     Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+     
+     mysql>  --这边就放一部分啦，
+#####  误删root用户无法登陆的解决就到这里啦
+#####  附赠忘记密码如何修改
+####  5.6和5.6以前版本：
+     update mysql.user set password=PASSWORD('123') where user='oldboy' and host='10.0.0.%';
+     flush privileges;
+####  5.7以上版本：
+     update mysql.user set authentication_string=PASSWORD('123') where user='oldboy' and host='10.0.0.%';

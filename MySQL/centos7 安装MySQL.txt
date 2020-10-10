@@ -1,0 +1,99 @@
+centos7 安装MySQL
+###  安装前准备
+     在centos7上，系统默认将mysql换成了mariadb，所以，我们要是想要安装mysql的话，需要先把系统中的mariadb删除
+####  查看主机是否安装了mariadb
+     [root@jinch ~]# rpm -qa |grep mariadb
+     mariadb-devel-5.5.56-2.el7.x86_64
+     mariadb-libs-5.5.56-2.el7.x86_64
+     
+####  删除mariadb
+     root@jinch ~]# rpm -e --nodeps mariadb-devel-5.5.56-2.el7.x86_64
+     root@jinch ~]# rpm -e --nodeps mariadb-libs-5.5.56-2.el7.x86_64
+     再查看已经是没有的了
+####  删除相关文件
+     [root@jinch ~]# rm -rf /etc/my.cnf
+####  添加相关用户mysql
+     [root@jinch ~]# id mysql
+     uid=1000(mysql) gid=1000(mysql) 组=1000(mysql)
+###  下载安装
+#####  下载安装包
+     wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz
+#####  解压     
+     tar -zxvf mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz       
+
+#####  复制     
+     cp -r mysql-5.7.22-linux-glibc2.12-x86_64 /usr/local/mysql
+
+#####  添加系统mysql组和mysql用户 
+
+     添加系统mysql组     groupadd mysql
+     
+     添加mysql用户 useradd -r -g mysql mysql （添加完成后可用id mysql查看）
+
+###  安装数据库
+
+     切到mysql目录 cd /usr/local/mysql
+
+     修改当前目录拥有者为mysql用户 chown -R mysql:mysql ./
+
+#####  安装数据库 
+     bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+
+     生成了临时密码
+
+#####  执行以下命令创建RSA private key 
+
+     bin/mysql_ssl_rsa_setup --datadir=/usr/local/mysql/data
+
+#####  修改当前目录拥有者为mysql用户 
+     chown -R mysql:mysql ./
+
+#####  修改当前data目录拥有者为mysql用户 
+     chown -R mysql:mysql data
+
+####  配置my.cnf
+
+     vim /etc/my.cnf    （直接把下面内容复制上就行）
+     
+     [mysqld]
+     character_set_server=utf8
+     init_connect='SET NAMES utf8'
+     skip-name-resolve
+     #设置3306端口
+     port = 3306 
+     socket=/var/lib/mysql/mysql.sock
+     # 设置mysql的安装目录
+     basedir=/usr/local/mysql
+     # 设置mysql数据库的数据的存放目录
+     datadir=/usr/local/mysql/data
+     # 允许最大连接数
+     max_connections=200
+     # 服务端使用的字符集默认为8比特编码的latin1字符集
+     character-set-server=utf8
+     # 创建新表时将使用的默认存储引擎
+     default-storage-engine=INNODB
+     lower_case_table_name=1
+     max_allowed_packet=16M
+	
+#####  添加开机启动     
+     cp /usr/local/mysql/support-files/mysql.server  /etc/init.d/mysqld
+
+#####  修改   
+     vim /etc/init.d/mysqld   
+
+     添加路径 在46行   
+
+     basedir=/usr/local/mysql
+     datadir=/usr/local/mysql/data
+	 
+#####  启动mysql   
+     service mysqld start 
+
+#####  加入开机起动    
+     chkconfig --add mysqld  
+
+#####  登录修改密码
+     mysql -uroot -p 
+	 上面初始化时的密码
+
+     如果出现错误 需要添加软连接  ln -s /usr/local/mysql/bin/mysql /usr/bin

@@ -1,0 +1,252 @@
+﻿mysql使用报错1142没有权限解决方法
+今天在学习mysql的时候，一顿蜜汁操作，再次使用mysql的时候发现，不管用啥子命令，都出现了一个报错
+mysql> select user,password from mysql.user;
+ERROR 1142 (42000): SELECT command denied to user 'root'@'localhost' for table 'user'
+看了一下报错信息，权限不够。。。那就是没有权限了，so，给他权限就好了
+
+####  step01
+     退出数据库并且关闭mysql服务
+	 mysql> quit
+     Bye
+####  step02
+     安全模式启动mysql，root用户登录
+	 [root@jinch ~]# mysqld_safe --skip-grant-tables &
+     [root@jinch ~]# mysql -uroot -p123 mysql
+####  切换数据库&查看表信息中的root用户的localhost权限
+     mysql> use mysql;
+     Database changed
+     mysql> show tables;
+     +---------------------------+
+     | Tables_in_mysql           |
+     +---------------------------+
+     | columns_priv              |
+     | db                        |
+     | event                     |
+     | func                      |
+     | general_log               |
+     | help_category             |
+     | help_keyword              |
+     | help_relation             |
+     | help_topic                |
+     | innodb_index_stats        |
+     | innodb_table_stats        |
+     | ndb_binlog_index          |
+     | plugin                    |
+     | proc                      |
+     | procs_priv                |
+     | proxies_priv              |
+     | servers                   |
+     | slave_master_info         |
+     | slave_relay_log_info      |
+     | slave_worker_info         |
+     | slow_log                  |
+     | tables_priv               |
+     | time_zone                 |
+     | time_zone_leap_second     |
+     | time_zone_name            |
+     | time_zone_transition      |
+     | time_zone_transition_type |
+     | user                      |
+     +---------------------------+
+     28 rows in set (0.00 sec)
+     
+     mysql> select * from user where user='root' and host='localhost'\G;
+     *************************** 1. row ***************************
+                       Host: localhost
+                       User: root
+                   Password: *23AE809DDACAF96AF0FD78ED04B6A265E05AA257
+                Select_priv: N
+                Insert_priv: N
+                Update_priv: N
+                Delete_priv: N
+                Create_priv: N
+                  Drop_priv: N
+                Reload_priv: N
+              Shutdown_priv: N
+               Process_priv: N
+                  File_priv: N
+                 Grant_priv: N
+            References_priv: N
+                 Index_priv: N
+                 Alter_priv: N
+               Show_db_priv: N
+                 Super_priv: N
+      Create_tmp_table_priv: N
+           Lock_tables_priv: N
+               Execute_priv: N
+            Repl_slave_priv: N
+           Repl_client_priv: N
+           Create_view_priv: N
+             Show_view_priv: N
+        Create_routine_priv: N
+         Alter_routine_priv: N
+           Create_user_priv: N
+                 Event_priv: N
+               Trigger_priv: N
+     Create_tablespace_priv: N
+                   ssl_type: 
+                 ssl_cipher: 
+                x509_issuer: 
+               x509_subject: 
+              max_questions: 0
+                max_updates: 0
+            max_connections: 0
+       max_user_connections: 0
+                     plugin: mysql_native_password
+      authentication_string: NULL
+           password_expired: N
+     1 row in set (0.00 sec)
+     
+     ERROR: 
+     No query specified
+     
+     这里发现全部都是N ，表示root用户本地登陆没有权限
+     ####  修改root用户的localhost权限
+     mysql> update user set `Insert_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Update_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Delete_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Create_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Drop_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Reload_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Shutdown_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Process_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `File_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Grant_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `References_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Index_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Alter_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Show_db_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Super_priv` ='Y',`Create_tmp_table_priv` = 'Y' where user='root'' and host='localhost';
+     
+     
+     mysql> update user set `Lock_tables_priv` ='Y' where user='root' and host='localhost';  
+     
+     mysql> update user set `Execute_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Repl_slave_priv` ='Y' where user='root' and host='localhost';
+     
+     
+     mysql> update user set `Repl_client_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Create_view_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Show_view_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Create_routine_priv` ='Y' where user='root' and host='localhost'';
+     
+     mysql> update user set `Alter_routine_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Create_user_priv` ='Y' where user='root' and host='localhost'; 
+     
+     mysql> update user set `Event_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> update user set `Trigger_priv` ='Y' where user='root' and host='localhost';
+     
+     mysql> flush privileges;
+     Query OK, 0 rows affected (0.00 sec)
+
+#####  我这里有点傻。。。自己一个一个敲了一遍，可以直接用‘,’ 分割一次写完的，，，
+#####  退出&重启&登陆
+     mysql> quit
+     Bye
+     [root@jinch ~]# /etc/init.d/mysqld restart
+     Shutting down MySQL.. SUCCESS! 
+     Starting MySQL.. SUCCESS! 
+     [root@jinch ~]# mysql -uroot -p123
+#####  切换库
+     mysql> use mysql;
+     Reading table information for completion of table and column names
+     You can turn off this feature to get a quicker startup with -A
+     
+     Database changed
+#####  查看表信息
+     mysql> select * from user\G;
+     *************************** 1. row ***************************
+                       Host: localhost
+                       User: root
+                   Password: *23AE809DDACAF96AF0FD78ED04B6A265E05AA257
+                Select_priv: Y
+                Insert_priv: Y
+                Update_priv: Y
+                Delete_priv: Y
+                Create_priv: Y
+                  Drop_priv: Y
+                Reload_priv: Y
+              Shutdown_priv: Y
+               Process_priv: Y
+                  File_priv: Y
+                 Grant_priv: Y
+            References_priv: Y
+                 Index_priv: Y
+                 Alter_priv: Y
+               Show_db_priv: Y
+                 Super_priv: Y
+      Create_tmp_table_priv: Y
+           Lock_tables_priv: Y
+               Execute_priv: Y
+            Repl_slave_priv: Y
+           Repl_client_priv: Y
+           Create_view_priv: Y
+             Show_view_priv: Y
+        Create_routine_priv: Y
+         Alter_routine_priv: Y
+           Create_user_priv: Y
+                 Event_priv: Y
+               Trigger_priv: Y
+     Create_tablespace_priv: N
+                   ssl_type: 
+                 ssl_cipher: 
+                x509_issuer: 
+               x509_subject: 
+              max_questions: 0
+                max_updates: 0
+            max_connections: 0
+       max_user_connections: 0
+                     plugin: mysql_native_password
+      authentication_string: NULL
+           password_expired: N
+     1 row in set (0.01 sec)
+     
+     ERROR: 
+     No query specified
+     
+     权限已经基本都有了
+#####  测试一下
+     mysql> create database jinc;
+     Query OK, 1 row affected (0.00 sec)
+     
+     mysql> select user,host from mysql.user;
+     +------+-----------+
+     | user | host      |
+     +------+-----------+
+     | root | localhost |
+     +------+-----------+
+     1 row in set (0.00 sec)
+     
+     mysql> drop database jinc;
+     Query OK, 0 rows affected (0.00 sec)
+     
+     
+####  好了，基本的权限又回来了
+####  还有更简单一点的写法
+前面一样的，安全模式登陆
+update mysql.user set Grant_priv='Y',Super_priv='Y' where user='root';
+
+flush privileges;
+
+grant all on *.* to 'root'@'localhost';
+

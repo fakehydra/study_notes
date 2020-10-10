@@ -1,0 +1,240 @@
+MySQL安装配置
+
+1.安装必要的组件
+# yum install –y autoconf automake imake libxml2-devel\
+ expat-devel cmake gcc gcc-c++ libaio libaio-devel bzr bison libtool ncurses5-devel
+
+# yum install –y autoconf automake imake libxml2-devel\
+ expat-devel cmake gcc gcc-c++ libaio libaio-devel bzr bison libtool ncurses5-devel
+
+2. 下载解压mysql软件
+# cd /usr/local/src
+# wget -c http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.14-<a href="http://www.ttlsa.com/linux/" title="linux"target="_blank">linux</a>-glibc2.5-x86_64.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.6.14-linux-glibc2.5-x86_64.tar.gz
+# tar zxvf mysql-5.6.14-linux-glibc2.5-x86_64.tar.gz –C ../
+# cd /usr/local/
+# ln -s mysql-5.6.14-linux-glibc2.5-x86_64 mysql
+	
+# cd /usr/local/src
+# wget -c http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.14-linux-glibc2.5-x86_64.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.6.14-linux-glibc2.5-x86_64.tar.gz
+# tar zxvf mysql-5.6.14-linux-glibc2.5-x86_64.tar.gz –C ../
+# cd /usr/local/
+# ln -s mysql-5.6.14-linux-glibc2.5-x86_64 mysql
+
+3. 创建Mysql用户组和用户，及数据库存放目录：
+# mkdir -p /data/mysql_data_3306
+# mkdir -p /data/mysql_log
+# mkdir -p /data/log-bin
+# groupadd mysql
+# useradd mysql -g mysql -M -s /sbin/nologin
+# chown -R mysql.mysql /data/mysql_data_3306 /data/mysql_log /data/log-bin
+# chown -R mysql.mysql /usr/local/mysql-5.6.14-linux-glibc2.5-x86_64
+	
+# mkdir -p /data/mysql_data_3306
+# mkdir -p /data/mysql_log
+# mkdir -p /data/log-bin
+# groupadd mysql
+# useradd mysql -g mysql -M -s /sbin/nologin
+# chown -R mysql.mysql /data/mysql_data_3306 /data/mysql_log /data/log-bin
+# chown -R mysql.mysql /usr/local/mysql-5.6.14-linux-glibc2.5-x86_64
+
+4. 配置文件（依具体环境）
+
+# vi /etc/my.cnf
+[mysqld]
+# GENERAL #
+user = mysql
+default-storage-engine = InnoDB
+socket = /data/mysql_data_3306/mysql.sock
+pid-file = /data/mysql_data_3306/mysql.pid
+port = 3306
+# MyISAM #
+key_buffer_size = 1344M
+myisam_recover = FORCE,BACKUP
+# SAFETY #
+max_allowed_packet = 16M
+max_connect_errors = 1000000
+skip_name_resolve
+# DATA STORAGE #
+datadir = /data/mysql_data_3306/
+long_query_time = 1
+# BINARY LOGGING #
+log-bin = /data/log-bin/mysql-bin-3306
+expire-logs-days = 14
+sync-binlog = 1
+server-id = 1
+max_binlog_size = 500M
+# REPLICATION #
+relay-log = /data/log-bin/relay-bin-3306
+slave-net-timeout = 60
+# CACHES AND LIMITS #
+tmp_table_size = 32M
+max_heap_table_size = 32M
+max_connections = 500
+thread_cache_size = 50
+open_files_limit = 65535
+table_definition_cache = 4096
+table_open_cache = 4096
+# INNODB #
+innodb_data_file_path = ibdata1:128M;ibdata2:10M:autoextend
+innodb_flush_method = O_DIRECT
+innodb_log_files_in_group = 2
+innodb_lock_wait_timeout = 50
+innodb_log_file_size = 256M
+innodb_flush_log_at_trx_commit = 1
+innodb_file_per_table = 1
+innodb_thread_concurrency = 8
+innodb_buffer_pool_size = 8G
+# LOGGING #
+log-error = /data/mysql_log/mysql-error-3306.log
+log-queries-not-using-indexes = 1
+slow-query-log = 1
+long_query_time = 1
+slow-query-log-file = /data/mysql_log/mysql-slow-3306.log
+# FOR SLAVE #
+#binlog-format = ROW
+#log-slave-updates = true
+#gtid-mode = on
+#enforce-gtid-consistency = true
+#master-info-repository = TABLE
+#relay-log-info-repository = TABLE
+#sync-master-info = 1
+#slave-parallel-workers = 2
+#binlog-checksum = CRC32
+#master-verify-checksum = 1
+#slave-sql-verify-checksum = 1
+#binlog-rows-query-log_events = 1
+#report-port = 3306
+#report-host = 10.1.1.10
+	
+[mysqld]
+# GENERAL #
+user = mysql
+default-storage-engine = InnoDB
+socket = /data/mysql_data_3306/mysql.sock
+pid-file = /data/mysql_data_3306/mysql.pid
+port = 3306
+# MyISAM #
+key_buffer_size = 1344M
+myisam_recover = FORCE,BACKUP
+# SAFETY #
+max_allowed_packet = 16M
+max_connect_errors = 1000000
+skip_name_resolve
+# DATA STORAGE #
+datadir = /data/mysql_data_3306/
+long_query_time = 1
+# BINARY LOGGING #
+log-bin = /data/log-bin/mysql-bin-3306
+expire-logs-days = 14
+sync-binlog = 1
+server-id = 1
+max_binlog_size = 500M
+# REPLICATION #
+relay-log = /data/log-bin/relay-bin-3306
+slave-net-timeout = 60
+# CACHES AND LIMITS #
+tmp_table_size = 32M
+max_heap_table_size = 32M
+max_connections = 500
+thread_cache_size = 50
+open_files_limit = 65535
+table_definition_cache = 4096
+table_open_cache = 4096
+# INNODB #
+innodb_data_file_path = ibdata1:128M;ibdata2:10M:autoextend
+innodb_flush_method = O_DIRECT
+innodb_log_files_in_group = 2
+innodb_lock_wait_timeout = 50
+innodb_log_file_size = 256M
+innodb_flush_log_at_trx_commit = 1
+innodb_file_per_table = 1
+innodb_thread_concurrency = 8
+innodb_buffer_pool_size = 8G
+# LOGGING #
+log-error = /data/mysql_log/mysql-error-3306.log
+log-queries-not-using-indexes = 1
+slow-query-log = 1
+long_query_time = 1
+slow-query-log-file = /data/mysql_log/mysql-slow-3306.log
+# FOR SLAVE #
+#binlog-format = ROW
+#log-slave-updates = true
+#gtid-mode = on
+#enforce-gtid-consistency = true
+#master-info-repository = TABLE
+#relay-log-info-repository = TABLE
+#sync-master-info = 1
+#slave-parallel-workers = 2
+#binlog-checksum = CRC32
+#master-verify-checksum = 1
+#slave-sql-verify-checksum = 1
+#binlog-rows-query-log_events = 1
+#report-port = 3306
+#report-host = 10.1.1.10
+
+5. 系统服务
+# cp -af /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld_3306
+# vi /etc/init.d/mysqld_3306
+修改两处位置：
+basedir=/usr/local/mysql
+datadir=/data/mysql_data_3306
+
+执行如下命令
+# chmod 755 /etc/init.d/mysqld_3306
+# chkconfig --add mysqld_3306
+# chkconfig --level 345 mysqld_3306 on
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+	
+# cp -af /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld_3306
+# vi /etc/init.d/mysqld_3306
+修改两处位置：
+basedir=/usr/local/mysql
+datadir=/data/mysql_data_3306
+ 
+执行如下命令
+# chmod 755 /etc/init.d/mysqld_3306
+# chkconfig --add mysqld_3306
+# chkconfig --level 345 mysqld_3306 on
+
+ 
+6. 初始化数据库
+
+# cd /usr/local/mysql
+# ./scripts/mysql_install_db --user=mysql --defaults-file=/etc/my.cnf
+1
+2
+	
+# cd /usr/local/mysql
+# ./scripts/mysql_install_db --user=mysql --defaults-file=/etc/my.cnf
+
+7. 启动数据库进程
+
+# service mysqld_3306 start
+1
+	
+# service mysqld_3306 start
+
+8. 修改root密码
+
+# /usr/local/mysql/bin/mysql -p -uroot -S /tmp/mysql.sock #这里直接回车就能进入数据库系统
+Mysql> delete from mysql.user where user='';
+Mysql> update mysql.user set password=PASSWORD(‘xxxxxxxx’) where user='root';
+Mysql>flush privileges;
+1
+2
+3
+4
+	
+# /usr/local/mysql/bin/mysql -p -uroot -S /tmp/mysql.sock #这里直接回车就能进入数据库系统
+Mysql> delete from mysql.user where user='';
+Mysql> update mysql.user set password=PASSWORD(‘xxxxxxxx’) where user='root';
+Mysql>flush privileges;

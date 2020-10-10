@@ -1,0 +1,68 @@
+mysql学习笔记之权限
+####  MySQL权限的定义
+#####  01.作用对象
+     库、表
+#####  02.权限
+     细化到具体命令
+#####  03.归属
+     每次设定只能有一个“属主”。没有属组或其他 概念
+	 
+####  grant all on test.* to test@'10.0.0.%' identified by '123';
+     grant  --授权命令
+	 all    --所有权限代表，等价于把所有权限输一遍
+	 on     --指定作用对象
+	 test,* --作用对象
+	 to     --指定用户
+	 identified by  --指定密码
+	 PS：grant ，若是用户不存在会自动创建用户
+	 
+####  作用对象分解：
+     *.*:当前MySQL数据库中所有库中的所有表，全局。（一般为管理员）
+	 test.*：单库级别，当前test库下的所有表
+	 test.t1：单表级别，当前test库下的t1表
+	 
+####  企业中权限的使用（沟通）
+     1.权限范围：指定库or表
+	 2.使用网段：localhost 或者 其他网段
+	 3.用户名：按需设置
+	 4.密码：按需设定
+	 PS：root权限不可随意给与
+	 
+####  讨论：对一个用户在不同级别设置权限，最终权限是什么
+#####  测试环境
+     mysql> create database test;
+     
+     mysql> use test
+     
+     mysql> create table t1 (id int);
+     
+     mysql> create table t2 (id int);
+     
+     mysql> create database test01;
+     
+     mysql> use test01
+     
+     mysql> create table tt1(id int);
+	 
+	 a) mysql> grant select on *.* to test@'10.0.0.%' identified by '123';
+
+     b) mysql> grant insert,delete,update on test.* to test@'10.0.0.%' identified by '123';
+
+     c) mysql> grant all on test.t1 to test@'10.0.0.%' identified by '123';
+####  问：某客户端程序使用test用户从10.0.0.210 登陆到mysql中后
+#####  1）对t1表的管理能力
+     同时满足授权a b c，所以最终权限为a+b+c
+#####  2) 对t2表的管理能力？
+     同时满足了授权a b ，所以最终权限为a+b
+#####  3）对tt1表的管理能力
+     因为只满足授权（a），所以对tt1表只有select权限
+     mysql> drop tables tt1;
+     ERROR 1142 (42000): DROP command denied 
+	 mysql> select * from tt1;
+     Empty set (0.00 sec)
+#####  结论：若在不同级别同时包含某个表的管理能力时，权限是相加关系
+#####  不推荐多级定义重复权限
+#####  常用授权为单库授权，即test.*
+
+
+

@@ -1,0 +1,16 @@
+useradd -s /sbin/nologin  -M mysql
+mkdir -p /application/
+mv /server/tools/mysql-5.6.34-*-x86_64 /application/mysql-5.6.34
+ln -s /application/mysql-5.6.34/ /application/mysql
+chown -R mysql.mysql /application/mysql/
+/application/mysql/scripts/mysql_install_db --basedir=/application/mysql --datadir=/application/mysql/data --user=mysql
+/application/mysql/bin/mysqladmin -u roo
+t password '123456'
+cp /application/mysql/support-files/mysql.server  /etc/init.d/mysqld
+chmod +x /etc/init.d/mysqld
+sed -i 's#/usr/local/mysql#/application/mysql#g' /application/mysql/bin/mysqld_safe /etc/init.d/mysqld
+\cp /application/mysql/support-files/my-default.cnf /etc/my.cnf
+/etc/init.d/mysqld stop
+/etc/init.d/mysqld start
+echo 'export PATH=/application/mysql/bin:$PATH' >>/etc/profile
+source /etc/profile
